@@ -36,6 +36,7 @@ public class BulletWorld implements Disposable
 	solver.dispose();
     }
 
+    
     public void init()
     {
 	Bullet.init();
