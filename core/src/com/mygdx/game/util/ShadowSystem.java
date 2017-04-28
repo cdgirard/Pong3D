@@ -14,6 +14,23 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.objects.PongObjects;
 
+// Shadow Lights Process
+//1.  Setup the Shadow Shader Provider that will do all the shadows together.
+//2. Until create shader is called it will not have the shader ready until create shader is called.
+//       2b. I think the design is that a shader should be created for each Renderable (maybe only called once?)
+//3.   Setup the lights - The Shadow Shader needs their info to do its job, so ideally they should be attached
+//                       to it.  However there could be more than one Shadow Shader for each Renderable, but should
+//                       only be one set of lights...
+//4. Render Process:
+//       - Lights need to build their depth maps for all the objects in the world
+//       - Shadow Shader needs to build the final render based on data from the lights
+
+// ShadowShader needs access to the Lights, Lights need to render all modelInstances first
+// before ShadowShader does it's render run over the same set of o
+
+// Going to need a special ShadowRender system that takes in the list of model instances and
+// then does the two step process of applying the lights and then rendering based off of the
+// data from the lights.
 public class ShadowSystem
 {
     public Array<AbstractShadowLight> lights = new Array<AbstractShadowLight>();

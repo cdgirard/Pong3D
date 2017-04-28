@@ -47,7 +47,6 @@ void main()
 	
 	// If not in shadow, add some light
     float adjust = (lenToLight-lenDepthMap - 0.01)*40;
-    //adjust = pow(clamp(adjust,0,1.0),2);
     if (adjust > 0.3)
     {
         adjust = adjust + 0.4;
@@ -56,23 +55,7 @@ void main()
     {
         adjust = adjust*0.5;
     }
-    // intensity = 0.5*(1.0 - pow(clamp(adjust,0,1.0),2));
     intensity = u_lightIntensity*(1.0 - clamp(adjust,0,1.0));
-	//adjust = clamp(adjust,0,0.025);
-	//adjust = pow(adjust*4,2);
-	//intensity = 1.0 - adjust;
-	//if (lenDepthMap<lenToLight-0.025)//0.02) Directional
-	//{
-	 //   intensity = 0.2;
-//	}
-   //if (lenDepthMap<lenToLight-0.04)
-	//{
-	 //   intensity = 0.5;
-//	}
-//	else
-	//{
-		//intensity=1.0;
-//	}
 	
 	gl_FragColor     = vec4(intensity);
 

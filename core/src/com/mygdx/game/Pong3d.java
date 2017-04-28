@@ -41,15 +41,6 @@ import com.mygdx.game.util.SimpleTextureShader;
 public class Pong3d extends ApplicationAdapter
 {
     PerspectiveCamera cam;
-    Environment environment;
-    ModelBatch modelBatch;
-  
-    // For Shadow Lights
-    ModelBatch shaderModelBatch;
-    
-    // libGDX's Shadow System
-    DirectionalShadowLight shadowLight;
-    ModelBatch shadowBatch;
     
     // For Shadow Environment
     ShadowSystem shadowSystem;
@@ -63,17 +54,6 @@ public class Pong3d extends ApplicationAdapter
     public void create()
     {
 	Assets.instance.init();
-	modelBatch = new ModelBatch();
-	
-	environment = new Environment();
-	environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.6f, 0.6f, 0.6f, 1f));
-	environment.add( new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -1.0f, 0.0f));
-	
-	shadowLight = new DirectionalShadowLight(1024, 1024, 60, 60, 1f, 300);
-	shadowLight.set(0.8f, 0.8f, 0.8f, -1f, -.8f, -.2f);
-	environment.add(shadowLight);
-	environment.shadowMap = shadowLight;
-	shadowBatch = new ModelBatch(new DepthShaderProvider());
 
 	cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	cam.near = 1f;
@@ -84,44 +64,11 @@ public class Pong3d extends ApplicationAdapter
 	
 	shadowSystem = new ShadowSystem();
 	
-	// Shadow Lights Process
-//	1.  Setup the Shadow Shader Provider that will do all the shadows together.
-//	2. Until create shader is called it will not have the shader ready until create shader is called.
-//	       2b. I think the design is that a shader should be created for each Renderable (maybe only called once?)
-//	3.   Setup the lights - The Shadow Shader needs their info to do its job, so ideally they should be attached
-//	                       to it.  However there could be more than one Shadow Shader for each Renderable, but should
-//	                       only be one set of lights...
-//	4. Render Process:
-//	       - Lights need to build their depth maps for all the objects in the world
-//	       - Shadow Shader needs to build the final render based on data from the lights
-	
-	// ShadowShader needs access to the Lights, Lights need to render all modelInstances first
-	// before ShadowShader does it's render run over the same set of o
-	
-	// Going to need a special ShadowRender system that takes in the list of model instances and
-	// then does the two step process of applying the lights and then rendering based off of the
-	// data from the lights.
-	
-	
-//	// Initializing Bullet Physics
-//	Bullet.init();
-//
-//	// setting up the world
-//	collisionConfiguration = new btDefaultCollisionConfiguration();
-//	dispatcher = new btCollisionDispatcher(collisionConfiguration);
-//	broadphase = new btDbvtBroadphase();
-//	solver = new btSequentialImpulseConstraintSolver();
-//	world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-//	world.setGravity(new Vector3(0, -9.81f, 1f));
-	
-	
-	//MyContactListener contactListener = new MyContactListener();
 	BulletWorld.instance.init();
 	//debugDrawer = new DebugDrawer();
 	//BulletWorld.world.setDebugDrawer(debugDrawer);
 	//debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
 	PongObjects.instance.init();
-	
 	
 	shadowSystem.addLight(new PointShadowLight(new Vector3(0f, 13.8f, 32f),0.3f));
  	shadowSystem.addLight(new PointShadowLight(new Vector3(45f, 0.0f, 0f),0.3f));
@@ -136,32 +83,8 @@ public class Pong3d extends ApplicationAdapter
     @Override
     public void render()
     {
-//	currentLight.render(PongObjects.instance);
-	Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-	Gdx.gl.glClearColor(0, 0, 0, 1);
-	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
-	
-	//shadowLight.begin(Vector3.Zero, cam.direction);
-	//shadowBatch.begin(shadowLight.getCamera());
-	//PongObjects.instance.render(shadowBatch);
-	//shadowBatch.end();
-	//shadowLight.end();
-	
-	// draw info
-	//modelBatch.begin(cam);
-	//PongObjects.instance.render(modelBatch,environment);
-        //modelBatch.end();
 	float delta = Gdx.graphics.getDeltaTime();
 	shadowSystem.render(cam, delta);
-        
-        //debugDrawer.begin(cam);
-        //BulletWorld.world.debugDrawWorld();
-        //debugDrawer.end();
-
-	//modelBatch.begin(cam);
-	//PongObjects.instance.render(modelBatch,environment);
-	//modelBatch.end();
 	
 	BulletWorld.instance.update(delta);
     }
