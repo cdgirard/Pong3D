@@ -4201,7 +4201,7 @@
       "textures": [
         {
           "id": "Soil",
-          "filename": "TexturesCom_SoilCracked0103_1_seamless_S.jpg",
+          "filename": "Grey.jpg",
           "type": "DIFFUSE"
         }
       ]

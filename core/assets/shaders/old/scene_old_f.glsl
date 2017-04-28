@@ -20,7 +20,7 @@ varying float v_intensity;
 void main()
 {
 	vec4 finalColor  = texture2D(u_diffuseTexture, v_texCoords0);
-	//finalColor.rgb   = finalColor.rgb*v_intensity;
+	finalColor.rgb   = finalColor.rgb*v_intensity;
 
 	// Retrieve the shadow color from shadow map
 	vec2 c= gl_FragCoord.xy;

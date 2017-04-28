@@ -100,7 +100,6 @@ public class ShadowSystem
      */
     public void act(final float delta)
     {
-
 	for (final AbstractShadowLight light : lights)
 	{
 	    light.act(delta);
@@ -134,7 +133,7 @@ public class ShadowSystem
 	PongObjects.instance.render(shadowModelBatch);
 	shadowModelBatch.end();
 
-	frameBufferShadows.end();
+        frameBufferShadows.end();
     }
 
     /**

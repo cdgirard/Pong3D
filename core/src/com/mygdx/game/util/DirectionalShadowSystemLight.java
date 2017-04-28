@@ -12,15 +12,22 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.Pong3d;
 import com.mygdx.game.objects.PongObjects;
 
-public class DirectionalShadowLight extends AbstractShadowLight
+public class DirectionalShadowSystemLight extends AbstractShadowLight
 {
 
     public Vector3 direction;
     public FrameBuffer frameBuffer;
     public Texture depthMap;
 
-    public DirectionalShadowLight(final Vector3 position, final Vector3 direction)
+    /**
+     * direction is the direction the camera is looking, not the position the camera is
+     * looking at.
+     * @param position
+     * @param direction
+     */
+    public DirectionalShadowSystemLight(final Vector3 position, final Vector3 direction, float i)
     {
+	intensity = i;
 	this.position = position;
 	this.direction = direction;
 	init();
@@ -30,13 +37,6 @@ public class DirectionalShadowLight extends AbstractShadowLight
     public void applyToShader(final ShaderProgram sceneShaderProgram)
     {
 	sceneShaderProgram.begin();
-//	final int textureNum = 2;
-//	depthMap.bind(textureNum);
-//	sceneShaderProgram.setUniformi("u_depthMap", textureNum);
-//	sceneShaderProgram.setUniformMatrix("u_lightTrans", camera.combined);
-//	sceneShaderProgram.setUniformf("u_cameraFar", camera.far);
-//	sceneShaderProgram.setUniformf("u_lightPosition", camera.position);
-//	sceneShaderProgram.end();
 	
 	final int textureNum = 3;
 	depthMap.bind(textureNum);
@@ -45,6 +45,7 @@ public class DirectionalShadowLight extends AbstractShadowLight
 	sceneShaderProgram.setUniformf("u_cameraFar", camera.far);
 	sceneShaderProgram.setUniformf("u_type", 1);
 	sceneShaderProgram.setUniformf("u_lightPosition", position);
+	sceneShaderProgram.setUniformf("u_lightIntensity", intensity);
 
     }
 
@@ -64,7 +65,11 @@ public class DirectionalShadowLight extends AbstractShadowLight
     @Override
     public void render()
     {
-
+	if (!needsUpdate)
+	{
+	    return;
+	}
+	needsUpdate = false;
 	if (frameBuffer == null)
 	{
 	    frameBuffer = new FrameBuffer(Format.RGBA8888, Pong3d.DEPTH_MAP_SIZE, Pong3d.DEPTH_MAP_SIZE, true);
@@ -75,7 +80,8 @@ public class DirectionalShadowLight extends AbstractShadowLight
 
 	shaderProgram.begin();
 	shaderProgram.setUniformf("u_cameraFar", camera.far);
-	shaderProgram.setUniformf("u_lightPosition", camera.position);
+	shaderProgram.setUniformf("u_lightPosition", position);
+	
 	shaderProgram.end();
 
 	modelBatch.begin(camera);
@@ -87,3 +93,19 @@ public class DirectionalShadowLight extends AbstractShadowLight
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -11,7 +11,9 @@ import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalShadowLight;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
+import com.badlogic.gdx.graphics.g3d.utils.DepthShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
@@ -28,7 +30,7 @@ import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.bullet.MyContactListener;
 import com.mygdx.game.objects.PongObjects;
 import com.mygdx.game.util.AbstractShadowLight;
-import com.mygdx.game.util.DirectionalShadowLight;
+import com.mygdx.game.util.DirectionalShadowSystemLight;
 import com.mygdx.game.util.MovingPointShadowLight;
 import com.mygdx.game.util.PointShadowLight;
 import com.mygdx.game.util.ShadowMapShader;
@@ -44,6 +46,10 @@ public class Pong3d extends ApplicationAdapter
   
     // For Shadow Lights
     ModelBatch shaderModelBatch;
+    
+    // libGDX's Shadow System
+    DirectionalShadowLight shadowLight;
+    ModelBatch shadowBatch;
     
     // For Shadow Environment
     ShadowSystem shadowSystem;
@@ -62,11 +68,17 @@ public class Pong3d extends ApplicationAdapter
 	environment = new Environment();
 	environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.6f, 0.6f, 0.6f, 1f));
 	environment.add( new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1.0f, -1.0f, 0.0f));
+	
+	shadowLight = new DirectionalShadowLight(1024, 1024, 60, 60, 1f, 300);
+	shadowLight.set(0.8f, 0.8f, 0.8f, -1f, -.8f, -.2f);
+	environment.add(shadowLight);
+	environment.shadowMap = shadowLight;
+	shadowBatch = new ModelBatch(new DepthShaderProvider());
 
 	cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	cam.near = 1f;
 	cam.far = 200;
-	cam.position.set(-5, 5, 0);
+	cam.position.set(-30, 5, 0);
 	cam.lookAt(0, 0, 0);
 	cam.update();
 	
@@ -111,15 +123,11 @@ public class Pong3d extends ApplicationAdapter
 	PongObjects.instance.init();
 	
 	
-	shadowSystem.addLight(new PointShadowLight(new Vector3(0f, 13.8f, 32f)));
-	shadowSystem.addLight(new PointShadowLight(new Vector3(-25.5f, 12.0f, -26f)));
-	shadowSystem.addLight(new DirectionalShadowLight(new Vector3(33, 10, 3), new Vector3(-10, 0, 0)));
-	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(0f, 30.0f, 0f)));
+	shadowSystem.addLight(new PointShadowLight(new Vector3(0f, 13.8f, 32f),0.3f));
+ 	shadowSystem.addLight(new PointShadowLight(new Vector3(45f, 0.0f, 0f),0.3f));
+	shadowSystem.addLight(new DirectionalShadowSystemLight(new Vector3(33, 0, 0), new Vector3(-1, 0, 0), 0.3f));
+	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(0f, 30.0f, 0f),0.1f));
     }
-
-
-    
-
 
     /**
      * Two shaders, one creates the depth map, the other uses the depth map to create the shadows.
@@ -129,10 +137,17 @@ public class Pong3d extends ApplicationAdapter
     public void render()
     {
 //	currentLight.render(PongObjects.instance);
-//	Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//	Gdx.gl.glClearColor(0, 0, 0, 1);
-//	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+	Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+	Gdx.gl.glClearColor(0, 0, 0, 1);
+	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
+	
+	//shadowLight.begin(Vector3.Zero, cam.direction);
+	//shadowBatch.begin(shadowLight.getCamera());
+	//PongObjects.instance.render(shadowBatch);
+	//shadowBatch.end();
+	//shadowLight.end();
+	
 	// draw info
 	//modelBatch.begin(cam);
 	//PongObjects.instance.render(modelBatch,environment);
@@ -143,12 +158,10 @@ public class Pong3d extends ApplicationAdapter
         //debugDrawer.begin(cam);
         //BulletWorld.world.debugDrawWorld();
         //debugDrawer.end();
-	
-//	currentLight.applyToShader(shaderProgram);
-//	shaderModelBatch.begin(cam);
-//	PongObjects.instance.render(shaderModelBatch);
-//	shaderModelBatch.end();
-	
+
+	//modelBatch.begin(cam);
+	//PongObjects.instance.render(modelBatch,environment);
+	//modelBatch.end();
 	
 	BulletWorld.instance.update(delta);
     }

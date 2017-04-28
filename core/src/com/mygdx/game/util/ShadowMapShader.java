@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Inputs;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Setters;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.utils.Array;
 
 /**
  * Shader used to render multiple shadows on the main scene. This shader will

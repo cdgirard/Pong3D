@@ -6,26 +6,15 @@ import com.mygdx.game.objects.PongObjects;
 
 public class MovingPointShadowLight extends PointShadowLight
 {
-    private boolean needsUpdate = false;
+    
     public Vector3 originalPosition = new Vector3();
     public float angle = 0;
     public float distance = 20f;
 
-    public MovingPointShadowLight(final Vector3 position)
+    public MovingPointShadowLight(final Vector3 position, float intensity)
     {
-	super(position);
+	super(position,intensity);
 	originalPosition.set(position);
-    }
-
-    @Override
-    public void render()
-    {
-	if (!needsUpdate)
-	{  
-	    return;
-	}
-	needsUpdate = false;
-	super.render();
     }
 
     @Override

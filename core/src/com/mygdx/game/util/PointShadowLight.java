@@ -12,13 +12,13 @@ import com.mygdx.game.objects.PongObjects;
 
 public class PointShadowLight extends AbstractShadowLight
 {
-
     public FrameBufferCubeMap frameBuffer;
     public Cubemap depthMap;
 
-    public PointShadowLight(final Vector3 position)
+    public PointShadowLight(final Vector3 position, float i)
     {
 	this.position = position;
+	this.intensity = i;
 	init();
     }
 
@@ -31,6 +31,7 @@ public class PointShadowLight extends AbstractShadowLight
 	sceneShaderProgram.setUniformi("u_depthMapCube", textureNum);
 	sceneShaderProgram.setUniformf("u_cameraFar", camera.far);
 	sceneShaderProgram.setUniformf("u_lightPosition", position);
+	sceneShaderProgram.setUniformf("u_lightIntensity", intensity);
     }
 
     @Override
@@ -48,6 +49,9 @@ public class PointShadowLight extends AbstractShadowLight
     @Override
     public void render()
     {
+	if (!needsUpdate)
+	    return;
+	needsUpdate = false;
 	if (frameBuffer == null)
 	{
 	    frameBuffer = new FrameBufferCubeMap(Format.RGBA8888, Pong3d.DEPTH_MAP_SIZE, true);
@@ -56,6 +60,7 @@ public class PointShadowLight extends AbstractShadowLight
 	shaderProgram.begin();
 	shaderProgram.setUniformf("u_cameraFar", camera.far);
 	shaderProgram.setUniformf("u_lightPosition", position);
+	
 	shaderProgram.end();
 
 	for (int s = 0; s <= 5; s++)

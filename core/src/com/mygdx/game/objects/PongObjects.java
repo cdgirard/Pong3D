@@ -64,7 +64,7 @@ public class PongObjects implements Disposable
     
     public void create_sphere()
     {	
-	Model model = Assets.assetManager.get("models/sphere.g3dj", Model.class);
+	Model model = Assets.assetManager.get(Assets.sphere, Model.class);
 	float radius = 2.0f;
 	Vector3 position = new Vector3(0,7,0);
 	sphere = new GameObject();
