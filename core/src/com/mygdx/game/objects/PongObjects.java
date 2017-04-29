@@ -34,7 +34,7 @@ public class PongObjects implements Disposable
     private static final Vector3 temp = new Vector3();
     private static final Vector3 localInertia = new Vector3(1, 1, 1);
     
-    GameObject ground, sphere;
+    public GameObject ground, sphere;
     
     protected  PongObjects()
     {
@@ -51,14 +51,16 @@ public class PongObjects implements Disposable
     {	
 	Model model = Assets.assetManager.get("models/marble.g3dj", Model.class);
     	ground = new GameObject();
+    	ground.moveTo = ground.position = new Vector3(0,0,0);
     	ground.instance = new ModelInstance(model);
-    	Vector3 position = new Vector3(0,0.25f,0);
-    	//(ground.instance.transform.trn(position)).set(ground.instance.transform);
+    	ground.motionState = new MyMotionState(ground.instance);
+    	ground.motionState.setWorldTransform(ground.instance.transform.trn(ground.position));
+    	
     	float width = 5;
     	ground.shape = new btBoxShape(new Vector3(width, 1/4f, width));
-    	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, null, ground.shape, Vector3.Zero);
+    	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, ground.motionState, ground.shape, Vector3.Zero);
     	ground.body = new btRigidBody(bodyInfo);
-    	ground.body.translate(position);
+    	ground.body.translate(ground.position);
     	BulletWorld.world.addRigidBody(ground.body);
     }
     
@@ -66,9 +68,10 @@ public class PongObjects implements Disposable
     {	
 	Model model = Assets.assetManager.get(Assets.sphere, Model.class);
 	float radius = 2.0f;
-	Vector3 position = new Vector3(0,7,0);
+	
 	sphere = new GameObject();
-    	
+	sphere.moveTo = sphere.position = new Vector3(0,0,0);
+	Vector3 position = new Vector3(0,7,0);
 	sphere.instance = new ModelInstance(model);
 	sphere.motionState = new MyMotionState(sphere.instance);
 	sphere.motionState.setWorldTransform(sphere.instance.transform.trn(position));
@@ -76,6 +79,12 @@ public class PongObjects implements Disposable
 	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(1, sphere.motionState, sphere.shape, localInertia);
 	sphere.body = new btRigidBody(bodyInfo);
 	BulletWorld.world.addRigidBody(sphere.body);
+    }
+    
+    public void update(float delta)
+    {
+	ground.update(delta);
+	sphere.update(delta);
     }
     
     public void render(ModelBatch batch)

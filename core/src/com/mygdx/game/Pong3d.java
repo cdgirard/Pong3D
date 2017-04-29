@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalShadowLight;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.g3d.utils.DepthShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
@@ -40,6 +41,9 @@ import com.mygdx.game.util.SimpleTextureShader;
 
 public class Pong3d extends ApplicationAdapter
 {
+    private static final String TAG = "Pong3d";
+    
+    PongController controller;
     PerspectiveCamera cam;
     
     // For Shadow Environment
@@ -49,6 +53,7 @@ public class Pong3d extends ApplicationAdapter
     
     // For Bullet
     DebugDrawer debugDrawer;
+    private static final boolean BULLET_DEBUG = true;
 
     @Override
     public void create()
@@ -58,22 +63,27 @@ public class Pong3d extends ApplicationAdapter
 	cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	cam.near = 1f;
 	cam.far = 200;
-	cam.position.set(-30, 5, 0);
+	cam.position.set(0, 30, 0);
 	cam.lookAt(0, 0, 0);
 	cam.update();
 	
 	shadowSystem = new ShadowSystem();
 	
 	BulletWorld.instance.init();
-	//debugDrawer = new DebugDrawer();
-	//BulletWorld.world.setDebugDrawer(debugDrawer);
-	//debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
+	if (BULLET_DEBUG)
+	{
+	    debugDrawer = new DebugDrawer();
+	    BulletWorld.world.setDebugDrawer(debugDrawer);
+	    debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
+	}
 	PongObjects.instance.init();
 	
 	shadowSystem.addLight(new PointShadowLight(new Vector3(0f, 13.8f, 32f),0.3f));
  	shadowSystem.addLight(new PointShadowLight(new Vector3(45f, 0.0f, 0f),0.3f));
 	shadowSystem.addLight(new DirectionalShadowSystemLight(new Vector3(33, 0, 0), new Vector3(-1, 0, 0), 0.3f));
 	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(0f, 30.0f, 0f),0.1f));
+	
+	controller = new PongController();
     }
 
     /**
@@ -84,11 +94,26 @@ public class Pong3d extends ApplicationAdapter
     public void render()
     {
 	float delta = Gdx.graphics.getDeltaTime();
+	update(delta);
 	shadowSystem.render(cam, delta);
+	
+	if (BULLET_DEBUG)
+	{
+	    debugDrawer.begin(cam);
+	    BulletWorld.instance.world.debugDrawWorld();
+	    debugDrawer.end();
+	}
 	
 	BulletWorld.instance.update(delta);
     }
 
+    public void update(float delta)
+    {
+	//PongObjects.instance.ground.body.applyCentralImpulse(new Vector3(5,0,0));
+	PongObjects.instance.update(delta);
+
+    }
+    
     @Override
     public void dispose()
     {

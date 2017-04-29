@@ -45,7 +45,7 @@ public class BulletWorld implements Disposable
 	broadphase = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
-	world.setGravity(new Vector3(0, -9.81f, .1f));
+	world.setGravity(new Vector3(0, -9.81f, 0f));
     }
 
     public void update(float delta)
