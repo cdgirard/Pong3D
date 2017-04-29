@@ -24,6 +24,9 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String TAG = Assets.class.getName();
     
     public static final String sphere = "models/sphere2.g3dj";
+    public static final String wood = "models/wood.g3dj";
+    public static final String wood2 = "models/wood2.g3dj";
+    public static final String marble = "models/marble.g3dj";
     
     public static FileHandle sceneVShader = Gdx.files.internal("shaders/scene_v.glsl");
     public static FileHandle sceneFShader = Gdx.files.internal("shaders/scene_f.glsl");
@@ -45,12 +48,17 @@ public class Assets implements Disposable, AssetErrorListener
     {
 	assetManager.setErrorListener(this);
 	
-	assetManager.load("models/marble.g3dj", Model.class);
+	assetManager.load(marble, Model.class);
 	assetManager.finishLoading();
 	
 	assetManager.load(sphere, Model.class);
 	assetManager.finishLoading();
 	
+	assetManager.load(wood, Model.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(wood2, Model.class);
+	assetManager.finishLoading();
     }
 
     @Override

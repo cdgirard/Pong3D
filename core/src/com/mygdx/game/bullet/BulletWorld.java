@@ -14,6 +14,8 @@ public class BulletWorld implements Disposable
 {
     public static final BulletWorld instance = new BulletWorld();
     
+    
+    protected MyContactListener contactListener;
     protected btDefaultCollisionConfiguration collisionConfiguration;
     protected btCollisionDispatcher dispatcher;
     protected btDbvtBroadphase broadphase;
@@ -23,7 +25,6 @@ public class BulletWorld implements Disposable
 
     private BulletWorld()
     {
-
     }
 
     @Override
@@ -40,8 +41,10 @@ public class BulletWorld implements Disposable
     public void init()
     {
 	Bullet.init();
+	
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfiguration);
+	contactListener = new MyContactListener();
 	broadphase = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);
