@@ -63,7 +63,7 @@ public class Pong3d extends ApplicationAdapter
 	cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	cam.near = 1f;
 	cam.far = 200;
-	cam.position.set(0, 10, 20);
+	cam.position.set(-20, 10, 20);
 	cam.lookAt(0, 0, 0);
 	cam.update();
 	

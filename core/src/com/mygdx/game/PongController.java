@@ -30,25 +30,25 @@ public class PongController extends InputAdapter implements Disposable
 	if (keycode == Keys.LEFT)
 	{
 	    if (!right)
-	        PongObjects.instance.ground.moveTo.x = 0f;
+	        PongObjects.instance.ground.impulseForce.x = 0f;
 	    left = false;
 	}
 	if (keycode == Keys.RIGHT)
 	{
 	    if (!left)
-	        PongObjects.instance.ground.moveTo.x = 0f;
+	        PongObjects.instance.ground.impulseForce.x = 0f;
 	    right = false;
 	}
 	if (keycode == Keys.DOWN)
 	{
 	    if (!up)
-	        PongObjects.instance.ground.moveTo.z = 0f;
+	        PongObjects.instance.ground.impulseForce.z = 0f;
 	    down = false;
 	}
 	if (keycode == Keys.UP)
 	{
 	    if (!down)
-	        PongObjects.instance.ground.moveTo.z = 0f;
+	        PongObjects.instance.ground.impulseForce.z = 0f;
 	    up = false;
 	}
 	return false;
@@ -60,22 +60,22 @@ public class PongController extends InputAdapter implements Disposable
 	PongObjects.instance.ground.body.activate();
 	if (keycode == Keys.LEFT)
 	{
-	    PongObjects.instance.ground.moveTo.x = -5f;
+	    PongObjects.instance.ground.impulseForce.x = -5f;
 	    left = true;
 	}
 	if (keycode == Keys.RIGHT)
 	{
-	    PongObjects.instance.ground.moveTo.x = 5f;
+	    PongObjects.instance.ground.impulseForce.x = 5f;
 	    right = true;
 	}
 	if (keycode == Keys.DOWN)
 	{
-	    PongObjects.instance.ground.moveTo.z = 5f;
+	    PongObjects.instance.ground.impulseForce.z = 5f;
 	    down = true;
 	}
 	if (keycode == Keys.UP)
 	{
-	    PongObjects.instance.ground.moveTo.z = -5f;
+	    PongObjects.instance.ground.impulseForce.z = -5f;
 	    up = true;
 	}
 	if (keycode == Keys.SPACE)
