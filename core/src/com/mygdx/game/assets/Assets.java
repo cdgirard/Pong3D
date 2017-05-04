@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,6 +13,9 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.shapebuilders.BoxShapeBuilder;
@@ -23,11 +27,15 @@ public class Assets implements Disposable, AssetErrorListener
     
     public static final String TAG = Assets.class.getName();
     
+    // 3D Models
     public static final String sphere = "models/sphere2.g3dj";
     public static final String wood = "models/wood.g3dj";
     public static final String wood2 = "models/wood2.g3dj";
     public static final String marble = "models/marble.g3dj";
     public static final String target = "models/target.g3dj";
+    
+    // 3D Effects
+    public static final String fire = "fire2.pfx";
     
     public static FileHandle sceneVShader = Gdx.files.internal("shaders/scene_v.glsl");
     public static FileHandle sceneFShader = Gdx.files.internal("shaders/scene_f.glsl");
@@ -39,6 +47,11 @@ public class Assets implements Disposable, AssetErrorListener
     public static FileHandle depthMapFShader = Gdx.files.internal("shaders/depthmap_f.glsl");
 
     public static AssetManager assetManager = new AssetManager();
+    
+    // ParticleSystem manages our particles - Not sure belongs here.
+    // We need it both to load the particles and to use the particles in the game...is an 
+    // odd class.
+    public ParticleSystem particleSystem = new ParticleSystem();
 
     private Assets()
     {
@@ -63,6 +76,8 @@ public class Assets implements Disposable, AssetErrorListener
 	
 	assetManager.load(target, Model.class);
 	assetManager.finishLoading();
+	
+
     }
 
     @Override

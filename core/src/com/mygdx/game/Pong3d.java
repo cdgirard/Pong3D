@@ -3,41 +3,17 @@ package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
-import com.badlogic.gdx.graphics.g3d.Renderable;
-import com.badlogic.gdx.graphics.g3d.Shader;
-import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.environment.DirectionalShadowLight;
-import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
-import com.badlogic.gdx.graphics.g3d.utils.DepthShaderProvider;
-import com.badlogic.gdx.graphics.glutils.ShaderProgram;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.Bullet;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionDispatcher;
-import com.badlogic.gdx.physics.bullet.collision.btDbvtBroadphase;
-import com.badlogic.gdx.physics.bullet.collision.btDefaultCollisionConfiguration;
-import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
-import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.bullet.BulletWorld;
-import com.mygdx.game.bullet.MyContactListener;
 import com.mygdx.game.objects.PongObjects;
-import com.mygdx.game.util.AbstractShadowLight;
 import com.mygdx.game.util.DirectionalShadowSystemLight;
 import com.mygdx.game.util.MovingPointShadowLight;
 import com.mygdx.game.util.PointShadowLight;
-import com.mygdx.game.util.ShadowMapShader;
-import com.mygdx.game.util.ShadowShaderProvider;
 import com.mygdx.game.util.ShadowSystem;
-import com.mygdx.game.util.SimpleTextureShader;
 
 public class Pong3d extends ApplicationAdapter
 {
@@ -55,6 +31,9 @@ public class Pong3d extends ApplicationAdapter
     DebugDrawer debugDrawer;
     private static final boolean BULLET_DEBUG = true;
 
+    
+
+    
     @Override
     public void create()
     {
@@ -63,7 +42,7 @@ public class Pong3d extends ApplicationAdapter
 	cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	cam.near = 1f;
 	cam.far = 200;
-	cam.position.set(-20, 10, 20);
+	cam.position.set(-10, 10, 10);
 	cam.lookAt(0, 0, 0);
 	cam.update();
 	
@@ -76,15 +55,19 @@ public class Pong3d extends ApplicationAdapter
 	    BulletWorld.world.setDebugDrawer(debugDrawer);
 	    debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
 	}
-	PongObjects.instance.init();
+	PongObjects.instance.init(cam);
 	
 	shadowSystem.addLight(new PointShadowLight(new Vector3(0f, 13.8f, 32f),0.3f));
  	shadowSystem.addLight(new PointShadowLight(new Vector3(45f, 0.0f, 0f),0.3f));
 	shadowSystem.addLight(new DirectionalShadowSystemLight(new Vector3(33, 0, 0), new Vector3(-1, 0, 0), 0.3f));
 	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(0f, 30.0f, 0f),0.1f));
 	
+
+	
 	controller = new PongController();
     }
+    
+
 
     /**
      * Two shaders, one creates the depth map, the other uses the depth map to create the shadows.
@@ -100,7 +83,7 @@ public class Pong3d extends ApplicationAdapter
 	if (BULLET_DEBUG)
 	{
 	    debugDrawer.begin(cam);
-	    BulletWorld.instance.world.debugDrawWorld();
+	    BulletWorld.world.debugDrawWorld();
 	    debugDrawer.end();
 	}
 	
