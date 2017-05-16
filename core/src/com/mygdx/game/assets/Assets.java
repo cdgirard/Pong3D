@@ -35,7 +35,7 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String target = "models/target.g3dj";
     
     // 3D Effects
-    public static final String fire = "fire2.pfx";
+    public static final String fire = "particles/flame.pfx";
     
     public static FileHandle sceneVShader = Gdx.files.internal("shaders/scene_v.glsl");
     public static FileHandle sceneFShader = Gdx.files.internal("shaders/scene_f.glsl");

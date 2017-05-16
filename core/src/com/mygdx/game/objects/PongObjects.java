@@ -7,11 +7,16 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleController;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.graphics.g3d.particles.emitters.Emitter;
 import com.badlogic.gdx.graphics.g3d.particles.emitters.RegularEmitter;
+import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsInfluencer;
+import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsModifier;
+import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsModifier.PolarAcceleration;
+import com.badlogic.gdx.graphics.g3d.particles.influencers.Influencer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
@@ -19,6 +24,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody.btRigidBodyConstructionInfo;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.bullet.BulletWorld;
@@ -66,10 +72,10 @@ public class PongObjects implements Disposable
 
 	ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(Assets.instance.particleSystem.getBatches());
 	ParticleEffectLoader loader = new ParticleEffectLoader(new InternalFileHandleResolver());
-        Assets.assetManager.setLoader(ParticleEffect.class, loader);
+	Assets.assetManager.setLoader(ParticleEffect.class, loader);
 	Assets.assetManager.load(Assets.fire, ParticleEffect.class, loadParam);
 	Assets.assetManager.finishLoading();
-	
+
 	ParticleEffect originalEffect = Assets.assetManager.get(Assets.fire);
 	// we cannot use the originalEffect, we must make a copy each time we
 	// create new particle effect
@@ -77,7 +83,129 @@ public class PongObjects implements Disposable
 	currentEffect.init();
 	currentEffect.start(); // optional: particle will begin playing
 			       // immediately
+	rotate_particle();
+
+	// ParticleEmitter emitter = effect.findEmitter("some_name"); // find
+	// the emitter you want to rotate here
+	// float targetAngle = /* your target angle */
+	//
+	// ScaledNumericValue angle = emitter.getAngle();
+	//
+	// /* find angle property and adjust that by letting the min, max of low
+	// and high span their current size around your angle */
+	//
+	// float angleHighMin = angle.getHighMin();
+	// float angleHighMax = angle.getHighMax();
+	// float spanHigh = angleHighMax - angleHighMin;
+	// angle.setHigh(angle - spanHigh / 2.0f, angle + spanHigh / 2.0f);
+	//
+	// float angleLowMin = angle.getLowhMin();
+	// float angleLowMax = angle.getLowMax();
+	// float spanLow = angleLowMax - angleLowMin;
+	// angle.setLow(angle - spanLow / 2.0f, angle + spanLow / 2.0f);
 	Assets.instance.particleSystem.add(currentEffect);
+    }
+
+    /**
+     * Seems to work, but need to play with it some more.
+     */
+    public void rotate_particle()
+    {
+	ParticleEffect effect = currentEffect;
+	
+	Matrix4 targetMatrix = new Matrix4();
+	targetMatrix.idt();
+	Vector3 position = new Vector3(-5, 7, 5);
+	Matrix4 loc = targetMatrix.trn(position);
+	//currentEffect.setTransform(loc);
+	//currentEffect.scale(new Vector3(2,2,2));
+	//currentEffect.rotate(new Vector3(0,0,1), 90);
+	
+
+	for (int i = 0; i < effect.getControllers().size; i++)
+	{
+	    Array<Influencer> data = effect.getControllers().get(i).influencers;
+	    
+	    boolean flag = false;
+	    for (int x = 0; x < data.size; x++)
+	    {
+
+		if (data.get(x) instanceof DynamicsInfluencer)
+		{
+		   // Gdx.app.error("INFO", "FOUND DI");
+		    flag = true;
+		    DynamicsInfluencer di = (DynamicsInfluencer) data.get(x);
+		    DynamicsModifier dm;
+
+		    for (int j = 0; j < di.velocities.size; j++)
+		    {
+
+			dm = (DynamicsModifier) di.velocities.get(j);
+
+			if (dm instanceof PolarAcceleration)
+			{
+			    Vector3 angVel = sphere.body.getLinearVelocity();
+			    float len = angVel.len();
+			    if (len > 0)
+			    {
+				angVel.x = angVel.x / len;
+			        angVel.y = angVel.y / len;
+			        angVel.z = angVel.z / len;
+			    }
+			        
+			   // Gdx.app.error("ANG", ""+angVel);
+
+			    
+			    float angPhi = (float)(Math.acos(-angVel.y)*180/Math.PI);
+			    float angTheta = (float)(Math.acos(-angVel.x)*180/Math.PI);
+			    if (angVel.z < 0)
+				angTheta = angTheta + 180;
+			    
+			   // Gdx.app.error("INFO:", ""+angVel+" : "+angPhi+" , "+angTheta);
+			    
+			    // horizontal +/- spread
+			    //float phiSpread = Math.abs(((PolarAcceleration) dm).phiValue.getHighMax() - ((PolarAcceleration) dm).phiValue.getHighMin());
+			    //((PolarAcceleration) dm).phiValue.setHigh(90 - 0.5f * phiSpread, 90 + 0.5f * phiSpread);
+			    // change to acc in opposite direction of movement direction
+			    //float angle = 270;//getAngleAroundY(direction);
+			   // float thetaSpread = Math.abs(((PolarAcceleration) dm).thetaValue.getHighMax() - ((PolarAcceleration) dm).thetaValue.getHighMin());
+			    // rotation around y-axis
+			    //((PolarAcceleration) dm).thetaValue.setHigh(angle - thetaSpread * 0.5f, angle + thetaSpread * 0.5f);
+			    ((PolarAcceleration) dm).phiValue.setHigh(angPhi,angPhi-10);
+			    ((PolarAcceleration) dm).thetaValue.setHigh(angTheta,angTheta-10);
+
+			}
+			else
+			{
+			   // Gdx.app.error("INFO", "NO polar acc for: ");
+			}
+		    }
+		}
+		if (!flag)
+		    ;//Gdx.app.error("INFO", "no DI");
+	    }
+	}
+
+	// ((PolarAcceleration) dm).phiValue.setHigh(90 - 0.5f * phiSpread, 90 +
+	// 0.5f * phiSpread);
+	//
+	//
+	// ((PolarAcceleration) dm).thetaValue.setHigh(angle - thetaSpread *
+	// 0.5f, angle + thetaSpread * 0.5f);
+	//
+	// DynamicsInfluencer di =
+	// effect.getControllers().get(i).findInfluencer(DynamicsInfluencer.class);
+	// DynamicsModifier dm;
+	// for (int j = 0; j < di.velocities.size; j++) {
+	//
+	// dm = (DynamicsModifier) di.velocities.get(j);
+	//
+	// ((PolarAcceleration) dm).phiValue.setHigh(90 - 0.5f * phiSpread, 90 +
+	// 0.5f * phiSpread);
+	//
+	// ((PolarAcceleration) dm).thetaValue.setHigh(angle - thetaSpread *
+	// 0.5f, angle + thetaSpread * 0.5f);
+	// }
     }
 
     public void create_platform()
@@ -126,7 +254,7 @@ public class PongObjects implements Disposable
 	Model model = Assets.assetManager.get(Assets.target, Model.class);
 
 	target = new GameObject();
-	Vector3 position = new Vector3(10, 7, 0);
+	Vector3 position = new Vector3(0, 7, 0);
 	target.instance = new ModelInstance(model);
 	target.motionState = new MyMotionState(target.instance);
 	target.motionState.setWorldTransform(target.instance.transform.trn(position));
@@ -213,20 +341,20 @@ public class PongObjects implements Disposable
     private void particleStuffCleanUp()
     {
 
-//	// Stopping a Partcle Effect
-//	Emitter emitter = pfx.getControllers().first().emitter;
-//	if (emitter instanceof RegularEmitter)
-//	{
-//	    RegularEmitter reg = (RegularEmitter) emitter;
-//	    reg.setEmissionMode(RegularEmitter.EmissionMode.EnabledUntilCycleEnd);
-//	}
-//
-//	// Cleanup of a dead particle
-//	if (currentEffects != null)
-//	{
-//	    Assets.instance.particleSystem.remove(currentEffects);
-//	    currentEffects.dispose();
-//	}
+	// // Stopping a Partcle Effect
+	// Emitter emitter = pfx.getControllers().first().emitter;
+	// if (emitter instanceof RegularEmitter)
+	// {
+	// RegularEmitter reg = (RegularEmitter) emitter;
+	// reg.setEmissionMode(RegularEmitter.EmissionMode.EnabledUntilCycleEnd);
+	// }
+	//
+	// // Cleanup of a dead particle
+	// if (currentEffects != null)
+	// {
+	// Assets.instance.particleSystem.remove(currentEffects);
+	// currentEffects.dispose();
+	// }
     }
 
     public void update(float delta)
@@ -264,28 +392,30 @@ public class PongObjects implements Disposable
      * Rendering the particles....probably needs to be housed in an object in
      * PongObjects.
      */
-    private void renderParticleEffects(ModelBatch batch) 
+    private void renderParticleEffects(ModelBatch batch)
     {
 	Matrix4 targetMatrix = new Matrix4();
-	
-	if (currentEffect!=null) {
-	    // Set to identity matrix
-		targetMatrix.idt();
 
-		//targetMatrix.translate(mWPos);
-		currentEffect.setTransform(targetMatrix); // Should not move yet.
-		
-		Assets.instance.particleSystem.update(); // technically not necessary for rendering
-		Assets.instance.particleSystem.begin();
-		Assets.instance.particleSystem.draw();
-		Assets.instance.particleSystem.end();
-		batch.render(Assets.instance.particleSystem);
+	if (currentEffect != null)
+	{
+	    rotate_particle();
+	    // Set to identity matrix
+	    targetMatrix.idt();
+
+	    targetMatrix = sphere.instance.transform;
+
+	    //targetMatrix.translate(mWPos);
+	    currentEffect.setTransform(targetMatrix); // Should not move yet.
+
+	    Assets.instance.particleSystem.update(); // technically not
+						     // necessary for rendering
+	    Assets.instance.particleSystem.begin();
+	    Assets.instance.particleSystem.draw();
+	    Assets.instance.particleSystem.end();
+	    batch.render(Assets.instance.particleSystem);
 	}
 
-	
-	
-
-}
+    }
 
     @Override
     public void dispose()
