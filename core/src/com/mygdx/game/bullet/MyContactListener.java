@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.bullet.collision.ContactListener;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObjectWrapper;
 import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
+import com.mygdx.game.objects.GameObject;
 import com.mygdx.game.objects.PongObjects;
 
 public class MyContactListener extends ContactListener
@@ -31,6 +32,21 @@ public class MyContactListener extends ContactListener
         public void onContactStarted(btCollisionObject colObj0, btCollisionObject colObj1)
         {
            // PongObjects.instance.ground.body.clearForces();
+            if ((colObj0.userData != null) && (colObj1.userData != null))
+            {
+        	Gdx.app.error("TAG","Callback"+colObj0.userData+" : "+colObj1.userData);
+                //Object obj = colObj0.userData;
+        	if (((GameObject)colObj0.userData).objId == GameObject.TARGET)
+        	{
+        	    BulletWorld.world.removeRigidBody(((GameObject)colObj0.userData).body);
+        	    ((GameObject)colObj0.userData).visible = false;
+        	}
+        	if (((GameObject)colObj1.userData).objId == GameObject.TARGET)
+        	{
+        	    BulletWorld.world.removeRigidBody(((GameObject)colObj1.userData).body);
+        	    ((GameObject)colObj1.userData).visible = false;
+        	}
+            }
         }
         
         @Override

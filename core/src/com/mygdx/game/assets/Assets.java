@@ -33,9 +33,11 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String wood2 = "models/wood2.g3dj";
     public static final String marble = "models/marble.g3dj";
     public static final String target = "models/target.g3dj";
+    public static final String water = "models/water.g3dj";
     
     // 3D Effects
     public static final String fire = "particles/flame.pfx";
+    public static final String splash = "particles/splash.pfx";
     
     public static FileHandle sceneVShader = Gdx.files.internal("shaders/scene_v.glsl");
     public static FileHandle sceneFShader = Gdx.files.internal("shaders/scene_f.glsl");
@@ -58,6 +60,11 @@ public class Assets implements Disposable, AssetErrorListener
 
     }
 
+    /**
+     * Ideally we should load our particles here, but they need the camera at loading
+     * time, which we won't have access to later.  May create a method that can be called
+     * later by classes that want to load/work with particles.
+     */
     public void init()
     {
 	assetManager.setErrorListener(this);
@@ -75,6 +82,9 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.finishLoading();
 	
 	assetManager.load(target, Model.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(water, Model.class);
 	assetManager.finishLoading();
 	
 

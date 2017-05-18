@@ -14,6 +14,9 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class GameObject implements Disposable 
 {
+    public static final int TARGET = 1;
+    public int objId;
+    public boolean visible = true;
     public btRigidBody body;
     public btCollisionShape shape;
     public ModelInstance instance;
@@ -31,6 +34,11 @@ public class GameObject implements Disposable
 	batch.render(instance);
     }
     
+    /**
+     * TODO: Should be removed, leaving in only if want to test again using the Environment.
+     * @param batch
+     * @param env
+     */
     public void render(ModelBatch batch, Environment env)
     {
 	batch.render(instance, env);
