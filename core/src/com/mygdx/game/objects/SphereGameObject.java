@@ -2,7 +2,8 @@ package com.mygdx.game.objects;
 
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
+import com.badlogic.gdx.graphics.g3d.Model;
+import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
@@ -12,8 +13,13 @@ import com.badlogic.gdx.graphics.g3d.particles.influencers.Influencer;
 import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsModifier.PolarAcceleration;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
+import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody.btRigidBodyConstructionInfo;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.Assets;
+import com.mygdx.game.bullet.BulletWorld;
+import com.mygdx.game.bullet.MyMotionState;
 
 public class SphereGameObject extends GameObject
 {
@@ -26,6 +32,24 @@ public class SphereGameObject extends GameObject
      */
     public SphereGameObject(Camera cam)
     {
+	
+	Model model = Assets.assetManager.get(Assets.sphere, Model.class);
+	float radius = 2.0f;
+
+	Vector3 position = new Vector3(0, 7, 0);
+	instance = new ModelInstance(model);
+	motionState = new MyMotionState(instance);
+	motionState.setWorldTransform(instance.transform.trn(position));
+	shape = new btSphereShape(radius / 2f);
+	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0.1f, motionState, shape, PongObjects.localInertia);
+	bodyInfo.setRestitution(1.01f);
+	bodyInfo.setFriction(1.0f);
+	body = new btRigidBody(bodyInfo);
+	body.userData = this;
+	// sphere.body.setCollisionFlags(sphere.body.getCollisionFlags() |
+	// btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
+	BulletWorld.world.addRigidBody(body);
+	
 	// Since our particle effects is a Billboard, we create a
 	// BillboardParticleBatch
 	// Not sure how this will fit in with the ShadowSystem.
