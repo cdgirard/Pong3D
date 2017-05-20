@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
@@ -16,6 +17,8 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
+import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
+import com.badlogic.gdx.graphics.g3d.particles.batches.PointSpriteParticleBatch;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.shapebuilders.BoxShapeBuilder;
@@ -38,6 +41,7 @@ public class Assets implements Disposable, AssetErrorListener
     // 3D Effects
     public static final String fire = "particles/flame.pfx";
     public static final String splash = "particles/splash.pfx";
+    public static final String explosion = "particles/explosion.pfx";
     
     public static FileHandle sceneVShader = Gdx.files.internal("shaders/scene_v.glsl");
     public static FileHandle sceneFShader = Gdx.files.internal("shaders/scene_f.glsl");
@@ -86,8 +90,37 @@ public class Assets implements Disposable, AssetErrorListener
 	
 	assetManager.load(water, Model.class);
 	assetManager.finishLoading();
+    }
+    
+    /**
+     * 3D Particle Effects need the camera to load properly, so need method
+     * called after the camera is setup to load them.  If I decide to attach
+     * particles to different cameras, then I will need different load methods.
+     * @param cam
+     */
+    public void loadParticleEffects(Camera cam)
+    {
 	
+	// Setup the ParticleBatch for the two different types of particles we plan to load.
+	BillboardParticleBatch billboardSpriteBatch = new BillboardParticleBatch();
+	billboardSpriteBatch.setCamera(cam);
+	Assets.instance.particleSystem.add(billboardSpriteBatch);
+	
+	PointSpriteParticleBatch pointSpriteBatch = new PointSpriteParticleBatch();
+	pointSpriteBatch.setCamera(cam);
+	Assets.instance.particleSystem.add(pointSpriteBatch);
 
+	// How is it connected to this.
+	ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(Assets.instance.particleSystem.getBatches());
+	ParticleEffectLoader loader = new ParticleEffectLoader(new InternalFileHandleResolver());
+	Assets.assetManager.setLoader(ParticleEffect.class, loader);
+	// Loading the fire trail effect
+	Assets.assetManager.load(Assets.fire, ParticleEffect.class, loadParam);
+	// Loading the explosion effect
+	Assets.assetManager.load(Assets.explosion, ParticleEffect.class, loadParam);
+	// Load the splash particle
+	Assets.assetManager.load(Assets.splash, ParticleEffect.class, loadParam);
+	Assets.assetManager.finishLoading();
     }
 
     @Override

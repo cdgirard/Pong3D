@@ -46,6 +46,8 @@ public class Pong3d extends ApplicationAdapter
 	cam.lookAt(0, 0, 0);
 	cam.update();
 	
+	Assets.instance.loadParticleEffects(cam);
+	
 	shadowSystem = new ShadowSystem();
 	
 	BulletWorld.instance.init();

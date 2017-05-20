@@ -53,15 +53,7 @@ public class SphereGameObject extends GameObject
 	// Since our particle effects is a Billboard, we create a
 	// BillboardParticleBatch
 	// Not sure how this will fit in with the ShadowSystem.
-	BillboardParticleBatch billboardSpriteBatch = new BillboardParticleBatch();
-	billboardSpriteBatch.setCamera(cam);
-	Assets.instance.particleSystem.add(billboardSpriteBatch);
-
-	ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(Assets.instance.particleSystem.getBatches());
-	ParticleEffectLoader loader = new ParticleEffectLoader(new InternalFileHandleResolver());
-	Assets.assetManager.setLoader(ParticleEffect.class, loader);
-	Assets.assetManager.load(Assets.fire, ParticleEffect.class, loadParam);
-	Assets.assetManager.finishLoading();
+	
 
 	ParticleEffect originalEffect = Assets.assetManager.get(Assets.fire);
 	// we cannot use the originalEffect, we must make a copy each time we

@@ -51,6 +51,8 @@ public class PongObjects implements Disposable
     // Needs a better home.
 
     ParticleEffect splashEffect;
+    ParticleEffect explosionEffect;
+    boolean explosion = false;
 
     protected PongObjects()
     {
@@ -68,25 +70,23 @@ public class PongObjects implements Disposable
 	create_water();
 
 	// Setup Splash for Testing
-	PointSpriteParticleBatch pointSpriteBatch = new PointSpriteParticleBatch();
-	pointSpriteBatch.setCamera(cam);
-	Assets.instance.particleSystem.add(pointSpriteBatch);
 
-	ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(Assets.instance.particleSystem.getBatches());
-	ParticleEffectLoader loader = new ParticleEffectLoader(new InternalFileHandleResolver());
-	Assets.assetManager.setLoader(ParticleEffect.class, loader);
-	Assets.assetManager.load(Assets.splash, ParticleEffect.class, loadParam);
-	Assets.assetManager.finishLoading();
 
 	ParticleEffect originalEffect = Assets.assetManager.get(Assets.splash);
 	// we cannot use the originalEffect, we must make a copy each time we
 	// create new particle effect
-	splashEffect = originalEffect.copy();
-	splashEffect.init();
-	splashEffect.start(); // optional: particle will begin playing
+	//splashEffect = originalEffect.copy();
+	//splashEffect.init();
+	//splashEffect.start(); // optional: particle will begin playing
 			      // immediately
 
-	Assets.instance.particleSystem.add(splashEffect);
+	//Assets.instance.particleSystem.add(splashEffect);
+	
+	// Prep the Explosion effect for when we need to trigger it.  Will just keep one
+	// and move it around as we need it.  Will work so long as we don't need to trigger more than one
+	// explosion at a time.
+	originalEffect = Assets.assetManager.get(Assets.explosion);
+	explosionEffect = originalEffect.copy();
     }
 
     public void create_wall3()
@@ -166,6 +166,21 @@ public class PongObjects implements Disposable
 	water.instance = new ModelInstance(model);
 	water.instance.transform.trn(position);
     }
+    
+    /**
+     * Sphere collided with a target so want to create an explosion effect from
+     * that collision.
+     */
+    public void startExplosion(Matrix4 location)
+    {
+	explosion = true;
+	explosionEffect.init();
+	Assets.instance.particleSystem.add(explosionEffect);
+	explosionEffect.start();
+        // Hopefully this will work to then immediately tell the explosion to stop and only do one cycle.
+	RegularEmitter reg = (RegularEmitter) explosionEffect.getControllers().first().emitter;
+	reg.setEmissionMode(RegularEmitter.EmissionMode.EnabledUntilCycleEnd);
+    }
 
     private void particleStuffCleanUp()
     {
@@ -174,8 +189,7 @@ public class PongObjects implements Disposable
 	// Emitter emitter = pfx.getControllers().first().emitter;
 	// if (emitter instanceof RegularEmitter)
 	// {
-	// RegularEmitter reg = (RegularEmitter) emitter;
-	// reg.setEmissionMode(RegularEmitter.EmissionMode.EnabledUntilCycleEnd);
+	// 
 	// }
 	//
 	// // Cleanup of a dead particle
@@ -188,6 +202,12 @@ public class PongObjects implements Disposable
 
     public void update(float delta)
     {
+	if (explosion)
+	{
+	    RegularEmitter reg = (RegularEmitter) explosionEffect.getControllers().first().emitter;
+	    if (reg.isComplete())
+		Assets.instance.particleSystem.remove(explosionEffect);
+	}
 	ground.update(delta);
 	sphere.update(delta);
 	wall.update(delta);
