@@ -1,31 +1,17 @@
 package com.mygdx.game.objects;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleController;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
-import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
-import com.badlogic.gdx.graphics.g3d.particles.batches.PointSpriteParticleBatch;
-import com.badlogic.gdx.graphics.g3d.particles.emitters.Emitter;
 import com.badlogic.gdx.graphics.g3d.particles.emitters.RegularEmitter;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsInfluencer;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsModifier;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsModifier.PolarAcceleration;
-import com.badlogic.gdx.graphics.g3d.particles.influencers.Influencer;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
-import com.badlogic.gdx.physics.bullet.collision.btSphereShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody.btRigidBodyConstructionInfo;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.bullet.BulletWorld;
@@ -44,6 +30,8 @@ public class PongObjects implements Disposable
 
     public static final Vector3 localInertia = new Vector3(1, 1, 1);
 
+    private float timePassed = 0.0f;
+    
     public GameObject wall, wall2, wall3, target, water;
     public PlatformGameObject ground;
     public SphereGameObject sphere;
@@ -53,6 +41,7 @@ public class PongObjects implements Disposable
     ParticleEffect splashEffect;
     ParticleEffect explosionEffect;
     boolean explosion = false;
+    boolean splash = false;
 
     protected PongObjects()
     {
@@ -75,12 +64,8 @@ public class PongObjects implements Disposable
 	ParticleEffect originalEffect = Assets.assetManager.get(Assets.splash);
 	// we cannot use the originalEffect, we must make a copy each time we
 	// create new particle effect
-	//splashEffect = originalEffect.copy();
-	//splashEffect.init();
-	//splashEffect.start(); // optional: particle will begin playing
-			      // immediately
+	splashEffect = originalEffect.copy();
 
-	//Assets.instance.particleSystem.add(splashEffect);
 	
 	// Prep the Explosion effect for when we need to trigger it.  Will just keep one
 	// and move it around as we need it.  Will work so long as we don't need to trigger more than one
@@ -174,11 +159,30 @@ public class PongObjects implements Disposable
     public void startExplosion(Matrix4 location)
     {
 	explosion = true;
+	explosionEffect.setTransform(location);
 	explosionEffect.init();
+	
 	Assets.instance.particleSystem.add(explosionEffect);
 	explosionEffect.start();
         // Hopefully this will work to then immediately tell the explosion to stop and only do one cycle.
 	RegularEmitter reg = (RegularEmitter) explosionEffect.getControllers().first().emitter;
+	reg.setEmissionMode(RegularEmitter.EmissionMode.EnabledUntilCycleEnd);
+    }
+    
+    /**
+     * Sphere went into the water, trigger a splash at the entry point.
+     * @param locaton
+     */
+    public void startSplash(Matrix4 location)
+    {
+	splash = true;
+	splashEffect.setTransform(location);
+	splashEffect.init();
+	
+	Assets.instance.particleSystem.add(splashEffect);
+	splashEffect.start();
+        // Hopefully this will work to then immediately tell the explosion to stop and only do one cycle.
+	RegularEmitter reg = (RegularEmitter) splashEffect.getControllers().first().emitter;
 	reg.setEmissionMode(RegularEmitter.EmissionMode.EnabledUntilCycleEnd);
     }
 
@@ -206,7 +210,29 @@ public class PongObjects implements Disposable
 	{
 	    RegularEmitter reg = (RegularEmitter) explosionEffect.getControllers().first().emitter;
 	    if (reg.isComplete())
+	    {
 		Assets.instance.particleSystem.remove(explosionEffect);
+	        explosion = false;
+	    }
+	}
+	if (splash)
+	{
+	    RegularEmitter reg = (RegularEmitter) splashEffect.getControllers().first().emitter;
+	    if (reg.isComplete())
+	    {
+		Assets.instance.particleSystem.remove(splashEffect);
+		splash = false;
+	    }
+	}
+	timePassed += delta;
+	if (timePassed > 1/60f)
+	{
+	        // Needs to be called so all particles update for next time step.
+		// Should only be called once per game loop update.
+		// 3D particle system has no connection to the game time, seems we have to 
+		// handle this on our own.
+		Assets.instance.particleSystem.update(); 
+		timePassed -= 1/60f;
 	}
 	ground.update(delta);
 	sphere.update(delta);
@@ -247,12 +273,13 @@ public class PongObjects implements Disposable
      */
     private void renderParticleEffects(ModelBatch batch)
     {
-	Assets.instance.particleSystem.update(); // technically not
-						 // necessary for rendering
+	
+						
 	Assets.instance.particleSystem.begin();
 	Assets.instance.particleSystem.draw();
 	Assets.instance.particleSystem.end();
 	batch.render(Assets.instance.particleSystem);
+	
     }
 
     @Override

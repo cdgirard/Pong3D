@@ -1,5 +1,6 @@
 package com.mygdx.game.objects;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
+import com.badlogic.gdx.graphics.g3d.particles.emitters.RegularEmitter;
 import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsInfluencer;
 import com.badlogic.gdx.graphics.g3d.particles.influencers.DynamicsModifier;
 import com.badlogic.gdx.graphics.g3d.particles.influencers.Influencer;
@@ -24,6 +26,7 @@ import com.mygdx.game.bullet.MyMotionState;
 public class SphereGameObject extends GameObject
 {
     ParticleEffect flameEffect;
+    boolean alive = true;
 
     /**
      * Creates the sphere with the fire trail particle affect attached.
@@ -138,9 +141,14 @@ public class SphereGameObject extends GameObject
 
 	    // Making sure the particle effect stays with the sphere.
 	    flameEffect.setTransform(targetMatrix);
-
-	    // Not sure what this does.
-	    Assets.instance.particleSystem.update();
+	}
+	
+	float sphereY = body.getCenterOfMassPosition().y;
+	Gdx.app.error("INFO", ""+sphereY);
+	if ((alive) && (sphereY < -5.0f))  // Setup this up to use the spalsh effect instead.
+	{
+	        PongObjects.instance.startSplash(instance.transform);
+	        alive = false;
 	}
     }
 

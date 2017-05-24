@@ -41,7 +41,7 @@ public class Assets implements Disposable, AssetErrorListener
     // 3D Effects
     public static final String fire = "particles/flame.pfx";
     public static final String splash = "particles/splash.pfx";
-    public static final String explosion = "particles/explosion.pfx";
+    public static final String explosion = "particles/explosion2.pfx";
     
     public static FileHandle sceneVShader = Gdx.files.internal("shaders/scene_v.glsl");
     public static FileHandle sceneFShader = Gdx.files.internal("shaders/scene_f.glsl");
@@ -104,23 +104,24 @@ public class Assets implements Disposable, AssetErrorListener
 	// Setup the ParticleBatch for the two different types of particles we plan to load.
 	BillboardParticleBatch billboardSpriteBatch = new BillboardParticleBatch();
 	billboardSpriteBatch.setCamera(cam);
-	Assets.instance.particleSystem.add(billboardSpriteBatch);
+	particleSystem.add(billboardSpriteBatch);
 	
 	PointSpriteParticleBatch pointSpriteBatch = new PointSpriteParticleBatch();
 	pointSpriteBatch.setCamera(cam);
-	Assets.instance.particleSystem.add(pointSpriteBatch);
+	particleSystem.add(pointSpriteBatch);
 
 	// How is it connected to this.
-	ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(Assets.instance.particleSystem.getBatches());
+	ParticleEffectLoader.ParticleEffectLoadParameter loadParam = new ParticleEffectLoader.ParticleEffectLoadParameter(particleSystem.getBatches());
 	ParticleEffectLoader loader = new ParticleEffectLoader(new InternalFileHandleResolver());
-	Assets.assetManager.setLoader(ParticleEffect.class, loader);
+	assetManager.setLoader(ParticleEffect.class, loader);
 	// Loading the fire trail effect
-	Assets.assetManager.load(Assets.fire, ParticleEffect.class, loadParam);
+	assetManager.load(Assets.fire, ParticleEffect.class, loadParam);
 	// Loading the explosion effect
-	Assets.assetManager.load(Assets.explosion, ParticleEffect.class, loadParam);
+	assetManager.load(Assets.explosion, ParticleEffect.class, loadParam);
 	// Load the splash particle
-	Assets.assetManager.load(Assets.splash, ParticleEffect.class, loadParam);
-	Assets.assetManager.finishLoading();
+	assetManager.load(Assets.splash, ParticleEffect.class, loadParam);
+	assetManager.finishLoading();
+	
     }
 
     @Override
