@@ -1,5 +1,6 @@
 package com.mygdx.game.objects;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody.btRigidBodyConstructionInfo;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.Assets;
+import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.bullet.MyMotionState;
 
@@ -158,6 +160,8 @@ public class PongObjects implements Disposable
      */
     public void startExplosion(Matrix4 location)
     {
+	Sound exp_snd = Assets.assetManager.get(Assets.explosion_snd, Sound.class);
+	AudioManager.instance.play(exp_snd);
 	explosion = true;
 	explosionEffect.setTransform(location);
 	explosionEffect.init();
@@ -175,6 +179,9 @@ public class PongObjects implements Disposable
      */
     public void startSplash(Matrix4 location)
     {
+	Sound splash_snd = Assets.assetManager.get(Assets.splash_snd, Sound.class);
+	AudioManager.instance.play(splash_snd);
+	
 	splash = true;
 	splashEffect.setTransform(location);
 	splashEffect.init();

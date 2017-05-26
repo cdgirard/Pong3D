@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
@@ -29,6 +30,10 @@ public class Assets implements Disposable, AssetErrorListener
     public static final Assets instance = new Assets();
     
     public static final String TAG = Assets.class.getName();
+    
+    // Sounds
+    public static final String explosion_snd = "sounds/explosion_snd.wav";
+    public static final String splash_snd = "sounds/splash_snd.wav";
     
     // 3D Models
     public static final String sphere = "models/sphere2.g3dj";
@@ -73,6 +78,7 @@ public class Assets implements Disposable, AssetErrorListener
     {
 	assetManager.setErrorListener(this);
 	
+	// Load 3D Models
 	assetManager.load(marble, Model.class);
 	assetManager.finishLoading();
 	
@@ -89,6 +95,13 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.finishLoading();
 	
 	assetManager.load(water, Model.class);
+	assetManager.finishLoading();
+	
+	// Load Sound Effects
+	assetManager.load(explosion_snd, Sound.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(splash_snd, Sound.class);
 	assetManager.finishLoading();
     }
     
