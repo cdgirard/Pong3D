@@ -4,6 +4,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
@@ -96,7 +97,10 @@ public class Pong3d extends ApplicationAdapter
     {
 	//PongObjects.instance.ground.body.applyCentralImpulse(new Vector3(5,0,0));
 	PongObjects.instance.update(delta);
-
+	Vector3 groundPos = PongObjects.instance.ground.body.getCenterOfMassPosition();
+	cam.position.set(groundPos.x-10,groundPos.y+10,groundPos.z+10);
+	cam.lookAt(groundPos);
+	cam.update();
     }
     
     @Override

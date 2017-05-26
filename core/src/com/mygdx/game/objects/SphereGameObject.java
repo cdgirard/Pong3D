@@ -23,6 +23,11 @@ import com.mygdx.game.assets.Assets;
 import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.bullet.MyMotionState;
 
+/**
+ * TODO Remember to clamp the force applied on the sphere so it doesn't shoot off into space.
+ * @author cdgira
+ *
+ */
 public class SphereGameObject extends GameObject
 {
     ParticleEffect flameEffect;
@@ -108,7 +113,7 @@ public class SphereGameObject extends GameObject
 			    // This is the angle along the y axis to spit out particles from.
 			    float angPhi = (float)(Math.acos(-angVel.y)*180/Math.PI);
 			    // This is the where on the xz circle to spit out particles from
-			    float angTheta = (float)(Math.acos(-angVel.x)*180/Math.PI);
+			    float  angTheta = (float)(Math.acos(-angVel.x)*180/Math.PI);
 			    if (angVel.z < 0)
 				angTheta = angTheta + 180;
 			    
@@ -131,6 +136,11 @@ public class SphereGameObject extends GameObject
     @Override
     public void update (float delta)
     {
+	// Try and cap this at around 15.
+	Vector3 speed = body.getLinearVelocity();
+	if (speed.y > 15)
+	    body.setLinearVelocity(new Vector3(speed.x,15,speed.z));
+	
 	Matrix4 targetMatrix = new Matrix4();
 
 	if (flameEffect != null)
@@ -144,7 +154,7 @@ public class SphereGameObject extends GameObject
 	}
 	
 	float sphereY = body.getCenterOfMassPosition().y;
-	Gdx.app.error("INFO", ""+sphereY);
+	
 	if ((alive) && (sphereY < -5.0f))  // Setup this up to use the spalsh effect instead.
 	{
 	        PongObjects.instance.startSplash(instance.transform);

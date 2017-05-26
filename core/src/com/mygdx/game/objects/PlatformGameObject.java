@@ -50,8 +50,8 @@ public class PlatformGameObject extends GameObject
 	body.applyCentralImpulse(impulseForce);
 
 	Vector3 tmp = body.getCenterOfMassPosition();
-	if (impulseForce.y > 10)
-	    Gdx.app.error("Tag", "" + tmp.y + " : " + impulseForce.y + " : " + bounceTimer);
+	//if (impulseForce.y > 10)
+	    //Gdx.app.error("Tag", "" + tmp.y + " : " + impulseForce.y + " : " + bounceTimer);
 	// body.clearForces();
 	if ((tmp.y > 1) || (tmp.y < -0.5))
 	{
