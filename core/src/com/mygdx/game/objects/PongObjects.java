@@ -6,18 +6,23 @@ import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleShader;
+import com.badlogic.gdx.graphics.g3d.particles.batches.PointSpriteParticleBatch;
 import com.badlogic.gdx.graphics.g3d.particles.emitters.RegularEmitter;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody.btRigidBodyConstructionInfo;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.bullet.MyMotionState;
+import com.mygdx.game.util.PongParticlePool;
 
 /**
  * This class needs some redesign on how we are managing the objects in the
@@ -279,14 +284,11 @@ public class PongObjects implements Disposable
      * PongObjects.
      */
     private void renderParticleEffects(ModelBatch batch)
-    {
-	
-						
+    {				
 	Assets.instance.particleSystem.begin();
 	Assets.instance.particleSystem.draw();
 	Assets.instance.particleSystem.end();
 	batch.render(Assets.instance.particleSystem);
-	
     }
 
     @Override

@@ -14,16 +14,24 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.attributes.BlendingAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.DepthTestAttribute;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleShader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleShader.AlignMode;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
 import com.badlogic.gdx.graphics.g3d.particles.batches.PointSpriteParticleBatch;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.shapebuilders.BoxShapeBuilder;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Pool;
+import com.mygdx.game.util.PongParticlePool;
 
 public class Assets implements Disposable, AssetErrorListener
 {
@@ -44,7 +52,7 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String water = "models/water.g3dj";
     
     // 3D Effects
-    public static final String fire = "particles/flame.pfx";
+    public static final String fire = "particles/flame2.pfx";
     public static final String splash = "particles/splash.pfx";
     public static final String explosion = "particles/explosion2.pfx";
     
@@ -63,6 +71,7 @@ public class Assets implements Disposable, AssetErrorListener
     // We need it both to load the particles and to use the particles in the game...is an 
     // odd class.
     public ParticleSystem particleSystem = new ParticleSystem();
+    //public PointSpriteParticleBatch pointSpriteBatch;
 
     private Assets()
     {
@@ -115,11 +124,23 @@ public class Assets implements Disposable, AssetErrorListener
     {
 	
 	// Setup the ParticleBatch for the two different types of particles we plan to load.
-	BillboardParticleBatch billboardSpriteBatch = new BillboardParticleBatch();
-	billboardSpriteBatch.setCamera(cam);
-	particleSystem.add(billboardSpriteBatch);
+	//(AlignMode mode, boolean useGPU, int capacity, BlendingAttribute blendingAttribute,DepthTestAttribute depthTestAttribute)
+	//BillboardParticleBatch billboardSpriteBatch = new BillboardParticleBatch(AlignMode.Screen,true,100);
+	// AlignMode seems to contain the vertex and fragment shaders that might be overriding the ones I'm
+	// trying to use for depth map.
 	
-	PointSpriteParticleBatch pointSpriteBatch = new PointSpriteParticleBatch();
+	// I may end up needing two particle systems...one for depth map and one for actual rendering...not sure.
+	//billboardSpriteBatch.setCamera(cam);
+	//particleSystem.add(billboardSpriteBatch);
+	
+	 PointSpriteParticleBatch pointSpriteBatch = new PointSpriteParticleBatch();
+	// This is what the ShaderProgram does as soon as you had it the file handles.
+	//String defaultVertexShader = Assets.sceneVShader.readString();
+	//String defaultFragmentShader = Assets.sceneFShader.readString();
+	
+// Path to get/interact with and change the shader for the particles.
+
+	//pointSpriteBatch = new PointSpriteParticleBatch(100,new ParticleShader.Config(defaultVertexShader, defaultFragmentShader));
 	pointSpriteBatch.setCamera(cam);
 	particleSystem.add(pointSpriteBatch);
 

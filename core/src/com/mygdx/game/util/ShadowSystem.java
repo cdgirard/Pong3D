@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.Shader;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleShader;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
@@ -74,6 +75,7 @@ public class ShadowSystem
     {
 	ShaderProgram.pedantic = false;
 	sceneShaderProgram = new ShaderProgram(Assets.sceneVShader, Assets.sceneFShader);
+	
 	sceneShaderProgram.isCompiled();
 	Gdx.app.error("ShadowSystem", sceneShaderProgram.getLog());
 

@@ -61,8 +61,8 @@ public class Pong3d extends ApplicationAdapter
 	PongObjects.instance.init(cam);
 	
 	shadowSystem.addLight(new PointShadowLight(new Vector3(0f, 13.8f, 32f),0.3f));
- 	shadowSystem.addLight(new PointShadowLight(new Vector3(45f, 0.0f, 0f),0.3f));
-	shadowSystem.addLight(new DirectionalShadowSystemLight(new Vector3(33, 0, 0), new Vector3(-1, 0, 0), 0.3f));
+ 	//shadowSystem.addLight(new PointShadowLight(new Vector3(45f, 0.0f, 0f),0.3f));
+	//shadowSystem.addLight(new DirectionalShadowSystemLight(new Vector3(33, 0, 0), new Vector3(-1, 0, 0), 0.3f));
 	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(0f, 30.0f, 0f),0.1f));
 	
 

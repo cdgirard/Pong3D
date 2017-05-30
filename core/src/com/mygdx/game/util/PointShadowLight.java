@@ -5,9 +5,13 @@ import com.badlogic.gdx.graphics.Cubemap;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap.Format;
+import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleShader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.Pong3d;
+import com.mygdx.game.assets.Assets;
 import com.mygdx.game.objects.PongObjects;
 
 public class PointShadowLight extends AbstractShadowLight
@@ -56,7 +60,23 @@ public class PointShadowLight extends AbstractShadowLight
 	{
 	    frameBuffer = new FrameBufferCubeMap(Format.RGBA8888, Pong3d.DEPTH_MAP_SIZE, true);
 	}
-
+	
+	// An attempt to get particles to cast shadows, still not plugging into the internal
+	// render system correctly that the ParticleSystem uses.
+//	Array<Renderable> renderables = new Array<Renderable>();
+//	PongParticlePool pool = new PongParticlePool();  // This guy is supposed to store a reusable pool of Renderable objects.
+//        Assets.instance.pointSpriteBatch.getRenderables (renderables, pool); // Would put the renderable in the Array.
+//	if (renderables.size > 0)
+//	{
+//	    Renderable renderable = renderables.get(0);
+//	    // renderable.shader = null;
+//	    ParticleShader ps = (ParticleShader) renderable.shader;
+//	    ps.program.begin();
+//	    ps.program.setUniformf("u_cameraFar", camera.far);
+//	    ps.program.setUniformf("u_lightPosition", position);
+//
+//	    ps.program.end();
+//	}
 	shaderProgram.begin();
 	shaderProgram.setUniformf("u_cameraFar", camera.far);
 	shaderProgram.setUniformf("u_lightPosition", position);
@@ -66,6 +86,7 @@ public class PointShadowLight extends AbstractShadowLight
 	for (int s = 0; s <= 5; s++)
 	{
 	    final Cubemap.CubemapSide side = Cubemap.CubemapSide.values()[s];
+	    // If you comment out the frameBuffer commands you can see what is gathered for the depthMap.
 	    frameBuffer.begin(side, camera);
 	    Gdx.gl.glClearColor(0, 0, 0, 1);
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);

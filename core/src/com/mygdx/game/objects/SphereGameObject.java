@@ -67,6 +67,7 @@ public class SphereGameObject extends GameObject
 	// we cannot use the originalEffect, we must make a copy each time we
 	// create new particle effect
 	flameEffect = originalEffect.copy();
+	
 	flameEffect.init();
 	flameEffect.start(); // optional: particle will begin playing
 			       // immediately
