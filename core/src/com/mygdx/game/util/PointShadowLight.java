@@ -61,22 +61,6 @@ public class PointShadowLight extends AbstractShadowLight
 	    frameBuffer = new FrameBufferCubeMap(Format.RGBA8888, Pong3d.DEPTH_MAP_SIZE, true);
 	}
 	
-	// An attempt to get particles to cast shadows, still not plugging into the internal
-	// render system correctly that the ParticleSystem uses.
-//	Array<Renderable> renderables = new Array<Renderable>();
-//	PongParticlePool pool = new PongParticlePool();  // This guy is supposed to store a reusable pool of Renderable objects.
-//        Assets.instance.pointSpriteBatch.getRenderables (renderables, pool); // Would put the renderable in the Array.
-//	if (renderables.size > 0)
-//	{
-//	    Renderable renderable = renderables.get(0);
-//	    // renderable.shader = null;
-//	    ParticleShader ps = (ParticleShader) renderable.shader;
-//	    ps.program.begin();
-//	    ps.program.setUniformf("u_cameraFar", camera.far);
-//	    ps.program.setUniformf("u_lightPosition", position);
-//
-//	    ps.program.end();
-//	}
 	shaderProgram.begin();
 	shaderProgram.setUniformf("u_cameraFar", camera.far);
 	shaderProgram.setUniformf("u_lightPosition", position);
