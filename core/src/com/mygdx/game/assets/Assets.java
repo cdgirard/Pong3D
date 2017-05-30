@@ -71,7 +71,7 @@ public class Assets implements Disposable, AssetErrorListener
     // We need it both to load the particles and to use the particles in the game...is an 
     // odd class.
     public ParticleSystem particleSystem = new ParticleSystem();
-    //public PointSpriteParticleBatch pointSpriteBatch;
+    public PointSpriteParticleBatch pointSpriteBatch;
 
     private Assets()
     {
@@ -133,14 +133,14 @@ public class Assets implements Disposable, AssetErrorListener
 	//billboardSpriteBatch.setCamera(cam);
 	//particleSystem.add(billboardSpriteBatch);
 	
-	 PointSpriteParticleBatch pointSpriteBatch = new PointSpriteParticleBatch();
+	 //PointSpriteParticleBatch pointSpriteBatch = new PointSpriteParticleBatch();
 	// This is what the ShaderProgram does as soon as you had it the file handles.
-	//String defaultVertexShader = Assets.sceneVShader.readString();
-	//String defaultFragmentShader = Assets.sceneFShader.readString();
+	String defaultVertexShader = Assets.sceneVShader.readString();
+	String defaultFragmentShader = Assets.sceneFShader.readString();
 	
 // Path to get/interact with and change the shader for the particles.
 
-	//pointSpriteBatch = new PointSpriteParticleBatch(100,new ParticleShader.Config(defaultVertexShader, defaultFragmentShader));
+	pointSpriteBatch = new PointSpriteParticleBatch(100,new ParticleShader.Config(defaultVertexShader, defaultFragmentShader));
 	pointSpriteBatch.setCamera(cam);
 	particleSystem.add(pointSpriteBatch);
 
