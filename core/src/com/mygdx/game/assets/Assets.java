@@ -27,11 +27,11 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String splash_snd = "sounds/splash_snd.wav";
     
     // 3D Models
-    public static final String sphere = "models/sphere2.g3dj";
-    public static final String wood = "models/wood.g3dj";
-    public static final String wood2 = "models/wood2.g3dj";
-    public static final String marble = "models/marble.g3dj";
-    public static final String target = "models/target.g3dj";
+    public static final String sphere = "models/sphere.g3dj";
+    public static final String wood = "models/rockWall3.g3dj";
+    public static final String wood2 = "models/rockWall2.g3dj";
+    public static final String marble = "models/bronzeCopper_platform.g3dj";
+    public static final String target = "models/target2.g3dj";
     public static final String water = "models/water.g3dj";
     
     // 3D Effects

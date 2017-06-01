@@ -19,12 +19,12 @@ public class TargetGameObject extends GameObject
 	Model model = Assets.assetManager.get(Assets.target, Model.class);
 
 	objId = GameObject.TARGET;
-	Vector3 position = new Vector3(5, 7, 0);
+	Vector3 position = new Vector3(7, 5, 5);
 	instance = new ModelInstance(model);
 	motionState = new MyMotionState(instance);
 	motionState.setWorldTransform(instance.transform.trn(position));
 	int width = 10;
-	shape = new btBoxShape(new Vector3(0.25f, 0.25f, 0.25f));
+	shape = new btBoxShape(new Vector3(1.0f, 1.0f, 1.0f));
 	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, motionState, shape, Vector3.Zero);
 	bodyInfo.setRestitution(1.01f);
 	bodyInfo.setFriction(1.0f);

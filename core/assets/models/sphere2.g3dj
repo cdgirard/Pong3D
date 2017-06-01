@@ -2525,7 +2525,7 @@
       "textures": [
         {
           "id": "Texture",
-          "filename": "Grey.jpg",
+          "filename": "concreteBare.jpg",
           "type": "DIFFUSE"
         }
       ]

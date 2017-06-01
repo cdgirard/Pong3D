@@ -76,7 +76,7 @@
       "textures": [
         {
           "id": "Tex",
-          "filename": "Textures_WoodFine.jpg",
+          "filename": "bronzeCopper.jpg",
           "type": "DIFFUSE"
         }
       ]
@@ -86,13 +86,10 @@
     {
       "id": "Cube",
       "translation": [
-        0, 0, 0
-      ],
-      "rotation": [
-        -0.707107,-0.000000,-0.707107, 0.000000
+        0.0, 0.0,0.0
       ],
       "scale": [
-        -10.000000,-35.092770,-0.043165
+         5.0, 1.000000, 5.0
       ],
       "parts": [
         {

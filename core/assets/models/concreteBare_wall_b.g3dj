@@ -76,7 +76,7 @@
       "textures": [
         {
           "id": "Tex",
-          "filename": "TexturesCom_MarbleGreen0001_1_seamless_S.jpg",
+          "filename": "rockWall.jpg",
           "type": "DIFFUSE"
         }
       ]
@@ -86,10 +86,13 @@
     {
       "id": "Cube",
       "translation": [
-        0.0, 0.0,0.0
+        0, 0, 0
+      ],
+      "rotation": [
+        -0.707107,-0.000000,-0.707107, 0.000000
       ],
       "scale": [
-         5.0, 1.000000, 5.0
+        -10.000000,-35.092770,-0.043165
       ],
       "parts": [
         {

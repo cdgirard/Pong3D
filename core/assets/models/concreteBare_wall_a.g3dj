@@ -76,7 +76,7 @@
       "textures": [
         {
           "id": "Tex",
-          "filename": "Textures_WoodFine.jpg",
+          "filename": "rockWall.jpg",
           "type": "DIFFUSE"
         }
       ]

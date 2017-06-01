@@ -86,14 +86,14 @@ public class PongObjects implements Disposable
 	Model model = Assets.assetManager.get(Assets.wood2, Model.class);
 
 	wall3 = new GameObject();
-	Vector3 position = new Vector3(30, 0, 0);
+	Vector3 position = new Vector3(29, 0, 1);
 	wall3.instance = new ModelInstance(model);
 	// Bullet does not deal well with scaled objects for some reason.
 	// wall.instance.transform.scale(1f,1.5f,1f);
 	wall3.motionState = new MyMotionState(wall3.instance);
 	wall3.motionState.setWorldTransform(wall3.instance.transform.trn(position));
 	int width = 10;
-	wall3.shape = new btBoxShape(new Vector3(0.025f, width - 1.8f, width));
+	wall3.shape = new btBoxShape(new Vector3(1.0f, width, width));
 	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, wall3.motionState, wall3.shape, Vector3.Zero);
 	bodyInfo.setRestitution(1.01f);
 	bodyInfo.setFriction(1.0f);
@@ -115,7 +115,7 @@ public class PongObjects implements Disposable
 	wall2.motionState = new MyMotionState(wall2.instance);
 	wall2.motionState.setWorldTransform(wall2.instance.transform.trn(position));
 	int width = 10;
-	wall2.shape = new btBoxShape(new Vector3(width, width - 1.8f, 0.025f));
+	wall2.shape = new btBoxShape(new Vector3(width, width, 1.0f));
 	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, wall2.motionState, wall2.shape, Vector3.Zero);
 	bodyInfo.setRestitution(1.01f);
 	bodyInfo.setFriction(1.0f);
@@ -138,7 +138,7 @@ public class PongObjects implements Disposable
 	wall.motionState = new MyMotionState(wall.instance);
 	wall.motionState.setWorldTransform(wall.instance.transform.trn(position));
 	int width = 10;
-	wall.shape = new btBoxShape(new Vector3(width, width - 1.8f, 0.025f));
+	wall.shape = new btBoxShape(new Vector3(width, width, 1.0f));
 	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, wall.motionState, wall.shape, Vector3.Zero);
 	bodyInfo.setRestitution(1.01f);
 	bodyInfo.setFriction(1.0f);

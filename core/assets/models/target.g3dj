@@ -76,7 +76,7 @@
       "textures": [
         {
           "id": "Tex",
-          "filename": "Textures_FabricPlain.jpg",
+          "filename": "WoodPlanks.jpg",
           "type": "DIFFUSE"
         }
       ]
