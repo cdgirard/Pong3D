@@ -43,6 +43,8 @@ public class SphereGameObject extends GameObject
 	
 	Model model = Assets.assetManager.get(Assets.sphere, Model.class);
 	float radius = 2.0f;
+	
+	objId = GameObject.SPHERE;
 
 	Vector3 position = new Vector3(0, 7, 0);
 	instance = new ModelInstance(model);

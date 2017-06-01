@@ -2,11 +2,8 @@ package com.mygdx.game.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionShape;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.linearmath.btMotionState;
@@ -14,7 +11,11 @@ import com.badlogic.gdx.utils.Disposable;
 
 public class GameObject implements Disposable 
 {
-    public static final int TARGET = 1;
+    public static final int SCORE_TARGET = 1;
+    public static final int OBSTACLE_TARGET = 2;
+    public static final int SPHERE = 3;
+    public static final int PLATFORM = 4;
+    public static final int WALL = 5;
     public int objId;
     public boolean visible = true;
     public btRigidBody body;

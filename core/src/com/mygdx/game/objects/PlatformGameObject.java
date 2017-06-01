@@ -25,6 +25,8 @@ public class PlatformGameObject extends GameObject
 	instance = new ModelInstance(model);
 	motionState = new MyMotionState(instance);
 
+	objId = GameObject.PLATFORM;
+	
 	float width = 5;
 	shape = new btBoxShape(new Vector3(width, 1 / 4f, width));
 	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(100f, motionState, shape, Vector3.Zero);

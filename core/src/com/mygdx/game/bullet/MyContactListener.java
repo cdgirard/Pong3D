@@ -2,6 +2,7 @@ package com.mygdx.game.bullet;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.physics.bullet.collision.btCollisionObject;
 import com.badlogic.gdx.physics.bullet.collision.btCollisionObjectWrapper;
 import com.badlogic.gdx.physics.bullet.collision.btManifoldPoint;
 import com.mygdx.game.assets.Assets;
+import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.objects.GameObject;
 import com.mygdx.game.objects.PongObjects;
 
@@ -42,17 +44,28 @@ public class MyContactListener extends ContactListener
 	{
 	    Gdx.app.error("TAG", "Callback" + colObj0.userData + " : " + colObj1.userData);
 	    // Object obj = colObj0.userData;
-	    if (((GameObject) colObj0.userData).objId == GameObject.TARGET)
+	    if (((GameObject) colObj0.userData).objId == GameObject.SCORE_TARGET)
 	    {
 		BulletWorld.world.removeRigidBody(((GameObject) colObj0.userData).body);
 		((GameObject) colObj0.userData).visible = false;
 		PongObjects.instance.startExplosion(((GameObject) colObj0.userData).instance.transform);
 	    }
-	    if (((GameObject) colObj1.userData).objId == GameObject.TARGET)
+	    if (((GameObject) colObj1.userData).objId == GameObject.SCORE_TARGET)
 	    {
 		BulletWorld.world.removeRigidBody(((GameObject) colObj1.userData).body);
 		((GameObject) colObj1.userData).visible = false;
 		PongObjects.instance.startExplosion(((GameObject) colObj1.userData).instance.transform);
+	    }
+	    
+	    if (((GameObject) colObj0.userData).objId == GameObject.OBSTACLE_TARGET)
+	    {
+		Sound exp_snd = Assets.assetManager.get(Assets.anvil_snd, Sound.class);
+		AudioManager.instance.play(exp_snd);
+	    }
+	    if (((GameObject) colObj1.userData).objId == GameObject.OBSTACLE_TARGET)
+	    {
+		Sound exp_snd = Assets.assetManager.get(Assets.anvil_snd, Sound.class);
+		AudioManager.instance.play(exp_snd);
 	    }
 	}
     }

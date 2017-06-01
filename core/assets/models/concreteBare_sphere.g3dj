@@ -4201,7 +4201,7 @@
       "textures": [
         {
           "id": "Soil",
-          "filename": "concreteBare.jpg",
+          "filename": "bunkerPainted.jpg",
           "type": "DIFFUSE"
         }
       ]

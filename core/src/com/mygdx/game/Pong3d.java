@@ -30,7 +30,7 @@ public class Pong3d extends ApplicationAdapter
     
     // For Bullet
     DebugDrawer debugDrawer;
-    private static final boolean BULLET_DEBUG = true;
+    private static final boolean BULLET_DEBUG = false;
     
     @Override
     public void create()
@@ -92,9 +92,9 @@ public class Pong3d extends ApplicationAdapter
     {
 	//PongObjects.instance.ground.body.applyCentralImpulse(new Vector3(5,0,0));
 	PongObjects.instance.update(delta);
-	//Vector3 groundPos = PongObjects.instance.ground.body.getCenterOfMassPosition();
-	Vector3 groundPos = PongObjects.instance.sphere.body.getCenterOfMassPosition();
-	cam.position.set(groundPos.x-3,groundPos.y+3,groundPos.z+3);
+	Vector3 groundPos = PongObjects.instance.ground.body.getCenterOfMassPosition();
+	//Vector3 groundPos = PongObjects.instance.sphere.body.getCenterOfMassPosition();
+	cam.position.set(groundPos.x-15,groundPos.y+15,groundPos.z+15);
 	cam.lookAt(groundPos);
 	cam.update();
     }

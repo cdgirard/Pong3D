@@ -39,9 +39,12 @@ public class PongObjects implements Disposable
 
     private float timePassed = 0.0f;
     
-    public GameObject wall, wall2, wall3, target, water;
+    Array<GameObject> objects = new Array<GameObject>();
+    
+    public GameObject wall, wall2, wall3, water;
     public PlatformGameObject ground;
     public SphereGameObject sphere;
+    public TargetGameObject target, target2;
 
     // Needs a better home.
 
@@ -57,13 +60,27 @@ public class PongObjects implements Disposable
 
     public void init(Camera cam)
     {
+	// Build the Game Objects
 	ground = new PlatformGameObject();
 	sphere = new SphereGameObject(cam);
 	create_wall();
 	create_wall2();
 	create_wall3();
-	target = new TargetGameObject();
+	target = new TargetGameObject(new Vector3(7,5,5),GameObject.SCORE_TARGET);
+	target2 = new TargetGameObject(new Vector3(0,5,4),GameObject.OBSTACLE_TARGET);
 	create_water();
+	
+	// Put them all in an array to make adding new objects to the game 
+	// more easy.
+	objects.add(ground);
+	objects.add(sphere);
+	objects.add(wall);
+	objects.add(wall2);
+	objects.add(wall3);
+	objects.add(target);
+	objects.add(target2);
+	objects.add(water);
+	
 
 	// Setup Splash for Testing
 
@@ -218,6 +235,7 @@ public class PongObjects implements Disposable
 
     public void update(float delta)
     {
+	// These should probably go with the objects that triggered them.
 	if (explosion)
 	{
 	    RegularEmitter reg = (RegularEmitter) explosionEffect.getControllers().first().emitter;
@@ -246,37 +264,40 @@ public class PongObjects implements Disposable
 		Assets.instance.particleSystem.update(); 
 		timePassed -= 1/60f;
 	}
-	ground.update(delta);
-	sphere.update(delta);
-	wall.update(delta);
-	wall2.update(delta);
-	wall3.update(delta);
-	if (target.visible)
-	    target.update(delta);
+	for (GameObject obj: objects)
+	{
+	    obj.update(delta);
+	}
     }
 
+    /**
+     * Present way the game objects are rendered using the ShadowLightingSystem.
+     * @param batch
+     */
     public void render(ModelBatch batch)
     {
-	ground.render(batch);
-	sphere.render(batch);
-	wall.render(batch);
-	wall2.render(batch);
-	wall3.render(batch);
-	water.render(batch);
-	if (target.visible)
-	    target.render(batch);
+	for (GameObject obj: objects)
+	{
+	    obj.render(batch);
+	}
+	
 	renderParticleEffects(batch);
     }
 
+    /**
+     * For back when I was trying to use the Environment class to manage lighting.
+     * Should probably be refactored out.
+     * @param batch
+     * @param env
+     */
     public void render(ModelBatch batch, Environment env)
     {
-	ground.render(batch, env);
-	sphere.render(batch, env);
-	wall.render(batch, env);
-	wall2.render(batch, env);
-	wall3.render(batch, env);
-	if (target.visible)
-	    target.render(batch, env);
+	for (GameObject obj: objects)
+	{
+	    obj.render(batch);
+	}
+	
+	renderParticleEffects(batch);
     }
 
     /**

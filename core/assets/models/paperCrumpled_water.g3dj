@@ -46,7 +46,7 @@
       "textures": [
         {
           "id": "Texture",
-          "filename": "PaperCrumpled_seamless.jpg",
+          "filename": "paperCrumpled.jpg",
           "type": "DIFFUSE"
         }
       ]

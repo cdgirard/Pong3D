@@ -25,14 +25,16 @@ public class Assets implements Disposable, AssetErrorListener
     // Sounds
     public static final String explosion_snd = "sounds/explosion_snd.wav";
     public static final String splash_snd = "sounds/splash_snd.wav";
+    public static final String anvil_snd = "sounds/anvil_snd.wav";
     
     // 3D Models
-    public static final String sphere = "models/sphere.g3dj";
-    public static final String wood = "models/rockWall3.g3dj";
-    public static final String wood2 = "models/rockWall2.g3dj";
+    public static final String sphere = "models/concreteBare_sphere.g3dj";
+    public static final String wood = "models/rockWall_wall_a.g3dj";
+    public static final String wood2 = "models/rockWall_wall_b.g3dj";
     public static final String marble = "models/bronzeCopper_platform.g3dj";
-    public static final String target = "models/target2.g3dj";
-    public static final String water = "models/water.g3dj";
+    public static final String target = "models/woodPlanks_target.g3dj";
+    public static final String target2 = "models/metalPlatesDucts_target.g3dj";
+    public static final String water = "models/paperCrumpled_water.g3dj";
     
     // 3D Effects
     public static final String fire = "particles/flame2.pfx";
@@ -85,6 +87,9 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.load(target, Model.class);
 	assetManager.finishLoading();
 	
+	assetManager.load(target2, Model.class);
+	assetManager.finishLoading();
+	
 	assetManager.load(water, Model.class);
 	assetManager.finishLoading();
 	
@@ -93,6 +98,9 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.finishLoading();
 	
 	assetManager.load(splash_snd, Sound.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(anvil_snd, Sound.class);
 	assetManager.finishLoading();
     }
     
