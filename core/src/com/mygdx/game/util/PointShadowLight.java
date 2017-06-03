@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleShader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.Pong3d;
+import com.mygdx.game.GameScreen;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.objects.PongObjects;
 
@@ -43,7 +43,7 @@ public class PointShadowLight extends AbstractShadowLight
     {
 	super.init();
 
-	camera = new PerspectiveCamera(90f, Pong3d.DEPTH_MAP_SIZE, Pong3d.DEPTH_MAP_SIZE);
+	camera = new PerspectiveCamera(90f, GameScreen.DEPTH_MAP_SIZE, GameScreen.DEPTH_MAP_SIZE);
 	camera.near = 4f;
 	camera.far = 70;
 	camera.position.set(position);
@@ -58,7 +58,7 @@ public class PointShadowLight extends AbstractShadowLight
 	needsUpdate = false;
 	if (frameBuffer == null)
 	{
-	    frameBuffer = new FrameBufferCubeMap(Format.RGBA8888, Pong3d.DEPTH_MAP_SIZE, true);
+	    frameBuffer = new FrameBufferCubeMap(Format.RGBA8888, GameScreen.DEPTH_MAP_SIZE, true);
 	}
 	
 	shaderProgram.begin();

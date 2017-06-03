@@ -8,6 +8,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
@@ -41,6 +42,7 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String splash = "particles/splash.pfx";
     public static final String explosion = "particles/explosion2.pfx";
     
+    // Shaders
     public static FileHandle sceneVShader = Gdx.files.internal("shaders/scene_v.glsl");
     public static FileHandle sceneFShader = Gdx.files.internal("shaders/scene_f.glsl");
     
@@ -49,6 +51,20 @@ public class Assets implements Disposable, AssetErrorListener
 
     public static FileHandle depthMapVShader = Gdx.files.internal("shaders/depthmap_v.glsl");
     public static FileHandle depthMapFShader = Gdx.files.internal("shaders/depthmap_f.glsl");
+    
+    // UI
+    public static final String TEXTURE_ATLAS_LIBGDX_UI = "ui/uiskin.atlas";
+    public static final String SKIN_LIBGDX_UI = "ui/uiskin.json";
+    public static final String BACKGROUND_IMG = "ui/Pong3D.jpg";
+    public static final String PLAY_BTN_IMG = "ui/PlayBtn.jpg";
+    public static final float VIEWPORT_GUI_WIDTH = 800.0f;
+    public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
+    
+    // GamePreferences
+    // TODO: Some of these constants should be moved to another class.
+    public static final String PREFERENCES = "game.prefs";
+
+
 
     public static AssetManager assetManager = new AssetManager();
     
@@ -101,6 +117,13 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.finishLoading();
 	
 	assetManager.load(anvil_snd, Sound.class);
+	assetManager.finishLoading();
+	
+	// Load UI Images
+	assetManager.load(BACKGROUND_IMG, Texture.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(PLAY_BTN_IMG, Texture.class);
 	assetManager.finishLoading();
     }
     

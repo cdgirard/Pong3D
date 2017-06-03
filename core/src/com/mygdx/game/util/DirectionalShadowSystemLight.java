@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.Pong3d;
+import com.mygdx.game.GameScreen;
 import com.mygdx.game.objects.PongObjects;
 
 public class DirectionalShadowSystemLight extends AbstractShadowLight
@@ -54,7 +54,7 @@ public class DirectionalShadowSystemLight extends AbstractShadowLight
     {
 	super.init();
 
-	camera = new PerspectiveCamera(120f, Pong3d.DEPTH_MAP_SIZE, Pong3d.DEPTH_MAP_SIZE);
+	camera = new PerspectiveCamera(120f, GameScreen.DEPTH_MAP_SIZE, GameScreen.DEPTH_MAP_SIZE);
 	camera.near = 1f;
 	camera.far = 70;
 	camera.position.set(position);
@@ -72,7 +72,7 @@ public class DirectionalShadowSystemLight extends AbstractShadowLight
 	needsUpdate = false;
 	if (frameBuffer == null)
 	{
-	    frameBuffer = new FrameBuffer(Format.RGBA8888, Pong3d.DEPTH_MAP_SIZE, Pong3d.DEPTH_MAP_SIZE, true);
+	    frameBuffer = new FrameBuffer(Format.RGBA8888, GameScreen.DEPTH_MAP_SIZE, GameScreen.DEPTH_MAP_SIZE, true);
 	}
 	frameBuffer.begin();
 	Gdx.gl.glClearColor(0, 0, 0, 1);

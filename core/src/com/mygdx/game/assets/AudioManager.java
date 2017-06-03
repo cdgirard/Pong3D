@@ -2,6 +2,7 @@ package com.mygdx.game.assets;
 
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.mygdx.game.util.GamePreferences;
 
 public class AudioManager
 {
@@ -37,6 +38,25 @@ public class AudioManager
 	// if (!GamePreferences.instance.sound) return;
 	// sound.play(GamePreferences.instance.volSound * volume, pitch, pan);
 	sound.play(volume, pitch, pan);
+    }
+
+    /**
+     * Should be called if changes are made to the settings stored in GamePreferences.
+     */
+    public void onSettingsUpdated()
+    {
+	if (playingMusic == null)
+	    return;
+	playingMusic.setVolume(GamePreferences.instance.volMusic);
+	if (GamePreferences.instance.music)
+	{
+	    if (!playingMusic.isPlaying())
+		playingMusic.play();
+	}
+	else
+	{
+	    playingMusic.pause();
+	}
     }
 
 }

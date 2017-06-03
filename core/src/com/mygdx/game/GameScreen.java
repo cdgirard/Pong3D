@@ -16,7 +16,7 @@ import com.mygdx.game.util.MovingPointShadowLight;
 import com.mygdx.game.util.PointShadowLight;
 import com.mygdx.game.util.ShadowSystem;
 
-public class Pong3d extends ApplicationAdapter
+public class GameScreen extends ApplicationAdapter
 {
     private static final String TAG = "Pong3d";
     
@@ -35,7 +35,7 @@ public class Pong3d extends ApplicationAdapter
     @Override
     public void create()
     {
-	Assets.instance.init();
+
 
 	cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	cam.near = 1f;
