@@ -56,9 +56,12 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String TEXTURE_ATLAS_LIBGDX_UI = "ui/uiskin.atlas";
     public static final String SKIN_LIBGDX_UI = "ui/uiskin.json";
     public static final String BACKGROUND_IMG = "ui/Pong3D.jpg";
-    public static final String PLAY_BTN_IMG = "ui/PlayBtn.jpg";
-    public static final float VIEWPORT_GUI_WIDTH = 800.0f;
-    public static final float VIEWPORT_GUI_HEIGHT = 480.0f;
+    public static final String PLAY_BTN_UP_IMG = "ui/PlayBtn_Up.jpg";
+    public static final String PLAY_BTN_DWN_IMG = "ui/PlayBtn_Dwn.jpg";
+    public static final String OPTION_BTN_UP_IMG = "ui/OptionBtn_Up.jpg";
+    public static final String OPTION_BTN_DWN_IMG = "ui/OptionBtn_Dwn.jpg";
+    public static final float VIEWPORT_GUI_WIDTH = 1024.0f;
+    public static final float VIEWPORT_GUI_HEIGHT = 768.0f;
     
     // GamePreferences
     // TODO: Some of these constants should be moved to another class.
@@ -123,7 +126,16 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.load(BACKGROUND_IMG, Texture.class);
 	assetManager.finishLoading();
 	
-	assetManager.load(PLAY_BTN_IMG, Texture.class);
+	assetManager.load(PLAY_BTN_UP_IMG, Texture.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(PLAY_BTN_DWN_IMG, Texture.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(OPTION_BTN_UP_IMG, Texture.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(OPTION_BTN_DWN_IMG, Texture.class);
 	assetManager.finishLoading();
     }
     

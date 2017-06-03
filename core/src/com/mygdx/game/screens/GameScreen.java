@@ -1,13 +1,15 @@
-package com.mygdx.game;
+package com.mygdx.game.screens;
 
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
+import com.mygdx.game.PongController;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.objects.PongObjects;
@@ -16,9 +18,9 @@ import com.mygdx.game.util.MovingPointShadowLight;
 import com.mygdx.game.util.PointShadowLight;
 import com.mygdx.game.util.ShadowSystem;
 
-public class GameScreen extends ApplicationAdapter
+public class GameScreen extends AbstractGameScreen
 {
-    private static final String TAG = "Pong3d";
+    private static final String TAG = "GameScreen";
     
     PongController controller;
     PerspectiveCamera cam;
@@ -32,11 +34,18 @@ public class GameScreen extends ApplicationAdapter
     DebugDrawer debugDrawer;
     private static final boolean BULLET_DEBUG = false;
     
-    @Override
+    public GameScreen(Game g)
+    {
+	super(g);
+	create();
+    }
+    
+    /**
+     * May be able to move this code into show(), but not
+     * sure yet.
+     */
     public void create()
     {
-
-
 	cam = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 	cam.near = 1f;
 	cam.far = 200;
@@ -72,9 +81,8 @@ public class GameScreen extends ApplicationAdapter
      * Both need to be setup correctly (see Git Hub example to fill in the missing pieces.
      */
     @Override
-    public void render()
+    public void render(float delta)
     {
-	float delta = Gdx.graphics.getDeltaTime();
 	update(delta);
 	shadowSystem.render(cam, delta);
 	
@@ -87,6 +95,29 @@ public class GameScreen extends ApplicationAdapter
 	
 	BulletWorld.instance.update(delta);
     }
+    
+	@Override
+	public void resize(int width, int height)
+	{
+	}
+
+	@Override
+	public void show()
+	{
+	    
+	}
+	
+	@Override
+	public void hide()
+	{
+	    
+	}
+	
+	@Override
+	public void pause()
+	{
+	    
+	}
 
     public void update(float delta)
     {

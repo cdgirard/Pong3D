@@ -9,8 +9,8 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.GameScreen;
 import com.mygdx.game.objects.PongObjects;
+import com.mygdx.game.screens.GameScreen;
 
 public class DirectionalShadowSystemLight extends AbstractShadowLight
 {

@@ -10,9 +10,9 @@ import com.badlogic.gdx.graphics.g3d.particles.ParticleShader;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.mygdx.game.GameScreen;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.objects.PongObjects;
+import com.mygdx.game.screens.GameScreen;
 
 public class PointShadowLight extends AbstractShadowLight
 {

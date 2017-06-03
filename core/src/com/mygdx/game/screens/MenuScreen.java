@@ -98,10 +98,10 @@ public class MenuScreen extends AbstractGameScreen
     private Table buildObjectsLayer()
     {
 	Table layer = new Table();
-	imgCoins = new Image(Assets.assetManager.get(Assets.PLAY_BTN_IMG,Texture.class));
+	imgCoins = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
 	layer.addActor(imgCoins);
 	imgCoins.setPosition(135, 80);
-	imgBunny = new Image(Assets.assetManager.get(Assets.PLAY_BTN_IMG,Texture.class));
+	imgBunny = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
 	layer.addActor(imgBunny);
 	imgBunny.setPosition(355, 40);
 	return layer;
@@ -111,10 +111,10 @@ public class MenuScreen extends AbstractGameScreen
     {
 	Table layer = new Table();
 	layer.left().top();
-	imgLogo = new Image(Assets.assetManager.get(Assets.PLAY_BTN_IMG,Texture.class));
+	imgLogo = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
 	layer.add(imgLogo);
 	layer.row().expandY();
-	imgInfo = new Image(Assets.assetManager.get(Assets.PLAY_BTN_IMG,Texture.class));
+	imgInfo = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
 	layer.add(imgInfo).bottom();
 	return layer;
     }
@@ -123,8 +123,9 @@ public class MenuScreen extends AbstractGameScreen
     {
 	Table layer = new Table();
 	layer.right().bottom();
-	Image playBtn = new Image(Assets.assetManager.get(Assets.PLAY_BTN_IMG,Texture.class));
-	btnMenuPlay = new Button(playBtn.getDrawable());
+	Image playBtnUp = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
+	Image playBtnDwn = new Image(Assets.assetManager.get(Assets.PLAY_BTN_DWN_IMG,Texture.class));
+	btnMenuPlay = new Button(playBtnUp.getDrawable(),playBtnDwn.getDrawable());
 	layer.add(btnMenuPlay);
 	btnMenuPlay.addListener(new ChangeListener()
 	{
@@ -134,8 +135,9 @@ public class MenuScreen extends AbstractGameScreen
 		onPlayClicked();
 	    }
 	});
-	Image optionBtn = new Image(Assets.assetManager.get(Assets.PLAY_BTN_IMG,Texture.class));
-	btnMenuOptions = new Button(optionBtn.getDrawable());
+	Image optionBtnUp = new Image(Assets.assetManager.get(Assets.OPTION_BTN_UP_IMG,Texture.class));
+	Image optionBtnDwn = new Image(Assets.assetManager.get(Assets.OPTION_BTN_DWN_IMG,Texture.class));
+	btnMenuOptions = new Button(optionBtnUp.getDrawable(), optionBtnDwn.getDrawable());
 	layer.add(btnMenuOptions);
 	btnMenuOptions.addListener(new ChangeListener()
 	{
@@ -278,7 +280,7 @@ public class MenuScreen extends AbstractGameScreen
 
     private void onPlayClicked()
     {
-	//game.setScreen(new GameScreen(game));
+	game.setScreen(new GameScreen(game));
     }
 
     private void onOptionsClicked()
