@@ -98,7 +98,7 @@ public class MenuScreen extends AbstractGameScreen
     private Table buildObjectsLayer()
     {
 	Table layer = new Table();
-	imgCoins = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
+	imgCoins = new Image(Assets.assetManager.get(Assets.BALL,Texture.class));
 	layer.addActor(imgCoins);
 	imgCoins.setPosition(135, 80);
 	imgBunny = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));

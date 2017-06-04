@@ -9,6 +9,8 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
@@ -60,8 +62,13 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String PLAY_BTN_DWN_IMG = "ui/PlayBtn_Dwn.jpg";
     public static final String OPTION_BTN_UP_IMG = "ui/OptionBtn_Up.jpg";
     public static final String OPTION_BTN_DWN_IMG = "ui/OptionBtn_Dwn.jpg";
+    public static final String BALL = "ui/ball2.png";
     public static final float VIEWPORT_GUI_WIDTH = 1024.0f;
     public static final float VIEWPORT_GUI_HEIGHT = 768.0f;
+    public  BitmapFont defaultSmall;
+    public  BitmapFont defaultNormal;
+    public BitmapFont defaultBig;
+
     
     // GamePreferences
     // TODO: Some of these constants should be moved to another class.
@@ -137,7 +144,28 @@ public class Assets implements Disposable, AssetErrorListener
 	
 	assetManager.load(OPTION_BTN_DWN_IMG, Texture.class);
 	assetManager.finishLoading();
+	
+	assetManager.load(BALL, Texture.class);
+	assetManager.finishLoading();
+	
+	loadFonts();
     }
+    
+    private void loadFonts()
+    {
+    	defaultSmall = new BitmapFont(Gdx.files.internal("ui/default.fnt"),true);
+    	defaultNormal = new BitmapFont(Gdx.files.internal("ui/default.fnt"),true);
+    	defaultBig = new BitmapFont(Gdx.files.internal("ui/default.fnt"),true);
+    	
+    	defaultSmall.getData().setScale(0.75f);
+    	defaultNormal.getData().setScale(1.0f);
+    	defaultBig.getData().setScale(2.0f);
+    	
+    	defaultSmall.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+    	defaultNormal.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+    	defaultBig.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+    }
+
     
     /**
      * 3D Particle Effects need the camera to load properly, so need method
