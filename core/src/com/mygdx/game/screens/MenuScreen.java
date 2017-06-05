@@ -65,11 +65,8 @@ public class MenuScreen extends AbstractGameScreen
 
     private void rebuildStage()
     {
-	// Images to be used in the UI
-	//skinGame = new Skin(Gdx.files.internal(Assets.SKIN_GAME_UI), new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
-	// Special images for creating the core of the UI.
-	skinLibgdx = new Skin(Gdx.files.internal(Assets.SKIN_LIBGDX_UI), new TextureAtlas(Assets.TEXTURE_ATLAS_LIBGDX_UI));
-
+	skinLibgdx = Assets.instance.skinLibgdx;
+	
 	Table layerBackground = buildBackgroundLayer();
 	Table layerObjects = buildObjectsLayer();
 	Table layerLogos = buildLogosLayer();

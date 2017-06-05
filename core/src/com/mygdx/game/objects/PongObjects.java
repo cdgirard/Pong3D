@@ -22,6 +22,7 @@ import com.mygdx.game.assets.Assets;
 import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.bullet.MyMotionState;
+import com.mygdx.game.screens.GameScreen;
 import com.mygdx.game.util.PongParticlePool;
 
 /**
@@ -52,10 +53,22 @@ public class PongObjects implements Disposable
     ParticleEffect explosionEffect;
     boolean explosion = false;
     boolean splash = false;
+    
+    // GameScreen - possibly temporary just want to get something working first
+    GameScreen screen;
 
     protected PongObjects()
     {
 	super();
+    }
+    
+    /**
+     * Quick setter that likely will remove once figure out a better overall design.
+     * @param sc
+     */
+    public void setGameScreen(GameScreen sc)
+    {
+	screen = sc;
     }
 
     public void init(Camera cam)
@@ -251,6 +264,7 @@ public class PongObjects implements Disposable
 	    if (reg.isComplete())
 	    {
 		Assets.instance.particleSystem.remove(splashEffect);
+		screen.lifeLost();
 		splash = false;
 	    }
 	}

@@ -103,6 +103,7 @@ public class GameScreen extends AbstractGameScreen
 	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(0f, 30.0f, 0f), 0.1f));
 
 	controller = new PongController();
+	PongObjects.instance.setGameScreen(this);
     }
 
     /**
@@ -159,7 +160,8 @@ public class GameScreen extends AbstractGameScreen
     {
 	float x = -15;
 	float y = -15;
-	Assets.instance.defaultNormal.draw(batch, "" + score, x + 75, y + 37);
+        Assets.instance.defaultNormal.draw(batch, "" + score, x + 75, y + 37);
+	//Assets.instance.skinLibgdx.getFont("default-font").draw(batch, "Hello" + score, x + 75, y + 37);
     }
 
     private void renderGuiExtraLive(SpriteBatch batch)
@@ -213,6 +215,16 @@ public class GameScreen extends AbstractGameScreen
 	cam.position.set(groundPos.x - 15, groundPos.y + 15, groundPos.z + 15);
 	cam.lookAt(groundPos);
 	cam.update();
+    }
+    
+    /**
+     * A sphere fell into the water, need to update number of lives and put the sphere back
+     * in the start place over the middle of the platform.
+     */
+    public void lifeLost()
+    {
+	lives--;
+	PongObjects.instance.sphere.reset();
     }
 
     @Override

@@ -11,11 +11,13 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffectLoader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
 import com.badlogic.gdx.graphics.g3d.particles.batches.PointSpriteParticleBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 
 
@@ -68,6 +70,7 @@ public class Assets implements Disposable, AssetErrorListener
     public  BitmapFont defaultSmall;
     public  BitmapFont defaultNormal;
     public BitmapFont defaultBig;
+    public Skin skinLibgdx;
 
     
     // GamePreferences
@@ -153,6 +156,11 @@ public class Assets implements Disposable, AssetErrorListener
     
     private void loadFonts()
     {
+	// Images to be used in the UI
+		//skinGame = new Skin(Gdx.files.internal(Assets.SKIN_GAME_UI), new TextureAtlas(Constants.TEXTURE_ATLAS_UI));
+		// Special images for creating the core of the UI.
+		skinLibgdx = new Skin(Gdx.files.internal(Assets.SKIN_LIBGDX_UI), new TextureAtlas(Assets.TEXTURE_ATLAS_LIBGDX_UI));
+		
     	defaultSmall = new BitmapFont(Gdx.files.internal("ui/default.fnt"),true);
     	defaultNormal = new BitmapFont(Gdx.files.internal("ui/default.fnt"),true);
     	defaultBig = new BitmapFont(Gdx.files.internal("ui/default.fnt"),true);

@@ -82,7 +82,6 @@ public class SphereGameObject extends GameObject
      */
     public void rotate_particle()
     {
-	
 	for (int i = 0; i < flameEffect.getControllers().size; i++)
 	{
 	    Array<Influencer> data = flameEffect.getControllers().get(i).influencers;
@@ -99,7 +98,6 @@ public class SphereGameObject extends GameObject
 
 		    for (int j = 0; j < di.velocities.size; j++)
 		    {
-
 			dm = (DynamicsModifier) di.velocities.get(j);
 
 			if (dm instanceof PolarAcceleration)
@@ -117,7 +115,7 @@ public class SphereGameObject extends GameObject
 			    float angPhi = (float)(Math.acos(-angVel.y)*180/Math.PI);
 			    // This is the where on the xz circle to spit out particles from
 			    float  angTheta = (float)(Math.acos(-angVel.x)*180/Math.PI);
-			    if (angVel.z < 0)
+			    if (angVel.z > 0)
 				angTheta = angTheta + 180;
 			    
 			    ((PolarAcceleration) dm).phiValue.setHigh(angPhi,angPhi-10);
@@ -134,6 +132,24 @@ public class SphereGameObject extends GameObject
 		    ;//Gdx.app.error("INFO", "no DI");
 	    }
 	}
+    }
+    
+    /**
+     * Will place the Sphere back over the center of the platform.
+     */
+    public void reset()
+    {
+	body.setLinearVelocity(new Vector3(0,0,0));
+	// The Vector3 returned by the method calls is a shared memory space that will overwrite the
+	// memory on each call so need to create copies. Not sure if I need to dispose of the copies as
+	// well.
+	Vector3 groundPos = PongObjects.instance.ground.body.getCenterOfMassPosition().cpy();
+	Vector3 spherePos = body.getCenterOfMassPosition().cpy();
+	Vector3 transPos = new Vector3(groundPos.x - spherePos.x, groundPos.y - spherePos.y + 12, groundPos.z - spherePos.z);
+	Matrix4 mat = body.getCenterOfMassTransform();
+	mat.trn(transPos);
+	body.setCenterOfMassTransform(mat);
+	alive = true;
     }
     
     @Override
