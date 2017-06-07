@@ -18,6 +18,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody.btRigidBodyConstructionInfo;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.bullet.BulletWorld;
@@ -116,6 +117,7 @@ public class PongObjects implements Disposable
 	Model model = Assets.assetManager.get(Assets.wood2, Model.class);
 
 	wall3 = new GameObject();
+	wall3.objId = GameObject.WALL;
 	Vector3 position = new Vector3(29, 0, 1);
 	wall3.instance = new ModelInstance(model);
 	// Bullet does not deal well with scaled objects for some reason.
@@ -129,7 +131,7 @@ public class PongObjects implements Disposable
 	bodyInfo.setFriction(1.0f);
 	wall3.body = new btRigidBody(bodyInfo);
 	wall3.body.setCollisionFlags(wall3.body.getCollisionFlags());
-
+	wall3.body.userData = wall3;
 	BulletWorld.world.addRigidBody(wall3.body);
     }
 
@@ -138,6 +140,7 @@ public class PongObjects implements Disposable
 	Model model = Assets.assetManager.get(Assets.wood, Model.class);
 
 	wall2 = new GameObject();
+	wall2.objId = GameObject.WALL;
 	Vector3 position = new Vector3(20, 0, -10);
 	wall2.instance = new ModelInstance(model);
 	// Bullet does not deal well with scaled objects for some reason.
@@ -153,7 +156,7 @@ public class PongObjects implements Disposable
 	wall2.body.setCollisionFlags(wall2.body.getCollisionFlags());// |
 								     // btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK
 								     // );
-
+	wall2.body.userData = wall2;
 	BulletWorld.world.addRigidBody(wall2.body);
     }
 
@@ -162,6 +165,7 @@ public class PongObjects implements Disposable
 	Model model = Assets.assetManager.get(Assets.wood, Model.class);
 
 	wall = new GameObject();
+	wall.objId = GameObject.WALL;
 	Vector3 position = new Vector3(0, 0, -10);
 	wall.instance = new ModelInstance(model);
 	// wall.instance.transform.scale(1f,1.5f,1f);
@@ -176,7 +180,7 @@ public class PongObjects implements Disposable
 	wall.body.setCollisionFlags(wall.body.getCollisionFlags());// |
 								   // btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK
 								   // );
-
+	wall.body.userData = wall;
 	BulletWorld.world.addRigidBody(wall.body);
     }
 
@@ -255,6 +259,7 @@ public class PongObjects implements Disposable
 	    if (reg.isComplete())
 	    {
 		Assets.instance.particleSystem.remove(explosionEffect);
+		PongGlobals.scorePoints();
 	        explosion = false;
 	    }
 	}
@@ -264,12 +269,12 @@ public class PongObjects implements Disposable
 	    if (reg.isComplete())
 	    {
 		Assets.instance.particleSystem.remove(splashEffect);
-		screen.lifeLost();
+		PongGlobals.lifeLost();
 		splash = false;
 	    }
 	}
 	timePassed += delta;
-	if (timePassed > 1/60f)
+	while (timePassed > 1/60f)
 	{
 	        // Needs to be called so all particles update for next time step.
 		// Should only be called once per game loop update.

@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.mygdx.game.Pong3D;
+import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.util.GamePreferences;
@@ -58,9 +60,8 @@ public class MenuScreen extends AbstractGameScreen
     private boolean debugEnabled = false;
     private float debugRebuildStage;
 
-    public MenuScreen(Game g)
+    public MenuScreen()
     {
-	super(g);
     }
 
     private void rebuildStage()
@@ -98,7 +99,7 @@ public class MenuScreen extends AbstractGameScreen
 	imgCoins = new Image(Assets.assetManager.get(Assets.BALL,Texture.class));
 	layer.addActor(imgCoins);
 	imgCoins.setPosition(135, 80);
-	imgBunny = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
+	imgBunny = new Image(Assets.assetManager.get(Assets.TITLE,Texture.class));
 	layer.addActor(imgBunny);
 	imgBunny.setPosition(355, 40);
 	return layer;
@@ -277,7 +278,8 @@ public class MenuScreen extends AbstractGameScreen
 
     private void onPlayClicked()
     {
-	game.setScreen(new GameScreen(game));
+	PongGlobals.startGame();
+	Pong3D.instance.setScreen(new GameScreen());
     }
 
     private void onOptionsClicked()
@@ -331,7 +333,6 @@ public class MenuScreen extends AbstractGameScreen
     {
 	stage.dispose();
 	//skinGame.dispose();
-	skinLibgdx.dispose();
     }
 
 }

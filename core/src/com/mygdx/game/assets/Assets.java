@@ -31,6 +31,11 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String explosion_snd = "sounds/explosion_snd.wav";
     public static final String splash_snd = "sounds/splash_snd.wav";
     public static final String anvil_snd = "sounds/anvil_snd.wav";
+    public static final String golf_snd = "sounds/golfBall_snd.wav";
+    public static final String bone_snd = "sounds/boneBreaking_snd.wav";
+    public static final String pan_snd = "sounds/fryingPan_snd.wav";
+    public static final String tick_snd = "sounds/tick_snd.mp3";
+    public static final String muted_snd = "sounds/mutedMetal_snd.wav";
     
     // 3D Models
     public static final String sphere = "models/concreteBare_sphere.g3dj";
@@ -65,6 +70,7 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String OPTION_BTN_UP_IMG = "ui/OptionBtn_Up.jpg";
     public static final String OPTION_BTN_DWN_IMG = "ui/OptionBtn_Dwn.jpg";
     public static final String BALL = "ui/ball2.png";
+    public static final String TITLE = "ui/Title.png";
     public static final float VIEWPORT_GUI_WIDTH = 1024.0f;
     public static final float VIEWPORT_GUI_HEIGHT = 768.0f;
     public  BitmapFont defaultSmall;
@@ -132,6 +138,21 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.load(anvil_snd, Sound.class);
 	assetManager.finishLoading();
 	
+	assetManager.load(golf_snd, Sound.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(bone_snd, Sound.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(pan_snd, Sound.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(tick_snd, Sound.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(muted_snd, Sound.class);
+	assetManager.finishLoading();
+	
 	// Load UI Images
 	assetManager.load(BACKGROUND_IMG, Texture.class);
 	assetManager.finishLoading();
@@ -149,6 +170,9 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.finishLoading();
 	
 	assetManager.load(BALL, Texture.class);
+	assetManager.finishLoading();
+	
+	assetManager.load(TITLE, Texture.class);
 	assetManager.finishLoading();
 	
 	loadFonts();
@@ -219,6 +243,7 @@ public class Assets implements Disposable, AssetErrorListener
     public void dispose()
     {
 	assetManager.dispose();
+	skinLibgdx.dispose();
     }
 
 }

@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.DebugDrawer;
 import com.badlogic.gdx.physics.bullet.linearmath.btIDebugDraw;
 import com.mygdx.game.PongController;
+import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.objects.PongObjects;
@@ -53,12 +54,9 @@ public class GameScreen extends AbstractGameScreen
     // For UI
     private OrthographicCamera cameraUI;
     private SpriteBatch batch;
-    int score = 0;
-    int lives = 3;
 
-    public GameScreen(Game g)
+    public GameScreen()
     {
-	super(g);
 	create();
     }
 
@@ -160,7 +158,7 @@ public class GameScreen extends AbstractGameScreen
     {
 	float x = -15;
 	float y = -15;
-        Assets.instance.defaultNormal.draw(batch, "" + score, x + 75, y + 37);
+        Assets.instance.defaultNormal.draw(batch, "" + PongGlobals.score, x + 75, y + 37);
 	//Assets.instance.skinLibgdx.getFont("default-font").draw(batch, "Hello" + score, x + 75, y + 37);
     }
 
@@ -170,7 +168,7 @@ public class GameScreen extends AbstractGameScreen
 	float y = 15;
 	for (int i = 0; i < LIVES_START; i++)
 	{
-	    if (lives <= i)
+	    if (PongGlobals.lives <= i)
 		batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
 	    batch.draw(Assets.assetManager.get(Assets.BALL, Texture.class), x + i * 50, y, 0, 0, 101, 73, 0.35f, 0.35f, 0, 0, 0, 101, 73, false, false);
 	    batch.setColor(1, 1, 1, 1);
@@ -217,15 +215,9 @@ public class GameScreen extends AbstractGameScreen
 	cam.update();
     }
     
-    /**
-     * A sphere fell into the water, need to update number of lives and put the sphere back
-     * in the start place over the middle of the platform.
-     */
-    public void lifeLost()
-    {
-	lives--;
-	PongObjects.instance.sphere.reset();
-    }
+
+    
+
 
     @Override
     public void dispose()

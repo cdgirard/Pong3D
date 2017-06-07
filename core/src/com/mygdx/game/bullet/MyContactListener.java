@@ -43,34 +43,59 @@ public class MyContactListener extends ContactListener
 	if ((colObj0.userData != null) && (colObj1.userData != null))
 	{
 	    Gdx.app.error("TAG", "Callback" + colObj0.userData + " : " + colObj1.userData);
-	    // Object obj = colObj0.userData;
-	    if (((GameObject) colObj0.userData).objId == GameObject.SCORE_TARGET)
-	    {
-		BulletWorld.world.removeRigidBody(((GameObject) colObj0.userData).body);
-		((GameObject) colObj0.userData).visible = false;
-		PongObjects.instance.startExplosion(((GameObject) colObj0.userData).instance.transform);
-	    }
-	    if (((GameObject) colObj1.userData).objId == GameObject.SCORE_TARGET)
-	    {
-		BulletWorld.world.removeRigidBody(((GameObject) colObj1.userData).body);
-		((GameObject) colObj1.userData).visible = false;
-		PongObjects.instance.startExplosion(((GameObject) colObj1.userData).instance.transform);
-	    }
-	    
-	    if (((GameObject) colObj0.userData).objId == GameObject.OBSTACLE_TARGET)
-	    {
-		Sound exp_snd = Assets.assetManager.get(Assets.anvil_snd, Sound.class);
-		AudioManager.instance.play(exp_snd);
-	    }
-	    if (((GameObject) colObj1.userData).objId == GameObject.OBSTACLE_TARGET)
-	    {
-		Sound exp_snd = Assets.assetManager.get(Assets.anvil_snd, Sound.class);
-		AudioManager.instance.play(exp_snd);
-	    }
+	    if (((GameObject) colObj0.userData).objId == GameObject.SPHERE)
+		processSphereCollision((GameObject) colObj1.userData);
+	    else if (((GameObject) colObj1.userData).objId == GameObject.SPHERE)
+		processSphereCollision((GameObject) colObj0.userData);
+	    else if (((GameObject) colObj0.userData).objId == GameObject.PLATFORM)
+		processPlatformCollision((GameObject) colObj1.userData);
+	    else if (((GameObject) colObj1.userData).objId == GameObject.PLATFORM)
+		processPlatformCollision((GameObject) colObj0.userData);
 	}
     }
 
-
+    /**
+     * Sphere collided with another game object.
+     * @param obj
+     */
+    private void processSphereCollision(GameObject obj)
+    {
+	if (obj.objId == GameObject.SCORE_TARGET)
+	{
+	    BulletWorld.world.removeRigidBody(obj.body);
+	    obj.visible = false;
+	    PongObjects.instance.startExplosion(obj.instance.transform);
+	}
+	else if (obj.objId == GameObject.OBSTACLE_TARGET)
+	{
+	    Sound exp_snd = Assets.assetManager.get(Assets.anvil_snd, Sound.class);
+	    AudioManager.instance.play(exp_snd);
+	}
+	else if (obj.objId == GameObject.WALL)
+	{
+	    Sound exp_snd = Assets.assetManager.get(Assets.tick_snd, Sound.class);
+	    AudioManager.instance.play(exp_snd);
+	}
+	if (obj.objId == GameObject.PLATFORM)
+	{
+	    Sound exp_snd = Assets.assetManager.get(Assets.muted_snd, Sound.class);
+	    AudioManager.instance.play(exp_snd);
+	}
+    }
+    
+    /**
+     * Platform collided with a game object that is not the sphere (should just
+     * be colliding with the wall).
+     * @param obj
+     */
+    private void processPlatformCollision(GameObject obj)
+    {
+	if (obj.objId == GameObject.WALL)
+	{
+	    Sound exp_snd = Assets.assetManager.get(Assets.pan_snd, Sound.class);
+	    AudioManager.instance.play(exp_snd);
+	}
+    }
 
     @Override
     public void onContactEnded(btCollisionObject colObj0, btCollisionObject colObj1)
