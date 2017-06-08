@@ -42,7 +42,7 @@ public class MyContactListener extends ContactListener
 	// PongObjects.instance.ground.body.clearForces();
 	if ((colObj0.userData != null) && (colObj1.userData != null))
 	{
-	    Gdx.app.error("TAG", "Callback" + colObj0.userData + " : " + colObj1.userData);
+	    //Gdx.app.error("TAG", "Callback" + colObj0.userData + " : " + colObj1.userData);
 	    if (((GameObject) colObj0.userData).objId == GameObject.SPHERE)
 		processSphereCollision((GameObject) colObj1.userData);
 	    else if (((GameObject) colObj1.userData).objId == GameObject.SPHERE)
