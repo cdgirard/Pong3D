@@ -16,14 +16,7 @@ public class HighScoreListFileManager
      */
     public static class JsonHighScoreList
     {
-        public Entry[] highScores;
-    }
-
-    public static class Entry
-    {
-        public String player = null;
-
-        public int score = 0;
+        public HighScoreEntry[] highScores;
     }
     
     /**
@@ -33,9 +26,9 @@ public class HighScoreListFileManager
      * @param file
      * @param world
      */
-    public static Array<String> loadHighScores()
+    public static Array<HighScoreEntry> loadHighScores()
     {
-        Array<String> highScores = null;
+        Array<HighScoreEntry> highScores = null;
         String load = readFile(fileName);
         if (!load.isEmpty())
         {
@@ -44,11 +37,11 @@ public class HighScoreListFileManager
 
             if (jWorld.highScores != null)
             {
-                highScores = new Array<String>();
+                highScores = new Array<HighScoreEntry>();
                 for (int x=0;x<jWorld.highScores.length;x++)
                 {
-                    highScores.add(jWorld.highScores[x].player);
-                    //highScores.add(jWorld.highScores[x].score);
+                    HighScoreEntry entry = new HighScoreEntry(jWorld.highScores[x].getPlayer(),jWorld.highScores[x].getScore());
+                    highScores.add(entry);
                 }   
             }
         }
@@ -78,7 +71,7 @@ public class HighScoreListFileManager
      * This should save the world to a text file.  Really need to figure out how to save
      * off my simple 10x10 world first.
      */
-    public static void saveHighScores(Array<String> highScores)
+    public static void saveHighScores(Array<HighScoreEntry> highScores)
     {
         String data = convertHighScores(highScores);
         FileHandle file = Gdx.files.local(fileName);
@@ -90,16 +83,14 @@ public class HighScoreListFileManager
      * @param map
      * @return
      */
-    private static String convertHighScores(Array<String> highScores)
+    private static String convertHighScores(Array<HighScoreEntry> highScores)
     {
         Json json = new Json();
         JsonHighScoreList jWorld = new JsonHighScoreList();
-        jWorld.highScores = new Entry[highScores.size];
+        jWorld.highScores = new HighScoreEntry[highScores.size];
         for (int x=0;x<jWorld.highScores.length;x++)
         {
-            jWorld.highScores[x] = new Entry();
-            jWorld.highScores[x].player = highScores.get(x);
-            //jWorld.highScores[x].score = ???;
+            jWorld.highScores[x] = new HighScoreEntry(highScores.get(x).getPlayer(),highScores.get(x).getScore());
         }
         
         return json.prettyPrint(jWorld);

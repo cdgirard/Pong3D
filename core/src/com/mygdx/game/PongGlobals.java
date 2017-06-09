@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.objects.PongObjects;
 import com.mygdx.game.screens.MenuScreen;
+import com.mygdx.game.util.HighScoreEntry;
 import com.mygdx.game.util.HighScoreListFileManager;
 
 public class PongGlobals
@@ -10,7 +11,10 @@ public class PongGlobals
     public static int lives = 0;
     public static int score = 0;
     
-    public static Array<String> highScores = new Array<String>();
+    /**
+     * TODO: Need to finish up High Score System so that it functions properly.
+     */
+    public static Array<HighScoreEntry> highScores = new Array<HighScoreEntry>();
     
     /**
      * Set the initial values for the variables for when we start a new game.
@@ -32,8 +36,7 @@ public class PongGlobals
 	    PongObjects.instance.sphere.reset();
 	else
 	{
-	    highScores.add(""+score);
-	    HighScoreListFileManager.saveHighScores(highScores);
+	    
 	    Pong3D.instance.setScreen(new MenuScreen());
 	}
     }

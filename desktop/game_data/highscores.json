@@ -1,7 +1,8 @@
 {
 highScores: [
 	{
-		player: 0
+		player: Player
+		score: 0
 	}
 ]
 }
