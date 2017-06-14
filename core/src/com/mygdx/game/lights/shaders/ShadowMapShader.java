@@ -1,4 +1,4 @@
-package com.mygdx.game.util;
+package com.mygdx.game.lights.shaders;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Inputs;
 import com.badlogic.gdx.graphics.g3d.shaders.DefaultShader.Setters;
 import com.badlogic.gdx.graphics.g3d.utils.RenderContext;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.mygdx.game.lights.AbstractShadowLight;
+import com.mygdx.game.lights.ShadowSystem;
 
 /**
  * Shader used to render multiple shadows on the main scene. This shader will

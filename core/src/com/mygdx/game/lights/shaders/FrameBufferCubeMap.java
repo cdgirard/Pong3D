@@ -1,4 +1,4 @@
-package com.mygdx.game.util;
+package com.mygdx.game.lights.shaders;
 
 /*******************************************************************************
  * Copyright 2011 See AUTHORS file.

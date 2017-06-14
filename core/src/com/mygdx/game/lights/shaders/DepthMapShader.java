@@ -1,4 +1,4 @@
-package com.mygdx.game.util;
+package com.mygdx.game.lights.shaders;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
