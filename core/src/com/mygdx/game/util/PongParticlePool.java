@@ -3,6 +3,11 @@ package com.mygdx.game.util;
 import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.utils.FlushablePool;
 
+/**
+ * TODO: Does anyone use this class?
+ * @author cdgira
+ *
+ */
 public class PongParticlePool extends FlushablePool<Renderable>
 {
     @Override

@@ -41,7 +41,7 @@ public class PongObjects implements Disposable
 
     private float timePassed = 0.0f;
     
-    Array<GameObject> objects = new Array<GameObject>();
+    public Array<GameObject> objects = new Array<GameObject>();
     
     public GameObject wall, wall2, wall3, water;
     public PlatformGameObject ground;
@@ -232,24 +232,6 @@ public class PongObjects implements Disposable
 	reg.setEmissionMode(RegularEmitter.EmissionMode.EnabledUntilCycleEnd);
     }
 
-    private void particleStuffCleanUp()
-    {
-
-	// // Stopping a Partcle Effect
-	// Emitter emitter = pfx.getControllers().first().emitter;
-	// if (emitter instanceof RegularEmitter)
-	// {
-	// 
-	// }
-	//
-	// // Cleanup of a dead particle
-	// if (currentEffects != null)
-	// {
-	// Assets.instance.particleSystem.remove(currentEffects);
-	// currentEffects.dispose();
-	// }
-    }
-
     public void update(float delta)
     {
 	// These should probably go with the objects that triggered them.
@@ -289,52 +271,16 @@ public class PongObjects implements Disposable
 	}
     }
 
-    /**
-     * Present way the game objects are rendered using the ShadowLightingSystem.
-     * @param batch
-     */
-    public void render(ModelBatch batch)
-    {
-	for (GameObject obj: objects)
-	{
-	    obj.render(batch);
-	}
-	
-	renderParticleEffects(batch);
-    }
-
-    /**
-     * For back when I was trying to use the Environment class to manage lighting.
-     * Should probably be refactored out.
-     * @param batch
-     * @param env
-     */
-    public void render(ModelBatch batch, Environment env)
-    {
-	for (GameObject obj: objects)
-	{
-	    obj.render(batch);
-	}
-	
-	renderParticleEffects(batch);
-    }
-
-    /**
-     * Rendering the particles....probably needs to be housed in an object in
-     * PongObjects.
-     */
-    private void renderParticleEffects(ModelBatch batch)
-    {				
-	Assets.instance.particleSystem.begin();
-	Assets.instance.particleSystem.draw();
-	Assets.instance.particleSystem.end();
-	batch.render(Assets.instance.particleSystem);
-    }
-
     @Override
     public void dispose()
     {
-	ground.dispose();
+	for (GameObject obj: objects)
+	    obj.dispose();
+	objects.removeRange(0, objects.size-1);
+	Assets.instance.particleSystem.removeAll();
+	splashEffect.dispose();
+	explosionEffect.dispose();
+	
     }
 
 }

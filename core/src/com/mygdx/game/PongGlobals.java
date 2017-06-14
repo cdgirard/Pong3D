@@ -25,6 +25,25 @@ public class PongGlobals
 	score = 0;
     }
     
+    public static void sortHighScoreList()
+    {
+	for (int x=0;x<highScores.size-1;x++)
+	{
+	    int y = x+1;
+	    int z = x;
+	    while ((y > 0) && (highScores.get(y).score > highScores.get(z).score))
+	    {
+		HighScoreEntry entry = highScores.removeIndex(y);
+		highScores.insert(z, entry);
+		y--;
+		z--;
+	    }
+	}
+	
+	while (highScores.size > 10)
+	    highScores.removeIndex(10);
+    }
+    
     /**
      * A sphere fell into the water, need to update number of lives and put the sphere back
      * in the start place over the middle of the platform.
@@ -32,12 +51,12 @@ public class PongGlobals
     public static void lifeLost()
     {
 	PongGlobals.lives--;
-	if (PongGlobals.lives >= 0)
+	if (PongGlobals.lives > 0)
 	    PongObjects.instance.sphere.reset();
 	else
 	{
 	    
-	    Pong3D.instance.setScreen(new MenuScreen());
+	//    Pong3D.instance.setScreen(new MenuScreen());
 	}
     }
     

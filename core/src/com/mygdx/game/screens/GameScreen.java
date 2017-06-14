@@ -33,14 +33,16 @@ import com.mygdx.game.PongController;
 import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.bullet.BulletWorld;
+import com.mygdx.game.lights.MovingPointShadowLight;
+import com.mygdx.game.lights.MyDirectionalShadowLight;
+import com.mygdx.game.lights.PointShadowLight;
+import com.mygdx.game.lights.ShadowSystem;
+import com.mygdx.game.objects.GameObject;
 import com.mygdx.game.objects.PongObjects;
-import com.mygdx.game.util.DirectionalShadowSystemLight;
+import com.mygdx.game.objects.TargetGameObject;
 import com.mygdx.game.util.GamePreferences;
 import com.mygdx.game.util.HighScoreEntry;
 import com.mygdx.game.util.HighScoreListFileManager;
-import com.mygdx.game.util.MovingPointShadowLight;
-import com.mygdx.game.util.PointShadowLight;
-import com.mygdx.game.util.ShadowSystem;
 
 /**
  * Is the screen displayed when playing the game.
@@ -57,6 +59,7 @@ public class GameScreen extends AbstractGameScreen
 
     // TODO: Needs a better home.
     public static final int LIVES_START = 3;
+    boolean flag = true;
 
     PongController controller;
     PerspectiveCamera cam;
@@ -86,7 +89,6 @@ public class GameScreen extends AbstractGameScreen
      */
     public void create()
     {
-
 	// UI
 	cameraUI = new OrthographicCamera(Assets.VIEWPORT_GUI_WIDTH, Assets.VIEWPORT_GUI_HEIGHT);
 	cameraUI.setToOrtho(true);
@@ -104,15 +106,23 @@ public class GameScreen extends AbstractGameScreen
 	Assets.instance.loadParticleEffects(cam);
 
 	shadowSystem = new ShadowSystem();
+	shadowSystem.addParticleSystem(Assets.instance.particleSystem);
 
-	BulletWorld.instance.init();
+	BulletWorld.instance.init(this);
 	if (BULLET_DEBUG)
 	{
 	    debugDrawer = new DebugDrawer();
 	    BulletWorld.world.setDebugDrawer(debugDrawer);
 	    debugDrawer.setDebugMode(btIDebugDraw.DebugDrawModes.DBG_MAX_DEBUG_DRAW_MODE);
 	}
+	// TODO: Bug is adding the objects over and over again everytime the
+	// game screen reloads.
+	// TODO: Need to work on cleanup code.
 	PongObjects.instance.init(cam);
+	for (GameObject obj : PongObjects.instance.objects)
+	{
+	    shadowSystem.addRenderObject(obj.instance);
+	}
 
 	shadowSystem.addLight(new PointShadowLight(new Vector3(0f, 13.8f, 32f), 0.3f));
 	// shadowSystem.addLight(new PointShadowLight(new Vector3(45f, 0.0f,
@@ -123,11 +133,14 @@ public class GameScreen extends AbstractGameScreen
 
 	controller = new PongController();
 	PongObjects.instance.setGameScreen(this);
-	
+
 	// TODO: Might want in a different method
 	stage = new Stage(new StretchViewport(Assets.VIEWPORT_GUI_WIDTH, Assets.VIEWPORT_GUI_HEIGHT));
-	Gdx.input.setInputProcessor(stage);
+	// TODO: This won't work because need input processor elsewhere, need to
+	// trigger it somehow. Also in PongController
+	// Gdx.input.setInputProcessor(stage);
 	rebuildStage();
+	flag = true;
     }
 
     /**
@@ -153,6 +166,19 @@ public class GameScreen extends AbstractGameScreen
 	BulletWorld.instance.update(delta);
     }
 
+    /**
+     * Sphere hit a target so update the game accordingly.
+     * 
+     * @param obj
+     */
+    public void hitScoreTarget(GameObject obj)
+    {
+	BulletWorld.world.removeRigidBody(obj.body);
+	obj.visible = false;
+	shadowSystem.removeRenderObject(obj.instance);
+	PongObjects.instance.startExplosion(obj.instance.transform);
+    }
+
     private void renderGui(float deltaTime)
     {
 	batch.setProjectionMatrix(cameraUI.combined);
@@ -161,10 +187,15 @@ public class GameScreen extends AbstractGameScreen
 	renderGuiExtraLive(batch);
 	if (GamePreferences.instance.showFpsCounter)
 	    renderGuiFpsCounter(batch);
-	
+
+	if ((flag) && (PongGlobals.lives == 0))
+	{
+	    winOptions.setVisible(true);
+	    Gdx.input.setInputProcessor(stage);
+	}
 	stage.act(deltaTime);
 	stage.draw();
-	
+
 	batch.end();
     }
 
@@ -182,16 +213,16 @@ public class GameScreen extends AbstractGameScreen
 	    fpsFont.setColor(1, 0, 0, 1);
 	fpsFont.draw(batch, "FPS: " + fps, x, y);
 	fpsFont.setColor(1, 1, 1, 1);
-	
-	
+
     }
 
     private void renderGuiScore(SpriteBatch batch)
     {
 	float x = -15;
 	float y = -15;
-        Assets.instance.defaultNormal.draw(batch, "" + PongGlobals.score, x + 75, y + 37);
-	//Assets.instance.skinLibgdx.getFont("default-font").draw(batch, "Hello" + score, x + 75, y + 37);
+	Assets.instance.defaultNormal.draw(batch, "" + PongGlobals.score, x + 75, y + 37);
+	// Assets.instance.skinLibgdx.getFont("default-font").draw(batch,
+	// "Hello" + score, x + 75, y + 37);
     }
 
     private void renderGuiExtraLive(SpriteBatch batch)
@@ -246,12 +277,11 @@ public class GameScreen extends AbstractGameScreen
 	cam.lookAt(groundPos);
 	cam.update();
     }
-    
 
     private void rebuildStage()
     {
 	skinLibgdx = Assets.instance.skinLibgdx;
-	
+
 	Table layerOptionsWindow = buildHighScoreWindowLayer();
 
 	stage.clear();
@@ -260,14 +290,15 @@ public class GameScreen extends AbstractGameScreen
 	stack.setSize(Assets.VIEWPORT_GUI_WIDTH, Assets.VIEWPORT_GUI_HEIGHT);
 	stage.addActor(layerOptionsWindow);
     }
-    
+
     /**
-     * TODO: Need to finish implementing the pop-up end of game window to enter a new highscore.
+     * TODO: Need to finish implementing the pop-up end of game window to enter
+     * a new highscore.
      */
     private Window winOptions;
     private TextButton btnWinOptSave;
     private TextField tfPlayer;
-    
+
     private Table buildHighScoreWindowLayer()
     {
 	winOptions = new Window("Options", skinLibgdx);
@@ -275,16 +306,16 @@ public class GameScreen extends AbstractGameScreen
 	winOptions.add(buildOptWinButtons()).pad(10, 0, 10, 0);
 	// Making the whole window transparent.
 	winOptions.setColor(1, 1, 1, 0.8f);
-	winOptions.setVisible(true);
-//	if (debugEnabled)
-//	    winOptions.debug();
+	winOptions.setVisible(false);
+	// if (debugEnabled)
+	// winOptions.debug();
 	winOptions.pack();
 	// Not doing anything
-	winOptions.setPosition(Assets.VIEWPORT_GUI_WIDTH - winOptions.getWidth() - 50, 50);
+	winOptions.setPosition(Assets.VIEWPORT_GUI_WIDTH / 2 - winOptions.getWidth() / 2, Assets.VIEWPORT_GUI_HEIGHT / 2 - winOptions.getHeight() / 2);
 	winOptions.setMovable(false);
 	return winOptions;
     }
-    
+
     private Table buildOptWinAudioSettings()
     {
 	Table tbl = new Table();
@@ -295,16 +326,16 @@ public class GameScreen extends AbstractGameScreen
 	tbl.columnDefaults(1).padRight(10);
 	tfPlayer = new TextField("", skinLibgdx);
 	tbl.add(tfPlayer);
-//	tbl.add(new Label("Sound", skinLibgdx));
-//	sldSound = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
-//	tbl.add(sldSound);
-//	tbl.row();
-//	chkMusic = new CheckBox("", skinLibgdx);
-//	tbl.add(chkMusic);
-//	tbl.add(new Label("Music", skinLibgdx));
-//	sldMusic = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
-//	tbl.add(sldMusic);
-//	tbl.row();
+	// tbl.add(new Label("Sound", skinLibgdx));
+	// sldSound = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
+	// tbl.add(sldSound);
+	// tbl.row();
+	// chkMusic = new CheckBox("", skinLibgdx);
+	// tbl.add(chkMusic);
+	// tbl.add(new Label("Music", skinLibgdx));
+	// sldMusic = new Slider(0.0f, 1.0f, 0.1f, false, skinLibgdx);
+	// tbl.add(sldMusic);
+	// tbl.row();
 	return tbl;
     }
 
@@ -331,21 +362,24 @@ public class GameScreen extends AbstractGameScreen
 	    @Override
 	    public void changed(ChangeEvent event, Actor actor)
 	    {
-		HighScoreEntry entry = new HighScoreEntry("Player",PongGlobals.score);
-		    PongGlobals.highScores.add(entry);
-		    HighScoreListFileManager.saveHighScores(PongGlobals.highScores);
-		    Pong3D.instance.setScreen(new MenuScreen());
+		HighScoreEntry entry = new HighScoreEntry(tfPlayer.getText(), PongGlobals.score);
+		PongGlobals.highScores.add(entry);
+		PongGlobals.sortHighScoreList();
+		HighScoreListFileManager.saveHighScores(PongGlobals.highScores);
+		
+		Pong3D.instance.setScreen(new MenuScreen());
+		dispose();
 	    }
 	});
 	return tbl;
     }
-
 
     @Override
     public void dispose()
     {
 	BulletWorld.instance.dispose();
 	batch.dispose();
-
+	shadowSystem.dispose();
+        PongObjects.instance.dispose();
     }
 }

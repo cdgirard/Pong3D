@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.bullet.dynamics.btDiscreteDynamicsWorld;
 import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
 import com.badlogic.gdx.physics.bullet.dynamics.btSequentialImpulseConstraintSolver;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.screens.GameScreen;
 
 public class BulletWorld implements Disposable
 {
@@ -38,13 +39,13 @@ public class BulletWorld implements Disposable
     }
 
     
-    public void init()
+    public void init(GameScreen gs)
     {
 	Bullet.init();
 	
 	collisionConfiguration = new btDefaultCollisionConfiguration();
 	dispatcher = new btCollisionDispatcher(collisionConfiguration);
-	contactListener = new MyContactListener();
+	contactListener = new MyContactListener(gs);
 	broadphase = new btDbvtBroadphase();
 	solver = new btSequentialImpulseConstraintSolver();
 	world = new btDiscreteDynamicsWorld(dispatcher, broadphase, solver, collisionConfiguration);

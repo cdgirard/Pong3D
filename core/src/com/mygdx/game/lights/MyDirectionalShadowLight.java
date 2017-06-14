@@ -1,4 +1,4 @@
-package com.mygdx.game.util;
+package com.mygdx.game.lights;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.objects.PongObjects;
 import com.mygdx.game.screens.GameScreen;
 
-public class DirectionalShadowSystemLight extends AbstractShadowLight
+public class MyDirectionalShadowLight extends AbstractShadowLight
 {
 
     public Vector3 direction;
@@ -25,7 +25,7 @@ public class DirectionalShadowSystemLight extends AbstractShadowLight
      * @param position
      * @param direction
      */
-    public DirectionalShadowSystemLight(final Vector3 position, final Vector3 direction, float i)
+    public MyDirectionalShadowLight(final Vector3 position, final Vector3 direction, float i)
     {
 	intensity = i;
 	this.position = position;
@@ -85,7 +85,7 @@ public class DirectionalShadowSystemLight extends AbstractShadowLight
 	shaderProgram.end();
 
 	modelBatch.begin(camera);
-	PongObjects.instance.render(modelBatch);
+	system.render(modelBatch);
 	modelBatch.end();
 
 	frameBuffer.end();

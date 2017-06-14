@@ -1,4 +1,4 @@
-package com.mygdx.game.util;
+package com.mygdx.game.lights;
 
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
@@ -8,9 +8,12 @@ import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.assets.Assets;
+import com.mygdx.game.lights.shaders.DepthMapShader;
 
 public abstract class AbstractShadowLight
 {
+    // Which display system does this light belong to.
+    protected ShadowSystem system;
     protected boolean needsUpdate = true;
     public static ShaderProgram shaderProgram;
     public static ModelBatch modelBatch;
@@ -57,6 +60,15 @@ public abstract class AbstractShadowLight
 	    });
 	}
     }
+    
+    /**
+     * Set the system this light is attached.
+     * @param sys
+     */
+    public void setSystem(ShadowSystem sys)
+    {
+	system = sys;
+    }
 
     /**
      * Create the depth map for this light
@@ -74,6 +86,20 @@ public abstract class AbstractShadowLight
     public void act(final float delta)
     {
 	needsUpdate = true;
+    }
+    
+    public void dispose()
+    {
+	if (shaderProgram != null)
+	{
+	    shaderProgram.dispose();
+	    shaderProgram = null;
+	}
+	if (modelBatch != null)
+	{
+	    modelBatch.dispose();
+	    modelBatch = null;
+	}
     }
 
 }

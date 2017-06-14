@@ -24,32 +24,25 @@ public class GameObject implements Disposable
     // Only for objects that move.
     public btMotionState motionState;
 
-    
+    /**
+     * Updates the state of a game object.
+     * @param delta
+     */
     public void update (float delta)
     {
 
     }
     
-    public void render(ModelBatch batch)
-    {
-	batch.render(instance);
-    }
-    
-    /**
-     * TODO: Should be removed, leaving in only if want to test again using the Environment.
-     * @param batch
-     * @param env
-     */
-    public void render(ModelBatch batch, Environment env)
-    {
-	batch.render(instance, env);
-    }
     
     @Override
     public void dispose()
     {
-	shape.dispose();
-	
+	if (shape != null)
+	    shape.dispose();
+	if (motionState != null)
+	    motionState.dispose();
+	if (body != null)
+	    body.dispose();
     }
 
 }

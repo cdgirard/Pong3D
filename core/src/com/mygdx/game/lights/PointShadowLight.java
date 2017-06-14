@@ -1,4 +1,4 @@
-package com.mygdx.game.util;
+package com.mygdx.game.lights;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Cubemap;
@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.Assets;
+import com.mygdx.game.lights.shaders.FrameBufferCubeMap;
 import com.mygdx.game.objects.PongObjects;
 import com.mygdx.game.screens.GameScreen;
 
@@ -76,11 +77,20 @@ public class PointShadowLight extends AbstractShadowLight
 	    Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 	    modelBatch.begin(camera);
-	    PongObjects.instance.render(modelBatch);
+	    if (system != null)
+	        system.render(modelBatch);
 	    modelBatch.end();
 	}
 
 	frameBuffer.end();
 	depthMap = frameBuffer.getColorBufferTexture();
+    }
+    
+    @Override
+    public void dispose()
+    {
+	super.dispose();
+	frameBuffer.dispose();
+	depthMap.dispose();
     }
 }

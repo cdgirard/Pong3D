@@ -1,8 +1,6 @@
 package com.mygdx.game.objects;
 
-import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
@@ -52,20 +50,6 @@ public class TargetGameObject extends GameObject
     {
 	if (visible)
 	    super.update(deltaTime);
-    }
-    
-    @Override
-    public void render(ModelBatch batch)
-    {
-	if (visible)
-	    super.render(batch);
-    }
-    
-    @Override
-    public void render(ModelBatch batch, Environment env)
-    {
-	if (visible)
-	    render(batch, env);
     }
 
 }

@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -13,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
@@ -27,21 +25,19 @@ import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.util.GamePreferences;
+import com.mygdx.game.util.HighScoreEntry;
 
 public class MenuScreen extends AbstractGameScreen
 {
     private static final String TAG = MenuScreen.class.getName();
 
     private Stage stage;
-    //private Skin skinGame;
+    // private Skin skinGame;
     private Skin skinLibgdx;
 
     // Menu
     private Image imgBackground;
-    private Image imgLogo;
-    private Image imgInfo;
-    private Image imgCoins;
-    private Image imgBunny;
+    private Image imgTitle;
     private Button btnMenuPlay;
     private Button btnMenuOptions;
 
@@ -56,22 +52,25 @@ public class MenuScreen extends AbstractGameScreen
     private CheckBox chkShowFpsCounter;
 
     // debug
-    private final float DEBUG_REBUILD_INTERNAL = 5.0f;
     private boolean debugEnabled = false;
-    private float debugRebuildStage;
 
     public MenuScreen()
     {
     }
 
+    /**
+     * Put all the UI componenets together.
+     */
     private void rebuildStage()
     {
 	skinLibgdx = Assets.instance.skinLibgdx;
 	
+	PongGlobals.sortHighScoreList();
+
 	Table layerBackground = buildBackgroundLayer();
-	Table layerObjects = buildObjectsLayer();
-	Table layerLogos = buildLogosLayer();
+	Table layerObjects = buildTitleLayer();
 	Table layerControls = buildControlsLayer();
+	Table highScores = buildHighScoreLayer();
 	Table layerOptionsWindow = buildOptionsWindowLayer();
 
 	stage.clear();
@@ -80,40 +79,33 @@ public class MenuScreen extends AbstractGameScreen
 	stack.setSize(Assets.VIEWPORT_GUI_WIDTH, Assets.VIEWPORT_GUI_HEIGHT);
 	stack.add(layerBackground);
 	stack.add(layerObjects);
-	stack.add(layerLogos);
+	stack.add(highScores);
 	stack.add(layerControls);
 	stage.addActor(layerOptionsWindow);
     }
 
+    /**
+     * Build the background for the MenuScrean.
+     * @return
+     */
     private Table buildBackgroundLayer()
     {
 	Table layer = new Table();
-	imgBackground = new Image(Assets.assetManager.get(Assets.BACKGROUND_IMG,Texture.class));
+	imgBackground = new Image(Assets.assetManager.get(Assets.BACKGROUND_IMG, Texture.class));
 	layer.add(imgBackground);
 	return layer;
     }
 
-    private Table buildObjectsLayer()
+    /**
+     * Build and place the title to be displayed.
+     * @return
+     */
+    private Table buildTitleLayer()
     {
 	Table layer = new Table();
-	imgCoins = new Image(Assets.assetManager.get(Assets.BALL,Texture.class));
-	layer.addActor(imgCoins);
-	imgCoins.setPosition(135, 80);
-	imgBunny = new Image(Assets.assetManager.get(Assets.TITLE,Texture.class));
-	layer.addActor(imgBunny);
-	imgBunny.setPosition(355, 40);
-	return layer;
-    }
-
-    private Table buildLogosLayer()
-    {
-	Table layer = new Table();
-	layer.left().top();
-	imgLogo = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
-	layer.add(imgLogo);
-	layer.row().expandY();
-	imgInfo = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
-	layer.add(imgInfo).bottom();
+	imgTitle = new Image(Assets.assetManager.get(Assets.TITLE, Texture.class));
+	layer.addActor(imgTitle);
+	imgTitle.setPosition(375, 600);
 	return layer;
     }
 
@@ -121,9 +113,9 @@ public class MenuScreen extends AbstractGameScreen
     {
 	Table layer = new Table();
 	layer.right().bottom();
-	Image playBtnUp = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG,Texture.class));
-	Image playBtnDwn = new Image(Assets.assetManager.get(Assets.PLAY_BTN_DWN_IMG,Texture.class));
-	btnMenuPlay = new Button(playBtnUp.getDrawable(),playBtnDwn.getDrawable());
+	Image playBtnUp = new Image(Assets.assetManager.get(Assets.PLAY_BTN_UP_IMG, Texture.class));
+	Image playBtnDwn = new Image(Assets.assetManager.get(Assets.PLAY_BTN_DWN_IMG, Texture.class));
+	btnMenuPlay = new Button(playBtnUp.getDrawable(), playBtnDwn.getDrawable());
 	layer.add(btnMenuPlay);
 	btnMenuPlay.addListener(new ChangeListener()
 	{
@@ -133,8 +125,8 @@ public class MenuScreen extends AbstractGameScreen
 		onPlayClicked();
 	    }
 	});
-	Image optionBtnUp = new Image(Assets.assetManager.get(Assets.OPTION_BTN_UP_IMG,Texture.class));
-	Image optionBtnDwn = new Image(Assets.assetManager.get(Assets.OPTION_BTN_DWN_IMG,Texture.class));
+	Image optionBtnUp = new Image(Assets.assetManager.get(Assets.OPTION_BTN_UP_IMG, Texture.class));
+	Image optionBtnDwn = new Image(Assets.assetManager.get(Assets.OPTION_BTN_DWN_IMG, Texture.class));
 	btnMenuOptions = new Button(optionBtnUp.getDrawable(), optionBtnDwn.getDrawable());
 	layer.add(btnMenuOptions);
 	btnMenuOptions.addListener(new ChangeListener()
@@ -148,6 +140,26 @@ public class MenuScreen extends AbstractGameScreen
 	if (debugEnabled)
 	    layer.debug();
 	return layer;
+    }
+
+    /**
+     * Need to build a highscore list.
+     * 
+     * @return
+     */
+    private Table buildHighScoreLayer()
+    {
+	Table tbl = new Table();
+	tbl.pad(10, 10, 0, 10);
+	for (HighScoreEntry e : PongGlobals.highScores)
+	{
+	    Label playerLbl = new Label(e.getPlayer(), skinLibgdx);
+	    Label scoreLbl = new Label(""+e.getScore(), skinLibgdx);
+	    tbl.add(playerLbl);
+	    tbl.add(scoreLbl);
+	    tbl.row();
+	}
+	return tbl;
     }
 
     private Table buildOptionsWindowLayer()
@@ -282,6 +294,9 @@ public class MenuScreen extends AbstractGameScreen
 	Pong3D.instance.setScreen(new GameScreen());
     }
 
+    /**
+     * How to update the UI when the option button is pressed.
+     */
     private void onOptionsClicked()
     {
 	loadSettings();
@@ -290,6 +305,9 @@ public class MenuScreen extends AbstractGameScreen
 	winOptions.setVisible(true);
     }
 
+    /**
+     * What to do when you click save at the Options window.
+     */
     private void onSaveClicked()
     {
 	saveSettings();
@@ -297,6 +315,9 @@ public class MenuScreen extends AbstractGameScreen
 	AudioManager.instance.onSettingsUpdated();
     }
 
+    /**
+     * Draws the information to the screen.
+     */
     @Override
     public void render(float deltaTime)
     {
@@ -332,7 +353,7 @@ public class MenuScreen extends AbstractGameScreen
     public void hide()
     {
 	stage.dispose();
-	//skinGame.dispose();
+	// skinGame.dispose();
     }
 
 }

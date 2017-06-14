@@ -1,4 +1,4 @@
-package com.mygdx.game.util;
+package com.mygdx.game.lights;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;

@@ -15,9 +15,17 @@ import com.mygdx.game.assets.Assets;
 import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.objects.GameObject;
 import com.mygdx.game.objects.PongObjects;
+import com.mygdx.game.screens.GameScreen;
 
 public class MyContactListener extends ContactListener
 {
+    private GameScreen game;
+    
+    public MyContactListener(GameScreen gs)
+    {
+	game = gs;
+    }
+    
     @Override
     public boolean onContactAdded(btManifoldPoint cp, btCollisionObjectWrapper colObj0Wrap, int partId0, int index0, btCollisionObjectWrapper colObj1Wrap, int partId1, int index1)
     {
@@ -62,9 +70,8 @@ public class MyContactListener extends ContactListener
     {
 	if (obj.objId == GameObject.SCORE_TARGET)
 	{
-	    BulletWorld.world.removeRigidBody(obj.body);
-	    obj.visible = false;
-	    PongObjects.instance.startExplosion(obj.instance.transform);
+	    game.hitScoreTarget(obj);
+
 	}
 	else if (obj.objId == GameObject.OBSTACLE_TARGET)
 	{

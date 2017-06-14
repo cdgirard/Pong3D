@@ -1,4 +1,4 @@
-package com.mygdx.game.util;
+package com.mygdx.game.lights;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -6,14 +6,19 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.Renderable;
+import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.Shader;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleShader;
+import com.badlogic.gdx.graphics.g3d.particles.ParticleSystem;
 import com.badlogic.gdx.graphics.g3d.utils.DefaultShaderProvider;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.assets.Assets;
+import com.mygdx.game.lights.shaders.ShadowMapShader;
+import com.mygdx.game.lights.shaders.ShadowShaderProvider;
 import com.mygdx.game.objects.PongObjects;
+import com.mygdx.game.util.SimpleTextureShader;
 
 // Shadow Lights Process
 //1.  Setup the Shadow Shader Provider that will do all the shadows together.
@@ -35,11 +40,12 @@ import com.mygdx.game.objects.PongObjects;
 public class ShadowSystem
 {
     public Array<AbstractShadowLight> lights = new Array<AbstractShadowLight>();
+    public Array<RenderableProvider> objects = new Array<RenderableProvider>();
+    public Array<ParticleSystem> particleSystems = new Array<ParticleSystem>();
     private FrameBuffer frameBufferShadows;
 
     // Shadows
     private ModelBatch shadowModelBatch;
-    private ShadowMapShader shadowEnv;
     ShaderProgram shadowsShaderProgram;
     private ShadowShaderProvider shadowProvider;
 
@@ -65,7 +71,48 @@ public class ShadowSystem
      */
     public void addLight(AbstractShadowLight light)
     {
+	light.setSystem(this);
 	lights.add(light);
+    }
+
+    /**
+     * Adds and object to be rendered by the lighting system.
+     * 
+     * @param obj
+     */
+    public void addRenderObject(RenderableProvider obj)
+    {
+	objects.add(obj);
+    }
+
+    /**
+     * Remove and object to be rendered by the lighting system.
+     * 
+     * @param obj
+     */
+    public void removeRenderObject(RenderableProvider obj)
+    {
+	objects.removeValue(obj, false);
+    }
+
+    /**
+     * Adds and object to be rendered by the lighting system.
+     * 
+     * @param obj
+     */
+    public void addParticleSystem(ParticleSystem obj)
+    {
+	particleSystems.add(obj);
+    }
+
+    /**
+     * Remove and object to be rendered by the lighting system.
+     * 
+     * @param obj
+     */
+    public void removeParticleSystem(ParticleSystem obj)
+    {
+	particleSystems.removeValue(obj, false);
     }
 
     /**
@@ -75,7 +122,7 @@ public class ShadowSystem
     {
 	ShaderProgram.pedantic = false;
 	sceneShaderProgram = new ShaderProgram(Assets.sceneVShader, Assets.sceneFShader);
-	
+
 	sceneShaderProgram.isCompiled();
 	Gdx.app.error("ShadowSystem", sceneShaderProgram.getLog());
 
@@ -149,10 +196,10 @@ public class ShadowSystem
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 	shadowModelBatch.begin(cam);
-	PongObjects.instance.render(shadowModelBatch);
+	render(shadowModelBatch);
 	shadowModelBatch.end();
 
-        frameBufferShadows.end();
+	frameBufferShadows.end();
     }
 
     /**
@@ -162,7 +209,7 @@ public class ShadowSystem
     {
 	Gdx.gl.glClearColor(0, 0, 0, 1);
 	Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling ? GL20.GL_COVERAGE_BUFFER_BIT_NV : 0));
-	//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+	// Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 	sceneShaderProgram.begin();
 	final int textureNum = 4;
 	frameBufferShadows.getColorBufferTexture().bind(textureNum);
@@ -172,8 +219,38 @@ public class ShadowSystem
 	sceneShaderProgram.end();
 
 	sceneModelBatch.begin(cam);
-	PongObjects.instance.render(sceneModelBatch);
+	render(sceneModelBatch);
 	sceneModelBatch.end();
-
+    }
+    
+    /**
+     * Renders all the objects being managed by the Shadow Light System.
+     * @param batch
+     */
+    public void render(ModelBatch batch)
+    {
+	batch.render(objects);
+	for (ParticleSystem system : particleSystems)
+	{
+	    system.begin();
+	    system.draw();
+	    system.end();
+	    batch.render(system);
+	}
+    }
+    
+    public void dispose()
+    {
+	
+	if (objects.size > 0)
+	    objects.removeRange(0, objects.size-1);
+	if (particleSystems.size > 0)
+	    particleSystems.removeRange(0, particleSystems.size-1);
+	shadowModelBatch.dispose();
+	shadowsShaderProgram.dispose();
+	sceneModelBatch.dispose();
+	sceneShaderProgram.dispose();
+	for (AbstractShadowLight light : lights)
+	    light.dispose();
     }
 }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.screens.MenuScreen;
+import com.mygdx.game.util.HighScoreListFileManager;
 
 public class Pong3D extends Game 
 {
@@ -20,6 +21,7 @@ public class Pong3D extends Game
 		instance = this;
 		
 		Assets.instance.init();
+		PongGlobals.highScores = HighScoreListFileManager.loadHighScores();
 		
 		//GamePreferences.instance.load();
 		//AudioManager.instance.play(Assets.instance.music.song01);
