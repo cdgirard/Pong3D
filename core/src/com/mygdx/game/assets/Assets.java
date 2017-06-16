@@ -32,18 +32,18 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String splash_snd = "sounds/splash_snd.wav";
     public static final String anvil_snd = "sounds/anvil_snd.wav";
     public static final String golf_snd = "sounds/golfBall_snd.wav";
-    public static final String bone_snd = "sounds/boneBreaking_snd.wav";
+    //public static final String bone_snd = "sounds/boneBreaking_snd.wav";
     public static final String pan_snd = "sounds/fryingPan_snd.wav";
     public static final String tick_snd = "sounds/tick_snd.mp3";
     public static final String muted_snd = "sounds/mutedMetal_snd.wav";
     
     // 3D Models
     public static final String sphere = "models/concreteBare_sphere.g3dj";
-    public static final String wood = "models/rockWall_wall_a.g3dj";
-    public static final String wood2 = "models/rockWall_wall_b.g3dj";
-    public static final String marble = "models/bronzeCopper_platform.g3dj";
-    public static final String target = "models/woodPlanks_target.g3dj";
-    public static final String target2 = "models/metalPlatesDucts_target.g3dj";
+    public static final String wall_a = "models/rockWall_wall_a.g3dj";
+    public static final String wall_b = "models/rockWall_wall_b.g3dj";
+    public static final String platform = "models/bronzeCopper_platform.g3dj";
+    public static final String score_target = "models/woodPlanks_target.g3dj";
+    public static final String solid_target = "models/metalPlatesDucts_target.g3dj";
     public static final String water = "models/paperCrumpled_water.g3dj";
     
     // 3D Effects
@@ -107,22 +107,22 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.setErrorListener(this);
 	
 	// Load 3D Models
-	assetManager.load(marble, Model.class);
+	assetManager.load(platform, Model.class);
 	assetManager.finishLoading();
 	
 	assetManager.load(sphere, Model.class);
 	assetManager.finishLoading();
 	
-	assetManager.load(wood, Model.class);
+	assetManager.load(wall_a, Model.class);
 	assetManager.finishLoading();
 	
-	assetManager.load(wood2, Model.class);
+	assetManager.load(wall_b, Model.class);
 	assetManager.finishLoading();
 	
-	assetManager.load(target, Model.class);
+	assetManager.load(score_target, Model.class);
 	assetManager.finishLoading();
 	
-	assetManager.load(target2, Model.class);
+	assetManager.load(solid_target, Model.class);
 	assetManager.finishLoading();
 	
 	assetManager.load(water, Model.class);
@@ -141,8 +141,8 @@ public class Assets implements Disposable, AssetErrorListener
 	assetManager.load(golf_snd, Sound.class);
 	assetManager.finishLoading();
 	
-	assetManager.load(bone_snd, Sound.class);
-	assetManager.finishLoading();
+	//assetManager.load(bone_snd, Sound.class);
+	//assetManager.finishLoading();
 	
 	assetManager.load(pan_snd, Sound.class);
 	assetManager.finishLoading();

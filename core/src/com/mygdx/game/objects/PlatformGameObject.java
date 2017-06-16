@@ -19,7 +19,7 @@ public class PlatformGameObject extends GameObject
     
     public PlatformGameObject()
     {
-	Model model = Assets.assetManager.get(Assets.marble, Model.class);
+	Model model = Assets.assetManager.get(Assets.platform, Model.class);
 	
 	impulseForce = new Vector3(0, 0, 0);
 	instance = new ModelInstance(model);

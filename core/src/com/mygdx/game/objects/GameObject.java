@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Disposable;
 public class GameObject implements Disposable 
 {
     public static final int SCORE_TARGET = 1;
-    public static final int OBSTACLE_TARGET = 2;
+    public static final int SOLID_TARGET = 2;
     public static final int SPHERE = 3;
     public static final int PLATFORM = 4;
     public static final int WALL = 5;

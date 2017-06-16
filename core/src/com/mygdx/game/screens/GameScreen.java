@@ -27,7 +27,6 @@ import com.mygdx.game.Pong3D;
 import com.mygdx.game.PongController;
 import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
-import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.lights.MovingPointShadowLight;
 import com.mygdx.game.lights.MyDirectionalShadowLight;
@@ -35,7 +34,6 @@ import com.mygdx.game.lights.PointShadowLight;
 import com.mygdx.game.lights.ShadowSystem;
 import com.mygdx.game.objects.GameObject;
 import com.mygdx.game.objects.PongObjects;
-import com.mygdx.game.objects.TargetGameObject;
 import com.mygdx.game.util.GamePreferences;
 import com.mygdx.game.util.HighScoreEntry;
 import com.mygdx.game.util.HighScoreListFileManager;
@@ -43,8 +41,7 @@ import com.mygdx.game.util.HighScoreListFileManager;
 /**
  * Is the screen displayed when playing the game.
  * 
- * TODO: Is in need of some refactoring, probably to pull apart the UI from the
- * Game graphics and maybe some other stuff.
+ * TODO: There is a bug where the ball can get stuck on top of a steel block. Fix - If ball stops completely and high up then have it shoot up and to the side a little bit.
  * 
  * @author cdgira
  *
@@ -61,7 +58,7 @@ public class GameScreen extends AbstractGameScreen
 
     // For Bullet
     DebugDrawer debugDrawer;
-    private static final boolean BULLET_DEBUG = true;
+    private static final boolean BULLET_DEBUG = false;
 
     // For UI
     private OrthographicCamera cameraUI;
@@ -122,7 +119,6 @@ public class GameScreen extends AbstractGameScreen
 	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(0f, 30.0f, 0f), 0.1f));
 
 	controller = new PongController();
-	PongObjects.instance.setGameScreen(this);
 
 	// TODO: Might want in a different method
 	stage = new Stage(new StretchViewport(Assets.VIEWPORT_GUI_WIDTH, Assets.VIEWPORT_GUI_HEIGHT));

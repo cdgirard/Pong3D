@@ -55,7 +55,7 @@ public class HighScoreListFileManager
      */
     private static String readFile(String fileName)
     {
-        FileHandle file = Gdx.files.local(fileName);
+        FileHandle file = Gdx.files.internal(fileName);
         if (file != null && file.exists())
         {
             String s = file.readString();

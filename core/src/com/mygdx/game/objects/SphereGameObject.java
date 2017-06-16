@@ -38,7 +38,7 @@ public class SphereGameObject extends GameObject
      * 
      * @param cam
      */
-    public SphereGameObject(Camera cam)
+    public SphereGameObject(Vector3 position, Camera cam)
     {
 	
 	Model model = Assets.assetManager.get(Assets.sphere, Model.class);
@@ -46,7 +46,6 @@ public class SphereGameObject extends GameObject
 	
 	objId = GameObject.SPHERE;
 
-	Vector3 position = new Vector3(0, 7, 0);
 	instance = new ModelInstance(model);
 	motionState = new MyMotionState(instance);
 	motionState.setWorldTransform(instance.transform.trn(position));
@@ -56,24 +55,22 @@ public class SphereGameObject extends GameObject
 	bodyInfo.setFriction(1.0f);
 	body = new btRigidBody(bodyInfo);
 	body.userData = this;
-	// sphere.body.setCollisionFlags(sphere.body.getCollisionFlags() |
-	// btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 	BulletWorld.world.addRigidBody(body);
 	
-	// Since our particle effects is a Billboard, we create a
-	// BillboardParticleBatch
-	// Not sure how this will fit in with the ShadowSystem.
-	
-
+	// Is a particle effect to make a flame trail from the ball.
+	// Particle effects do their own special shading that is separate from
+	// any other setup.  This is bad if you want the effects to cast shadows
+	// and their system isn't setup to support it.
 	ParticleEffect originalEffect = Assets.assetManager.get(Assets.fire);
 	// we cannot use the originalEffect, we must make a copy each time we
 	// create new particle effect
 	flameEffect = originalEffect.copy();
 	
 	flameEffect.init();
-	flameEffect.start(); // optional: particle will begin playing
-			       // immediately
+	// optional: particle will begin playing immediately
+	flameEffect.start();
 
+	// If want to see the particle need to add it to a particle system.
 	Assets.instance.particleSystem.add(flameEffect);
     }
     

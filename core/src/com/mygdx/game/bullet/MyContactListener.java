@@ -75,7 +75,7 @@ public class MyContactListener extends ContactListener
 		game.shadowSystem.removeRenderObject(obj.instance);
 		PongObjects.instance.startExplosion(obj.instance.transform);
 	}
-	else if (obj.objId == GameObject.OBSTACLE_TARGET)
+	else if (obj.objId == GameObject.SOLID_TARGET)
 	{
 	    Sound exp_snd = Assets.assetManager.get(Assets.anvil_snd, Sound.class);
 	    AudioManager.instance.play(exp_snd);

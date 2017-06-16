@@ -2,29 +2,18 @@ package com.mygdx.game.objects;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Model;
-import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.Renderable;
 import com.badlogic.gdx.graphics.g3d.particles.ParticleEffect;
-import com.badlogic.gdx.graphics.g3d.particles.ParticleShader;
-import com.badlogic.gdx.graphics.g3d.particles.batches.PointSpriteParticleBatch;
 import com.badlogic.gdx.graphics.g3d.particles.emitters.RegularEmitter;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.bullet.collision.btBoxShape;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody;
-import com.badlogic.gdx.physics.bullet.dynamics.btRigidBody.btRigidBodyConstructionInfo;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.assets.AudioManager;
-import com.mygdx.game.bullet.BulletWorld;
-import com.mygdx.game.bullet.MyMotionState;
-import com.mygdx.game.screens.GameScreen;
-import com.mygdx.game.util.PongParticlePool;
+import com.mygdx.game.util.LevelLoader;
 
 /**
  * This class needs some redesign on how we are managing the objects in the
@@ -43,7 +32,8 @@ public class PongObjects implements Disposable
     
     public Array<GameObject> objects = new Array<GameObject>();
     
-    public GameObject wall, wall2, wall3, water;
+    public GameObject water;
+    public WallGameObject wall, wall2, wall3;
     public PlatformGameObject ground;
     public SphereGameObject sphere;
     public TargetGameObject target, target2;
@@ -54,51 +44,39 @@ public class PongObjects implements Disposable
     ParticleEffect explosionEffect;
     boolean explosion = false;
     boolean splash = false;
-    
-    // GameScreen - possibly temporary just want to get something working first
-    GameScreen screen;
 
     protected PongObjects()
     {
 	super();
     }
     
-    /**
-     * Quick setter that likely will remove once figure out a better overall design.
-     * @param sc
-     */
-    public void setGameScreen(GameScreen sc)
-    {
-	screen = sc;
-    }
-
     public void init(Camera cam)
     {
 	// Build the Game Objects
 	ground = new PlatformGameObject();
-	sphere = new SphereGameObject(cam);
-	create_wall();
-	create_wall2();
-	create_wall3();
+	sphere = new SphereGameObject(new Vector3(0, 7, 0),cam);
+	//create_wall();
+	//create_wall2();
+	//create_wall3();
 	target = new TargetGameObject(new Vector3(7,5,5),GameObject.SCORE_TARGET);
-	target2 = new TargetGameObject(new Vector3(0,5,4),GameObject.OBSTACLE_TARGET);
+	target2 = new TargetGameObject(new Vector3(0,5,4),GameObject.SOLID_TARGET);
 	create_water();
 	
 	// Put them all in an array to make adding new objects to the game 
 	// more easy.
 	objects.add(ground);
 	objects.add(sphere);
-	objects.add(wall);
-	objects.add(wall2);
-	objects.add(wall3);
+	//objects.add(wall);
+	//objects.add(wall2);
+	//objects.add(wall3);
 	objects.add(target);
 	objects.add(target2);
 	objects.add(water);
 	
+	LevelLoader.loadLevel("levels/Empty_Level.png", cam);
+	
 
-	// Setup Splash for Testing
-
-
+	// Setup Splash
 	ParticleEffect originalEffect = Assets.assetManager.get(Assets.splash);
 	// we cannot use the originalEffect, we must make a copy each time we
 	// create new particle effect
@@ -114,81 +92,24 @@ public class PongObjects implements Disposable
 
     public void create_wall3()
     {
-	Model model = Assets.assetManager.get(Assets.wood2, Model.class);
-
-	wall3 = new GameObject();
-	wall3.objId = GameObject.WALL;
-	Vector3 position = new Vector3(29, 0, 1);
-	wall3.instance = new ModelInstance(model);
-	// Bullet does not deal well with scaled objects for some reason.
-	// wall.instance.transform.scale(1f,1.5f,1f);
-	wall3.motionState = new MyMotionState(wall3.instance);
-	wall3.motionState.setWorldTransform(wall3.instance.transform.trn(position));
-	int width = 10;
-	wall3.shape = new btBoxShape(new Vector3(1.0f, width, width));
-	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, wall3.motionState, wall3.shape, Vector3.Zero);
-	bodyInfo.setRestitution(1.01f);
-	bodyInfo.setFriction(1.0f);
-	wall3.body = new btRigidBody(bodyInfo);
-	wall3.body.setCollisionFlags(wall3.body.getCollisionFlags());
-	wall3.body.userData = wall3;
-	BulletWorld.world.addRigidBody(wall3.body);
+	wall3 = new WallGameObject(new Vector3(20, 0, -10), WallGameObject.NORTH_SOUTH);
     }
 
     public void create_wall2()
     {
-	Model model = Assets.assetManager.get(Assets.wood, Model.class);
-
-	wall2 = new GameObject();
-	wall2.objId = GameObject.WALL;
-	Vector3 position = new Vector3(20, 0, -10);
-	wall2.instance = new ModelInstance(model);
-	// Bullet does not deal well with scaled objects for some reason.
-	// wall.instance.transform.scale(1f,1.5f,1f);
-	wall2.motionState = new MyMotionState(wall2.instance);
-	wall2.motionState.setWorldTransform(wall2.instance.transform.trn(position));
-	int width = 10;
-	wall2.shape = new btBoxShape(new Vector3(width, width, 1.0f));
-	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, wall2.motionState, wall2.shape, Vector3.Zero);
-	bodyInfo.setRestitution(1.01f);
-	bodyInfo.setFriction(1.0f);
-	wall2.body = new btRigidBody(bodyInfo);
-	wall2.body.setCollisionFlags(wall2.body.getCollisionFlags());// |
-								     // btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK
-								     // );
-	wall2.body.userData = wall2;
-	BulletWorld.world.addRigidBody(wall2.body);
+	wall2 = new WallGameObject(new Vector3(20, 0, -10), WallGameObject.EAST_WEST);
     }
 
     public void create_wall()
     {
-	Model model = Assets.assetManager.get(Assets.wood, Model.class);
-
-	wall = new GameObject();
-	wall.objId = GameObject.WALL;
-	Vector3 position = new Vector3(0, 0, -10);
-	wall.instance = new ModelInstance(model);
-	// wall.instance.transform.scale(1f,1.5f,1f);
-	wall.motionState = new MyMotionState(wall.instance);
-	wall.motionState.setWorldTransform(wall.instance.transform.trn(position));
-	int width = 10;
-	wall.shape = new btBoxShape(new Vector3(width, width, 1.0f));
-	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(0, wall.motionState, wall.shape, Vector3.Zero);
-	bodyInfo.setRestitution(1.01f);
-	bodyInfo.setFriction(1.0f);
-	wall.body = new btRigidBody(bodyInfo);
-	wall.body.setCollisionFlags(wall.body.getCollisionFlags());// |
-								   // btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK
-								   // );
-	wall.body.userData = wall;
-	BulletWorld.world.addRigidBody(wall.body);
+        wall = new WallGameObject(new Vector3(0, 0, -10), WallGameObject.EAST_WEST);
     }
 
     public void create_water()
     {
 	Model model = Assets.assetManager.get(Assets.water, Model.class);
 	water = new GameObject();
-	Vector3 position = new Vector3(0, -5, 0);
+	Vector3 position = new Vector3(50, -5, 50);
 	water.instance = new ModelInstance(model);
 	water.instance.transform.trn(position);
     }

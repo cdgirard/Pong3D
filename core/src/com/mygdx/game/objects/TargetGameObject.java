@@ -18,9 +18,9 @@ public class TargetGameObject extends GameObject
 	
 	Model model = null;
 	if (type == GameObject.SCORE_TARGET)
-	    model = Assets.assetManager.get(Assets.target, Model.class);
-	else if (type == GameObject.OBSTACLE_TARGET)
-	    model = Assets.assetManager.get(Assets.target2, Model.class);
+	    model = Assets.assetManager.get(Assets.score_target, Model.class);
+	else if (type == GameObject.SOLID_TARGET)
+	    model = Assets.assetManager.get(Assets.solid_target, Model.class);
 	else
 	    throw new RuntimeException("Wrong Target Type");
 	objId = type;
@@ -38,7 +38,7 @@ public class TargetGameObject extends GameObject
 	// btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK
 	if (type == GameObject.SCORE_TARGET)
 	    body.setCollisionFlags(body.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_NO_CONTACT_RESPONSE);
-	else if (type == GameObject.OBSTACLE_TARGET)
+	else if (type == GameObject.SOLID_TARGET)
 	    body.setCollisionFlags(body.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 	body.userData = this;
 
