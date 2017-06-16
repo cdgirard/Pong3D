@@ -53,19 +53,19 @@ public class PongObjects implements Disposable
     public void init(Camera cam)
     {
 	// Build the Game Objects
-	ground = new PlatformGameObject();
-	sphere = new SphereGameObject(new Vector3(0, 7, 0),cam);
+	//ground = new PlatformGameObject();
+	//sphere = new SphereGameObject(new Vector3(0, 7, 0),cam);
 	//create_wall();
 	//create_wall2();
 	//create_wall3();
 	target = new TargetGameObject(new Vector3(7,5,5),GameObject.SCORE_TARGET);
-	target2 = new TargetGameObject(new Vector3(0,5,4),GameObject.SOLID_TARGET);
+	target2 = new TargetGameObject(new Vector3(50,5,50),GameObject.SOLID_TARGET);
 	create_water();
 	
 	// Put them all in an array to make adding new objects to the game 
 	// more easy.
-	objects.add(ground);
-	objects.add(sphere);
+	//objects.add(ground);
+	//objects.add(sphere);
 	//objects.add(wall);
 	//objects.add(wall2);
 	//objects.add(wall3);

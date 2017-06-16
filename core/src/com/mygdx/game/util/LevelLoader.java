@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.objects.GameObject;
+import com.mygdx.game.objects.PlatformGameObject;
 import com.mygdx.game.objects.PongObjects;
 import com.mygdx.game.objects.SphereGameObject;
 import com.mygdx.game.objects.TargetGameObject;
@@ -13,7 +14,7 @@ import com.mygdx.game.objects.WallGameObject;
 public class LevelLoader
 {
     private static final String TAG = "LevelLoader";
-    
+
     public enum BLOCK_TYPE
     {
 	EMPTY(0, 0, 0), // black
@@ -63,28 +64,32 @@ public class LevelLoader
 		}
 		else if (BLOCK_TYPE.WALL_A.sameColor(currentPixel))
 		{
-			Vector3 position = new Vector3(pixelX,0,pixelY);
-			obj = new WallGameObject(position,WallGameObject.EAST_WEST);
+		    Vector3 position = new Vector3(pixelX, 0, pixelY);
+		    obj = new WallGameObject(position, WallGameObject.EAST_WEST);
 		}
 		else if (BLOCK_TYPE.WALL_B.sameColor(currentPixel))
 		{
-			Vector3 position = new Vector3(pixelX,0,pixelY);
-			obj = new WallGameObject(position,WallGameObject.NORTH_SOUTH);
+		    Vector3 position = new Vector3(pixelX, 0, pixelY);
+		    obj = new WallGameObject(position, WallGameObject.NORTH_SOUTH);
+
 		}
 		else if (BLOCK_TYPE.PLAYER_SPAWNPOINT.sameColor(currentPixel))
 		{
-		    Vector3 position = new Vector3(pixelX,7,pixelY);
-		    obj = new SphereGameObject(position,cam);
+		    Vector3 position = new Vector3(pixelX, 7, pixelY);
+		    obj = PongObjects.instance.sphere = new SphereGameObject(position, cam);
+		    PongObjects.instance.ground = new PlatformGameObject(new Vector3(pixelX,0,pixelY));
+		    // TODO: Make this a method for better design?
+		    PongObjects.instance.objects.add(PongObjects.instance.ground);
 		}
 		else if (BLOCK_TYPE.SCORE_TARGET.sameColor(currentPixel))
 		{
-		    Vector3 position = new Vector3(pixelX,5,pixelY);
-		    obj = new TargetGameObject(position,GameObject.SCORE_TARGET);
+		    Vector3 position = new Vector3(pixelX, 5, pixelY);
+		    obj = new TargetGameObject(position, GameObject.SCORE_TARGET);
 		}
 		else if (BLOCK_TYPE.SOLID_TARGET.sameColor(currentPixel))
 		{
-		    Vector3 position = new Vector3(pixelX,5,pixelY);
-		    obj = new TargetGameObject(position,GameObject.SOLID_TARGET);
+		    Vector3 position = new Vector3(pixelX, 5, pixelY);
+		    obj = new TargetGameObject(position, GameObject.SOLID_TARGET);
 		}
 		else
 		{

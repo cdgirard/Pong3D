@@ -17,16 +17,17 @@ public class PlatformGameObject extends GameObject
     public float bounceTimer = 0;
     public Vector3 impulseForce;
     
-    public PlatformGameObject()
+    public PlatformGameObject(Vector3 position)
     {
 	Model model = Assets.assetManager.get(Assets.platform, Model.class);
+	
+	objId = GameObject.PLATFORM;
 	
 	impulseForce = new Vector3(0, 0, 0);
 	instance = new ModelInstance(model);
 	motionState = new MyMotionState(instance);
+	motionState.setWorldTransform(instance.transform.trn(position));
 
-	objId = GameObject.PLATFORM;
-	
 	float width = 5;
 	shape = new btBoxShape(new Vector3(width, 1 / 4f, width));
 	btRigidBodyConstructionInfo bodyInfo = new btRigidBodyConstructionInfo(100f, motionState, shape, Vector3.Zero);

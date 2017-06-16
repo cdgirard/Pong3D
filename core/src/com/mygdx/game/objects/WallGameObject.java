@@ -28,7 +28,7 @@ public class WallGameObject extends GameObject
 	if (facing == EAST_WEST)
 	     model = Assets.assetManager.get(Assets.wall_a, Model.class);
 	else if (facing == NORTH_SOUTH)
-	    model = Assets.assetManager.get(Assets.wall_a, Model.class);
+	    model = Assets.assetManager.get(Assets.wall_b, Model.class);
 	else 
 	    throw new InvalidFacingException();
 

@@ -32,6 +32,7 @@ public class SphereGameObject extends GameObject
 {
     ParticleEffect flameEffect;
     boolean alive = true;
+    float timeAtRest = 0f;
 
     /**
      * Creates the sphere with the fire trail particle affect attached.
@@ -154,8 +155,8 @@ public class SphereGameObject extends GameObject
     {
 	// Try and cap this at around 15.
 	Vector3 speed = body.getLinearVelocity();
-	if (speed.y > 15)
-	    body.setLinearVelocity(new Vector3(speed.x,15,speed.z));
+	if (speed.y > 12)
+	    body.setLinearVelocity(new Vector3(speed.x,12,speed.z));
 	
 	Matrix4 targetMatrix = new Matrix4();
 
@@ -169,12 +170,24 @@ public class SphereGameObject extends GameObject
 	    flameEffect.setTransform(targetMatrix);
 	}
 	
-	float sphereY = body.getCenterOfMassPosition().y;
 	
-	if ((alive) && (sphereY < -5.0f))  // Setup this up to use the spalsh effect instead.
+	
+	if (alive)  
 	{
+	    // btRigidBody appears to use the same Vector3 over and over again to return all values.
+	    // So if you don't want to lose them, need to create a copy of the Vector3.
+	    speed = body.getLinearVelocity().cpy();
+	    float sphereY = body.getCenterOfMassPosition().y;
+	 // Setup this up to use the spalsh effect instead.
+	    if (sphereY < -1.0f)
+	    {
 	        PongObjects.instance.startSplash(instance.transform);
 	        alive = false;
+	    }
+	    else if ((sphereY > 3.0f) && (speed.x + speed.y + speed.z == 0))
+	    {
+		body.setLinearVelocity(new Vector3(1f,5f,1f));
+	    }
 	}
     }
 
