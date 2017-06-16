@@ -6,6 +6,13 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
 import com.mygdx.game.objects.PongObjects;
 
+/**
+ * This class manages the input from the user while they still have lives.  Once all 
+ * the lives are used, input control is handed over to the High Score Name window.
+ * 
+ * @author cdgira
+ *
+ */
 public class PongController extends InputAdapter implements Disposable
 {
     private static final String TAG = PongController.class.getName();
@@ -24,6 +31,9 @@ public class PongController extends InputAdapter implements Disposable
 	Gdx.input.setInputProcessor(this);
     }
     
+    /**
+     * Allows the user to move the platform around.
+     */
     @Override
     public boolean keyUp(int keycode)
     {

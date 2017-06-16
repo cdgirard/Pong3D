@@ -61,17 +61,19 @@ public class MyContactListener extends ContactListener
 		processPlatformCollision((GameObject) colObj0.userData);
 	}
     }
-
+    
     /**
      * Sphere collided with another game object.
      * @param obj
      */
-    private void processSphereCollision(GameObject obj)
+    public void processSphereCollision(GameObject obj)
     {
 	if (obj.objId == GameObject.SCORE_TARGET)
 	{
-	    game.hitScoreTarget(obj);
-
+	    BulletWorld.world.removeRigidBody(obj.body);
+		obj.visible = false;
+		game.shadowSystem.removeRenderObject(obj.instance);
+		PongObjects.instance.startExplosion(obj.instance.transform);
 	}
 	else if (obj.objId == GameObject.OBSTACLE_TARGET)
 	{
@@ -95,7 +97,7 @@ public class MyContactListener extends ContactListener
      * be colliding with the wall).
      * @param obj
      */
-    private void processPlatformCollision(GameObject obj)
+    public void processPlatformCollision(GameObject obj)
     {
 	if (obj.objId == GameObject.WALL)
 	{

@@ -54,7 +54,7 @@ public class MyDirectionalShadowLight extends AbstractShadowLight
     {
 	super.init();
 
-	camera = new PerspectiveCamera(120f, GameScreen.DEPTH_MAP_SIZE, GameScreen.DEPTH_MAP_SIZE);
+	camera = new PerspectiveCamera(120f, ShadowSystem.DEPTH_MAP_SIZE, ShadowSystem.DEPTH_MAP_SIZE);
 	camera.near = 1f;
 	camera.far = 70;
 	camera.position.set(position);
@@ -72,7 +72,7 @@ public class MyDirectionalShadowLight extends AbstractShadowLight
 	needsUpdate = false;
 	if (frameBuffer == null)
 	{
-	    frameBuffer = new FrameBuffer(Format.RGBA8888, GameScreen.DEPTH_MAP_SIZE, GameScreen.DEPTH_MAP_SIZE, true);
+	    frameBuffer = new FrameBuffer(Format.RGBA8888, ShadowSystem.DEPTH_MAP_SIZE, ShadowSystem.DEPTH_MAP_SIZE, true);
 	}
 	frameBuffer.begin();
 	Gdx.gl.glClearColor(0, 0, 0, 1);

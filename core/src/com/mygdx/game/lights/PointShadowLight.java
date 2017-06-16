@@ -44,7 +44,7 @@ public class PointShadowLight extends AbstractShadowLight
     {
 	super.init();
 
-	camera = new PerspectiveCamera(90f, GameScreen.DEPTH_MAP_SIZE, GameScreen.DEPTH_MAP_SIZE);
+	camera = new PerspectiveCamera(90f, ShadowSystem.DEPTH_MAP_SIZE, ShadowSystem.DEPTH_MAP_SIZE);
 	camera.near = 4f;
 	camera.far = 70;
 	camera.position.set(position);
@@ -59,7 +59,7 @@ public class PointShadowLight extends AbstractShadowLight
 	needsUpdate = false;
 	if (frameBuffer == null)
 	{
-	    frameBuffer = new FrameBufferCubeMap(Format.RGBA8888, GameScreen.DEPTH_MAP_SIZE, true);
+	    frameBuffer = new FrameBufferCubeMap(Format.RGBA8888, ShadowSystem.DEPTH_MAP_SIZE, true);
 	}
 	
 	shaderProgram.begin();

@@ -39,6 +39,8 @@ import com.mygdx.game.util.SimpleTextureShader;
 // data from the lights.
 public class ShadowSystem
 {
+    public static final int DEPTH_MAP_SIZE = 1024;
+    
     public Array<AbstractShadowLight> lights = new Array<AbstractShadowLight>();
     public Array<RenderableProvider> objects = new Array<RenderableProvider>();
     public Array<ParticleSystem> particleSystems = new Array<ParticleSystem>();

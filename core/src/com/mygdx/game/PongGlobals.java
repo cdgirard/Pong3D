@@ -8,6 +8,9 @@ import com.mygdx.game.util.HighScoreListFileManager;
 
 public class PongGlobals
 {
+    public static final int LIVES_START = 3;
+    public static final int MAX_SCORES = 10;
+    
     public static int lives = 0;
     public static int score = 0;
     
@@ -40,8 +43,8 @@ public class PongGlobals
 	    }
 	}
 	
-	while (highScores.size > 10)
-	    highScores.removeIndex(10);
+	while (highScores.size > MAX_SCORES)
+	    highScores.removeIndex(MAX_SCORES);
     }
     
     /**
