@@ -59,7 +59,7 @@ public class PongObjects implements Disposable
 	//create_wall2();
 	//create_wall3();
 	target = new TargetGameObject(new Vector3(7,5,5),GameObject.SCORE_TARGET);
-	target2 = new TargetGameObject(new Vector3(50,5,50),GameObject.SOLID_TARGET);
+	//target2 = new TargetGameObject(new Vector3(50,5,50),GameObject.SOLID_TARGET);
 	create_water();
 	
 	// Put them all in an array to make adding new objects to the game 
@@ -70,10 +70,10 @@ public class PongObjects implements Disposable
 	//objects.add(wall2);
 	//objects.add(wall3);
 	objects.add(target);
-	objects.add(target2);
+	//objects.add(target2);
 	objects.add(water);
 	
-	LevelLoader.loadLevel("levels/Empty_Level.png", cam);
+	LevelLoader.loadLevel("levels/Basic_Level.png", cam);
 	
 
 	// Setup Splash

@@ -28,6 +28,17 @@ void main()
 	c.y/=u_screenHeight;
 	vec4 color=texture2D(u_shadows,c);
 	
+//	#ifdef blendedFlag
+//		gl_FragColor.a = diffuse.a * v_opacity;
+//		#ifdef alphaTestFlag
+//			if (gl_FragColor.a <= v_alphaTest)
+//				discard;
+//		#endif
+//	#else
+//		gl_FragColor.a = 1.0;
+//	#endif
+	
+	
 	// Apply shadow
 	finalColor.rgb*=(0.4+0.6*color.a);
 	

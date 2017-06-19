@@ -28,6 +28,8 @@ import com.mygdx.game.PongController;
 import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
 import com.mygdx.game.bullet.BulletWorld;
+import com.mygdx.game.lights.AbstractShadowSystem;
+import com.mygdx.game.lights.BasicLightSystem;
 import com.mygdx.game.lights.MovingPointShadowLight;
 import com.mygdx.game.lights.MyDirectionalShadowLight;
 import com.mygdx.game.lights.PointShadowLight;
@@ -41,8 +43,6 @@ import com.mygdx.game.util.HighScoreListFileManager;
 /**
  * Is the screen displayed when playing the game.
  * 
- * TODO: There is a bug where the ball can get stuck on top of a steel block. Fix - If ball stops completely and high up then have it shoot up and to the side a little bit.
- * 
  * @author cdgira
  *
  */
@@ -53,7 +53,7 @@ public class GameScreen extends AbstractGameScreen
     PongController controller;
 
     // For Shadow Environment
-    public ShadowSystem shadowSystem;
+    public AbstractShadowSystem shadowSystem;
     PerspectiveCamera cam;
 
     // For Bullet
@@ -97,6 +97,7 @@ public class GameScreen extends AbstractGameScreen
 	Assets.instance.loadParticleEffects(cam);
 
 	shadowSystem = new ShadowSystem();
+	//shadowSystem = new BasicLightSystem();
 	shadowSystem.addParticleSystem(Assets.instance.particleSystem);
 
 	BulletWorld.instance.init(this);

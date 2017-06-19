@@ -13,7 +13,7 @@ import com.mygdx.game.lights.shaders.DepthMapShader;
 public abstract class AbstractShadowLight
 {
     // Which display system does this light belong to.
-    protected ShadowSystem system;
+    protected AbstractShadowSystem system;
     protected boolean needsUpdate = true;
     public static ShaderProgram shaderProgram;
     public static ModelBatch modelBatch;
@@ -65,7 +65,7 @@ public abstract class AbstractShadowLight
      * Set the system this light is attached.
      * @param sys
      */
-    public void setSystem(ShadowSystem sys)
+    public void setSystem(AbstractShadowSystem sys)
     {
 	system = sys;
     }

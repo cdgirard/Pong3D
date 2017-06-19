@@ -20,6 +20,9 @@ import com.mygdx.game.lights.shaders.ShadowShaderProvider;
 import com.mygdx.game.objects.PongObjects;
 import com.mygdx.game.util.SimpleTextureShader;
 
+// TODO: Check out xoppa's blog with a simple 3D shader example and walk through it.  See if we can eventually 
+//       adapt it to this Shadow light system for better shadows with spheres.
+
 // Shadow Lights Process
 //1.  Setup the Shadow Shader Provider that will do all the shadows together.
 //2. Until create shader is called it will not have the shader ready until create shader is called.
@@ -37,13 +40,10 @@ import com.mygdx.game.util.SimpleTextureShader;
 // Going to need a special ShadowRender system that takes in the list of model instances and
 // then does the two step process of applying the lights and then rendering based off of the
 // data from the lights.
-public class ShadowSystem
+public class ShadowSystem extends AbstractShadowSystem
 {
     public static final int DEPTH_MAP_SIZE = 1024;
     
-    public Array<AbstractShadowLight> lights = new Array<AbstractShadowLight>();
-    public Array<RenderableProvider> objects = new Array<RenderableProvider>();
-    public Array<ParticleSystem> particleSystems = new Array<ParticleSystem>();
     private FrameBuffer frameBufferShadows;
 
     // Shadows
@@ -61,66 +61,10 @@ public class ShadowSystem
 	initShadowShader();
     }
 
-    public Array<AbstractShadowLight> getLights()
-    {
-	return lights;
-    }
-
-    /**
-     * Adds a light to be managed by the shadow light system.
-     * 
-     * @param light
-     */
-    public void addLight(AbstractShadowLight light)
-    {
-	light.setSystem(this);
-	lights.add(light);
-    }
-
-    /**
-     * Adds and object to be rendered by the lighting system.
-     * 
-     * @param obj
-     */
-    public void addRenderObject(RenderableProvider obj)
-    {
-	objects.add(obj);
-    }
-
-    /**
-     * Remove and object to be rendered by the lighting system.
-     * 
-     * @param obj
-     */
-    public void removeRenderObject(RenderableProvider obj)
-    {
-	objects.removeValue(obj, false);
-    }
-
-    /**
-     * Adds and object to be rendered by the lighting system.
-     * 
-     * @param obj
-     */
-    public void addParticleSystem(ParticleSystem obj)
-    {
-	particleSystems.add(obj);
-    }
-
-    /**
-     * Remove and object to be rendered by the lighting system.
-     * 
-     * @param obj
-     */
-    public void removeParticleSystem(ParticleSystem obj)
-    {
-	particleSystems.removeValue(obj, false);
-    }
-
     /**
      * Load shader(s)
      */
-    public void initSceneShader()
+    private void initSceneShader()
     {
 	ShaderProgram.pedantic = false;
 	sceneShaderProgram = new ShaderProgram(Assets.sceneVShader, Assets.sceneFShader);
@@ -166,7 +110,7 @@ public class ShadowSystem
      * 
      * @param delta
      */
-    public void act(final float delta)
+    private void act(final float delta)
     {
 	for (final AbstractShadowLight light : lights)
 	{
