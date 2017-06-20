@@ -184,10 +184,15 @@ public class SphereGameObject extends GameObject
 	        PongObjects.instance.startSplash(instance.transform);
 	        alive = false;
 	    }
-	    else if ((sphereY > 3.0f) && (speed.x + speed.y + speed.z == 0))
+	    else if ((sphereY > 3.0f) && (timeAtRest > 0.25f) && (speed.x + speed.y + speed.z == 0))
 	    {
 		body.setLinearVelocity(new Vector3(1f,5f,1f));
 	    }
+	    
+	    if (speed.x + speed.y + speed.z != 0)
+		timeAtRest = 0;
+	    else
+		timeAtRest += delta;
 	}
     }
 

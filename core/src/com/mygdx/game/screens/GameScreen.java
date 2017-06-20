@@ -80,6 +80,8 @@ public class GameScreen extends AbstractGameScreen
      */
     public void create()
     {
+	PongGlobals.startLevel();
+	
 	// UI
 	cameraUI = new OrthographicCamera(Assets.VIEWPORT_GUI_WIDTH, Assets.VIEWPORT_GUI_HEIGHT);
 	cameraUI.setToOrtho(true);
@@ -96,8 +98,8 @@ public class GameScreen extends AbstractGameScreen
 
 	Assets.instance.loadParticleEffects(cam);
 
-	shadowSystem = new ShadowSystem();
-	//shadowSystem = new BasicLightSystem();
+	//shadowSystem = new ShadowSystem();
+	shadowSystem = new BasicLightSystem();
 	shadowSystem.addParticleSystem(Assets.instance.particleSystem);
 
 	BulletWorld.instance.init(this);
@@ -161,6 +163,13 @@ public class GameScreen extends AbstractGameScreen
 	if (GamePreferences.instance.showFpsCounter)
 	    renderGuiFpsCounter(batch);
 
+	if (PongGlobals.numScoreBlocks == 0)
+	{
+	    PongGlobals.changeLevel();
+	    dispose();
+	    Pong3D.instance.setScreen(new GameScreen());
+	}
+	
 	if ((!highScoreWindowActive) && (PongGlobals.lives == 0))
 	{
 	    if (PongGlobals.highScores.size == PongGlobals.MAX_SCORES)

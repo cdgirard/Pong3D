@@ -1,0 +1,44 @@
+{
+highScores: [
+	{
+		player: Howard
+		score: 1100
+	}
+	{
+		player: Bob
+		score: 400
+	}
+	{
+		player: Player
+		score: 200
+	}
+	{
+		player: Dudley
+		score: 50
+	}
+	{
+		player: Dudley
+		score: 10
+	}
+	{
+		player: Bob
+		score: 10
+	}
+	{
+		player: ""
+		score: 10
+	}
+	{
+		player: ""
+		score: 10
+	}
+	{
+		player: ""
+		score: 10
+	}
+	{
+		player: ""
+		score: 10
+	}
+]
+}

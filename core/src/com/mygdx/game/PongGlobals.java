@@ -13,6 +13,8 @@ public class PongGlobals
     
     public static int lives = 0;
     public static int score = 0;
+    public static int numScoreBlocks = 0;
+    public static int level = 0;
     
     /**
      * TODO: Need to finish up High Score System so that it functions properly.
@@ -21,11 +23,25 @@ public class PongGlobals
     
     /**
      * Set the initial values for the variables for when we start a new game.
+     * Need to make sure this is called after loading a level.
      */
     public static void startGame()
     {
 	lives = 1;
 	score = 0;
+        level = 0;
+    }
+    
+    public static void startLevel()
+    {
+	numScoreBlocks = 0;
+    }
+    
+    public static void changeLevel()
+    {
+	level++;
+	if (level > 3)
+	    level = 0;
     }
     
     public static void sortHighScoreList()

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Vector3;
+import com.mygdx.game.PongGlobals;
 import com.mygdx.game.objects.GameObject;
 import com.mygdx.game.objects.PlatformGameObject;
 import com.mygdx.game.objects.PongObjects;
@@ -85,6 +86,7 @@ public class LevelLoader
 		{
 		    Vector3 position = new Vector3(pixelX, 5, pixelY);
 		    obj = new TargetGameObject(position, GameObject.SCORE_TARGET);
+		    PongGlobals.numScoreBlocks++;
 		}
 		else if (BLOCK_TYPE.SOLID_TARGET.sameColor(currentPixel))
 		{
