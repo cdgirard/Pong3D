@@ -98,8 +98,7 @@ public class GameScreen extends AbstractGameScreen
 
 	Assets.instance.loadParticleEffects(cam);
 
-	//shadowSystem = new ShadowSystem();
-	shadowSystem = new BasicLightSystem();
+	shadowSystem = new ShadowSystem();
 	shadowSystem.addParticleSystem(Assets.instance.particleSystem);
 
 	BulletWorld.instance.init(this);
@@ -158,19 +157,31 @@ public class GameScreen extends AbstractGameScreen
     {
 	batch.setProjectionMatrix(cameraUI.combined);
 	batch.begin();
+	// TODO Issue with Scene2D - see details below.
+	// For some reason you have to draw one extra thing in Scene2D for all
+	// the other things to show up.  Also, renderGuiScore and renderGuiFpsCounter must come before
+	// renderGuiExtrLive or they don't get drawn.
+	renderGuiFpsCounter(batch);
+	
 	renderGuiScore(batch);
 	renderGuiExtraLive(batch);
-	if (GamePreferences.instance.showFpsCounter)
-	    renderGuiFpsCounter(batch);
+//	if (GamePreferences.instance.showFpsCounter)
+	renderGuiScore2(batch);
+	    
+	    
 
+
+	stage.act(deltaTime);
+	stage.draw();
+	batch.end();
+	
 	if (PongGlobals.numScoreBlocks == 0)
 	{
 	    PongGlobals.changeLevel();
 	    dispose();
 	    Pong3D.instance.setScreen(new GameScreen());
 	}
-	
-	if ((!highScoreWindowActive) && (PongGlobals.lives == 0))
+	else if ((!highScoreWindowActive) && (PongGlobals.lives == 0))
 	{
 	    if (PongGlobals.highScores.size == PongGlobals.MAX_SCORES)
 	    {
@@ -191,9 +202,6 @@ public class GameScreen extends AbstractGameScreen
 		Gdx.input.setInputProcessor(stage);
 	    }
 	}
-	stage.act(deltaTime);
-	stage.draw();
-	batch.end();
     }
 
     /**
@@ -202,8 +210,8 @@ public class GameScreen extends AbstractGameScreen
      */
     private void renderGuiFpsCounter(SpriteBatch batch)
     {
-	float x = cameraUI.viewportWidth - 55;
-	float y = cameraUI.viewportHeight - 15;
+	float x = cameraUI.viewportWidth - 75;
+	float y = cameraUI.viewportHeight - 55;
 	int fps = Gdx.graphics.getFramesPerSecond();
 	BitmapFont fpsFont = Assets.instance.defaultNormal;
 	if (fps >= 45)
@@ -222,14 +230,24 @@ public class GameScreen extends AbstractGameScreen
 	float x = -15;
 	float y = -15;
 	Assets.instance.defaultNormal.draw(batch, "" + PongGlobals.score, x + 75, y + 37);
+	Assets.instance.defaultNormal.setColor(1,1,1,1);
+    }
+    
+    private void renderGuiScore2(SpriteBatch batch)
+    {
+	float x = 50;
+	float y = 50;
+	Assets.instance.defaultNormal.draw(batch, "" + PongGlobals.score, x + 75, y + 37);
+	Assets.instance.defaultNormal.setColor(1,1,1,1);
     }
 
     private void renderGuiExtraLive(SpriteBatch batch)
     {
-	float x = cameraUI.viewportWidth - 50 - PongGlobals.LIVES_START * 50;
+	float x = cameraUI.viewportWidth - 25 - PongGlobals.LIVES_START * 50;
 	float y = 15;
 	for (int i = 0; i < PongGlobals.LIVES_START; i++)
 	{
+	  //  Assets.instance.defaultNormal.draw(batch, "" + PongGlobals.score, x + 75, y + 37);
 	    if (PongGlobals.lives <= i)
 		batch.setColor(0.5f, 0.5f, 0.5f, 0.5f);
 	    batch.draw(Assets.assetManager.get(Assets.BALL, Texture.class), x + i * 50, y, 0, 0, 101, 73, 0.35f, 0.35f, 0, 0, 0, 101, 73, false, false);
