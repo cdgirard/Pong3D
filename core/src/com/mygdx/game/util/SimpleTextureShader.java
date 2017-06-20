@@ -18,6 +18,10 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 public class SimpleTextureShader extends BaseShader
 {
     public Renderable renderable;
+    
+    public final static Uniform opacity = new Uniform("u_opacity", BlendingAttribute.Type);
+    
+    public final int u_opacity;
 
     @Override
     public void end()
@@ -33,6 +37,7 @@ public class SimpleTextureShader extends BaseShader
 	register(Inputs.projViewTrans, Setters.projViewTrans);
 	register(Inputs.normalMatrix, Setters.normalMatrix);
 	register(Inputs.diffuseTexture, Setters.diffuseTexture);
+	u_opacity = register(Inputs.opacity);
 
     }
 
