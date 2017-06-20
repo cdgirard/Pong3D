@@ -39,14 +39,13 @@ void main()
 	// Apply shadow
 	finalColor.rgb*=(0.4+0.6*color.a);
 	gl_FragColor = finalColor;
+	//gl_FragColor.a = gl_FragColor.a * v_opacity;
 	//#ifdef blendedFlag
-		gl_FragColor.a = finalColor.a * v_opacity;
-		#ifdef alphaTestFlag
-			if (gl_FragColor.a <= v_alphaTest)
-				discard;
-		#endif
+		gl_FragColor.a =  v_opacity;
+
+		//#endif
 	//#else
-		gl_FragColor.a = 1.0;
+	//	gl_FragColor.a = 1.0;
 	//#endif
 		
 }

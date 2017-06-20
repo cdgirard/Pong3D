@@ -9,16 +9,8 @@ precision mediump float;
 #define HIGH
 #endif
 
-//#ifdef blendedFlag
 uniform float u_opacity;
 varying float v_opacity;
-
-#ifdef alphaTestFlag
-uniform float u_alphaTest;
-varying float v_alphaTest;
-#endif //alphaTestFlag
-//#endif // blendedFlag
-
 
 attribute vec3 a_position;
 attribute vec2 a_texCoord0;
@@ -40,13 +32,8 @@ void main()
     
     v_texCoords0 = a_texCoord0;
     
-    //#ifdef blendedFlag
-		v_opacity = u_opacity;
-	    #ifdef alphaTestFlag
-		    v_alphaTest = u_alphaTest;
-		#endif //alphaTestFlag
-	//#endif // blendedFlag
-    
+	v_opacity = u_opacity;
+
     // Just add some basic self shadow
     vec3 normal = normalize(u_normalMatrix * a_normal);    
 	v_intensity=1.0;
