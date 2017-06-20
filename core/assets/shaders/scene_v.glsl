@@ -9,6 +9,9 @@ precision mediump float;
 #define HIGH
 #endif
 
+uniform float u_opacity;
+varying float v_opacity;
+
 attribute vec3 a_position;
 attribute vec2 a_texCoord0;
 attribute vec3 a_normal;
@@ -29,6 +32,8 @@ void main()
     
     v_texCoords0 = a_texCoord0;
     
+	v_opacity = u_opacity;
+
     // Just add some basic self shadow
     vec3 normal = normalize(u_normalMatrix * a_normal);    
 	v_intensity=1.0;

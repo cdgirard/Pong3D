@@ -9,6 +9,11 @@ precision mediump float;
 #define HIGH
 #endif
 
+// Blending flag was not working
+// Presently assuming all objects have this value.
+varying float v_opacity;
+
+
 uniform sampler2D u_diffuseTexture;
 uniform sampler2D u_shadows;
 uniform float u_screenWidth;
@@ -28,22 +33,11 @@ void main()
 	c.y/=u_screenHeight;
 	vec4 color=texture2D(u_shadows,c);
 	
-//	#ifdef blendedFlag
-//		gl_FragColor.a = diffuse.a * v_opacity;
-//		#ifdef alphaTestFlag
-//			if (gl_FragColor.a <= v_alphaTest)
-//				discard;
-//		#endif
-//	#else
-//		gl_FragColor.a = 1.0;
-//	#endif
-	
-	
 	// Apply shadow
 	finalColor.rgb*=(0.4+0.6*color.a);
-	
-	gl_FragColor     = finalColor;
-	
-	
+	gl_FragColor = finalColor;
+	// Assumes all objects have an opacity value.
+	gl_FragColor.a = gl_FragColor.a * v_opacity;
+		
 }
 

@@ -187,7 +187,6 @@ public class ShadowSystem extends AbstractShadowSystem
     
     public void dispose()
     {
-	
 	if (objects.size > 0)
 	    objects.removeRange(0, objects.size-1);
 	if (particleSystems.size > 0)
