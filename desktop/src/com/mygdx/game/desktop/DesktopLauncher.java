@@ -7,6 +7,7 @@ import com.mygdx.game.Pong3D;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
 		new LwjglApplication(new Pong3D(), config);
 	}
 }

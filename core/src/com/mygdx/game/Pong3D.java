@@ -17,7 +17,7 @@ public class Pong3D extends Game
 	public void create() 
 	{
 		Gdx.app.setLogLevel(Application.LOG_DEBUG);
-		
+		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		instance = this;
 		
 		Assets.instance.init();

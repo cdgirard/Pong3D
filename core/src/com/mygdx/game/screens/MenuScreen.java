@@ -40,6 +40,7 @@ public class MenuScreen extends AbstractGameScreen
     private Image imgTitle;
     private Button btnMenuPlay;
     private Button btnMenuOptions;
+    private TextButton btnExit;
 
     // Options
     private Window winOptions;
@@ -83,6 +84,7 @@ public class MenuScreen extends AbstractGameScreen
 	stack.add(layerObjects);
 	stack.add(highScores);
 	stack.add(layerControls);
+	stack.add(buildExitLayer());
 	stage.addActor(layerOptionsWindow);
     }
 
@@ -108,6 +110,27 @@ public class MenuScreen extends AbstractGameScreen
 	imgTitle = new Image(Assets.assetManager.get(Assets.TITLE, Texture.class));
 	layer.addActor(imgTitle);
 	imgTitle.setPosition(375, 600);
+	return layer;
+    }
+    
+    /**
+     * Build and place the exit button so we can quit out in full screen mode.
+     * @return
+     */
+    private Table buildExitLayer()
+    {
+	Table layer = new Table();
+	btnExit = new TextButton("Exit", skinLibgdx);
+	layer.addActor(btnExit);
+	btnExit.addListener(new ChangeListener()
+	{
+	    @Override
+	    public void changed(ChangeEvent event, Actor actor)
+	    {
+		Gdx.app.exit();
+	    }
+	});
+	btnExit.setPosition(Assets.VIEWPORT_GUI_WIDTH - btnExit.getWidth() - 5, Assets.VIEWPORT_GUI_HEIGHT - btnExit.getHeight() - 5);
 	return layer;
     }
 
