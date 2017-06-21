@@ -55,7 +55,8 @@ public class HighScoreListFileManager
      */
     private static String readFile(String fileName)
     {
-        FileHandle file = Gdx.files.internal(fileName);
+	// Needs to be local as can't save to the internal files.
+        FileHandle file = Gdx.files.local(fileName);
         if (file != null && file.exists())
         {
             String s = file.readString();
@@ -74,6 +75,7 @@ public class HighScoreListFileManager
     public static void saveHighScores(Array<HighScoreEntry> highScores)
     {
         String data = convertHighScores(highScores);
+        // Can't save to the internal files.
         FileHandle file = Gdx.files.local(fileName);
         file.writeString(data,false);         // True means append, false means overwrite.
     }

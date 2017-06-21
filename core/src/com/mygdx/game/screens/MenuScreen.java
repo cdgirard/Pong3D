@@ -175,14 +175,18 @@ public class MenuScreen extends AbstractGameScreen
     private Table buildHighScoreLayer()
     {
 	Table tbl = new Table();
+	tbl.add(new Label("HIGH SCORE LIST", skinLibgdx));
+	tbl.row();
 	tbl.pad(10, 10, 0, 10);
+	int counter = 1;
 	for (HighScoreEntry e : PongGlobals.highScores)
 	{
-	    Label playerLbl = new Label(e.getPlayer(), skinLibgdx);
-	    Label scoreLbl = new Label(""+e.getScore(), skinLibgdx);
+	    Label playerLbl = new Label(""+counter+". "+e.getPlayer(), skinLibgdx);
+	    Label scoreLbl = new Label(" "+e.getScore(), skinLibgdx);
 	    tbl.add(playerLbl);
 	    tbl.add(scoreLbl);
 	    tbl.row();
+	    counter++;
 	}
 	return tbl;
     }

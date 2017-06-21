@@ -1,44 +1,34 @@
 {
 highScores: [
 	{
-		player: Howard
-		score: 1100
+		player: <None>
 	}
 	{
-		player: Bob
-		score: 400
+		player: <None>
 	}
 	{
-		player: Player
-		score: 200
+		player: <None>
 	}
 	{
-		player: Dudley
-		score: 50
+		player: <None>
 	}
 	{
-		player: n nb n
-		score: 20
+		player: <None>
 	}
 	{
-		player: hgh
-		score: 20
+		player: <None>
 	}
 	{
-		player: Dudley
-		score: 10
+		player: <None>
 	}
 	{
-		player: Bob
-		score: 10
+		player: <None>
 	}
 	{
-		player: ""
-		score: 10
+		player: <None>
 	}
 	{
-		player: ""
-		score: 10
+		player: <None>
 	}
 ]
 }
