@@ -27,6 +27,7 @@ import com.mygdx.game.Pong3D;
 import com.mygdx.game.PongController;
 import com.mygdx.game.PongGlobals;
 import com.mygdx.game.assets.Assets;
+import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.bullet.BulletWorld;
 import com.mygdx.game.lights.AbstractShadowSystem;
 import com.mygdx.game.lights.BasicLightSystem;
@@ -41,6 +42,10 @@ import com.mygdx.game.util.HighScoreEntry;
 import com.mygdx.game.util.HighScoreListFileManager;
 
 /**
+ * TODO: Shadows do not show through opaque objects.  Basically the render code is smart enough to grab the object behind the
+ *       opaque object so we can "see it".  However, it is not smart enough to know there should be a shadow on it.  Would require
+ *       two render calls to get it to work right I think.
+ *       
  * Is the screen displayed when playing the game.
  * 
  * @author cdgira
@@ -55,6 +60,8 @@ public class GameScreen extends AbstractGameScreen
     // For Shadow Environment
     public AbstractShadowSystem shadowSystem;
     PerspectiveCamera cam;
+    private MyDirectionalShadowLight dShadow;
+    private PointShadowLight pShadow;
 
     // For Bullet
     DebugDrawer debugDrawer;
@@ -70,6 +77,8 @@ public class GameScreen extends AbstractGameScreen
     private Window winOptions;
     private TextButton btnWinOptSave;
     private TextField tfPlayer;
+    
+    
 
     public GameScreen()
     {
@@ -115,11 +124,18 @@ public class GameScreen extends AbstractGameScreen
 	{
 	    shadowSystem.addRenderObject(obj.instance);
 	}
+	
+	Vector3 groundPos = PongObjects.instance.ground.body.getCenterOfMassPosition();
 
-	shadowSystem.addLight(new PointShadowLight(new Vector3(0f, 13.8f, 32f), 0.3f));
-	// shadowSystem.addLight(new PointShadowLight(new Vector3(45f, 0.0f, 0f),0.3f));
-	// shadowSystem.addLight(new DirectionalShadowSystemLight(new Vector3(33, 0, 0), new Vector3(-1, 0, 0), 0.3f));
-	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(0f, 30.0f, 0f), 0.1f));
+	Vector3 lightPos = new Vector3(groundPos.x, 30f, groundPos.z);
+	Vector3 lightDir = new Vector3(0,-1,0.1f);
+	dShadow = new MyDirectionalShadowLight(lightPos, lightDir, 0.3f);
+	pShadow = new PointShadowLight(lightPos, 0.4f);
+	//pShadow.updateTarget(groundPos);
+	//shadowSystem.addLight(pShadow);
+	 shadowSystem.addLight(pShadow); //new PointShadowLight(new Vector3(50f, 30.0f, 50f),0.3f));
+	// shadowSystem.addLight(pShadow);
+	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(50f, 30.0f, 50f), 0.1f));
 
 	controller = new PongController();
 
@@ -185,6 +201,7 @@ public class GameScreen extends AbstractGameScreen
 		else
 		{
 		    dispose();
+		    AudioManager.instance.stopMusic();
 		    Pong3D.instance.setScreen(new MenuScreen());    
 		}
 	    }
@@ -265,8 +282,11 @@ public class GameScreen extends AbstractGameScreen
 	cam.position.set(groundPos.x - 15, groundPos.y + 15, groundPos.z + 15);
 	cam.lookAt(groundPos);
 	cam.update();
-	scoreLbl.setText("Score: " +PongGlobals.score);
 	
+	// Have the Shadow Light track the Platform from above.
+	pShadow.updatePosition(new Vector3(groundPos.x,pShadow.camera.position.y,groundPos.z));
+	
+	scoreLbl.setText("Score: " +PongGlobals.score);
     }
 
     private void rebuildStage()

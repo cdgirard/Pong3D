@@ -88,6 +88,27 @@ public abstract class AbstractShadowLight
 	needsUpdate = true;
     }
     
+    /**
+     * Change the location of the light
+     * @param pos
+     */
+    public void updatePosition(Vector3 pos)
+    {
+	position = new Vector3(pos.x,pos.y,pos.z);
+	camera.position.set(pos.x, pos.y, pos.z);
+	camera.update();
+    }
+    
+    /**
+     * Change where the light is shining.
+     * @param pos
+     */
+    public void updateDirection(Vector3 dir)
+    {
+	camera.direction.set(dir);
+	camera.update();
+    }
+    
     public void dispose()
     {
 	if (shaderProgram != null)

@@ -175,7 +175,6 @@ public class ShadowSystem extends AbstractShadowSystem
      */
     public void render(ModelBatch batch)
     {
-	batch.render(objects);
 	for (ParticleSystem system : particleSystems)
 	{
 	    system.begin();
@@ -183,6 +182,7 @@ public class ShadowSystem extends AbstractShadowSystem
 	    system.end();
 	    batch.render(system);
 	}
+	batch.render(objects);
     }
     
     public void dispose()

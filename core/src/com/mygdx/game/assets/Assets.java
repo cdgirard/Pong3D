@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Camera;
@@ -36,6 +37,9 @@ public class Assets implements Disposable, AssetErrorListener
     public static final String pan_snd = "sounds/fryingPan_snd.wav";
     public static final String tick_snd = "sounds/tick_snd.mp3";
     public static final String muted_snd = "sounds/mutedMetal_snd.wav";
+    
+    // Music
+    public static final String game_mus = "music/Sro_02_Sentimental.mp3";
     
     // 3D Models
     public static final String sphere = "models/concreteBare_sphere.g3dj";
@@ -108,70 +112,34 @@ public class Assets implements Disposable, AssetErrorListener
 	
 	// Load 3D Models
 	assetManager.load(platform, Model.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(sphere, Model.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(wall_a, Model.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(wall_b, Model.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(score_target, Model.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(solid_target, Model.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(water, Model.class);
 	assetManager.finishLoading();
 	
 	// Load Sound Effects
 	assetManager.load(explosion_snd, Sound.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(splash_snd, Sound.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(anvil_snd, Sound.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(golf_snd, Sound.class);
-	assetManager.finishLoading();
-	
-	//assetManager.load(bone_snd, Sound.class);
-	//assetManager.finishLoading();
-	
 	assetManager.load(pan_snd, Sound.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(tick_snd, Sound.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(muted_snd, Sound.class);
+	assetManager.finishLoading();
+	// Load Music
+	assetManager.load(game_mus, Music.class);
 	assetManager.finishLoading();
 	
 	// Load UI Images
 	assetManager.load(BACKGROUND_IMG, Texture.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(PLAY_BTN_UP_IMG, Texture.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(PLAY_BTN_DWN_IMG, Texture.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(OPTION_BTN_UP_IMG, Texture.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(OPTION_BTN_DWN_IMG, Texture.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(BALL, Texture.class);
-	assetManager.finishLoading();
-	
 	assetManager.load(TITLE, Texture.class);
 	assetManager.finishLoading();
 	

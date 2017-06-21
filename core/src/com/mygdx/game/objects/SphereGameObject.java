@@ -72,7 +72,7 @@ public class SphereGameObject extends GameObject
 	flameEffect.start();
 
 	// If want to see the particle need to add it to a particle system.
-	Assets.instance.particleSystem.add(flameEffect);
+	//Assets.instance.particleSystem.add(flameEffect);
     }
     
     /**
@@ -179,7 +179,7 @@ public class SphereGameObject extends GameObject
 	    speed = body.getLinearVelocity().cpy();
 	    float sphereY = body.getCenterOfMassPosition().y;
 	 // Setup this up to use the spalsh effect instead.
-	    if (sphereY < -1.0f)
+	    if (sphereY < -5.0f)
 	    {
 	        PongObjects.instance.startSplash(instance.transform);
 	        alive = false;

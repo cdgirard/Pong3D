@@ -1,6 +1,10 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.utils.Array;
+import com.mygdx.game.assets.Assets;
+import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.objects.PongObjects;
 import com.mygdx.game.screens.MenuScreen;
 import com.mygdx.game.util.HighScoreEntry;
@@ -27,9 +31,10 @@ public class PongGlobals
      */
     public static void startGame()
     {
-	lives = 1;
+	lives = 3;
 	score = 0;
         level = 0;
+        AudioManager.instance.play(Assets.assetManager.get(Assets.game_mus, Music.class));
     }
     
     public static void startLevel()

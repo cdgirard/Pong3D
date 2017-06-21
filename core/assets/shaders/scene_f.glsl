@@ -33,11 +33,16 @@ void main()
 	c.y/=u_screenHeight;
 	vec4 color=texture2D(u_shadows,c);
 	
+	
+	// Assumes all objects have an opacity value.
+	//gl_FragColor.a = gl_FragColor.a * v_opacity;
+	finalColor.a = finalColor.a * v_opacity;
+	//if ((v_opacity < 0.9) && (v_opacity > 0.1))
+	 //   discard;
+	
 	// Apply shadow
 	finalColor.rgb*=(0.4+0.6*color.a);
 	gl_FragColor = finalColor;
-	// Assumes all objects have an opacity value.
-	gl_FragColor.a = gl_FragColor.a * v_opacity;
 		
 }
 

@@ -39,6 +39,32 @@ public class AudioManager
 	// sound.play(GamePreferences.instance.volSound * volume, pitch, pan);
 	sound.play(volume, pitch, pan);
     }
+    
+    /**
+     * Play some music in the background.
+     * @param music
+     */
+    public void play(Music music)
+    {
+	stopMusic();
+	playingMusic = music;
+	if (GamePreferences.instance.music)
+	{
+	    music.setLooping(true);
+	    music.setVolume(GamePreferences.instance.volMusic);
+	    music.play();
+	}
+    }
+    
+    /**
+     * Stop any music we do have playing.
+     */
+    public void stopMusic()
+    {
+	if (playingMusic != null)
+	    playingMusic.stop();
+	playingMusic = null;
+    }
 
     /**
      * Should be called if changes are made to the settings stored in GamePreferences.

@@ -21,15 +21,15 @@ highScores: [
 		score: 20
 	}
 	{
+		player: hgh
+		score: 20
+	}
+	{
 		player: Dudley
 		score: 10
 	}
 	{
 		player: Bob
-		score: 10
-	}
-	{
-		player: ""
 		score: 10
 	}
 	{

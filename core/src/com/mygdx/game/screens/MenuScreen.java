@@ -56,6 +56,8 @@ public class MenuScreen extends AbstractGameScreen
 
     public MenuScreen()
     {
+	GamePreferences prefs = GamePreferences.instance;
+	prefs.load();
     }
 
     /**
