@@ -65,6 +65,7 @@ public class GameScreen extends AbstractGameScreen
     private SpriteBatch batch;
     private Skin skinLibgdx;
     private Stage stage;
+    Label scoreLbl;
     boolean highScoreWindowActive = false;
     private Window winOptions;
     private TextButton btnWinOptSave;
@@ -157,23 +158,14 @@ public class GameScreen extends AbstractGameScreen
     {
 	batch.setProjectionMatrix(cameraUI.combined);
 	batch.begin();
-	// TODO Issue with Scene2D - see details below.
-	// For some reason you have to draw one extra thing in Scene2D for all
-	// the other things to show up.  Also, renderGuiScore and renderGuiFpsCounter must come before
-	// renderGuiExtrLive or they don't get drawn.
-	renderGuiFpsCounter(batch);
-	
-	renderGuiScore(batch);
 	renderGuiExtraLive(batch);
-//	if (GamePreferences.instance.showFpsCounter)
-	renderGuiScore2(batch);
-	    
-	    
-
-
+	if (GamePreferences.instance.showFpsCounter)
+	    renderGuiFpsCounter(batch);    
+	batch.end();
+	
+	// Placing inside of batch start end caused problems with the batch rendering.
 	stage.act(deltaTime);
 	stage.draw();
-	batch.end();
 	
 	if (PongGlobals.numScoreBlocks == 0)
 	{
@@ -225,22 +217,6 @@ public class GameScreen extends AbstractGameScreen
 
     }
 
-    private void renderGuiScore(SpriteBatch batch)
-    {
-	float x = -15;
-	float y = -15;
-	Assets.instance.defaultNormal.draw(batch, "" + PongGlobals.score, x + 75, y + 37);
-	Assets.instance.defaultNormal.setColor(1,1,1,1);
-    }
-    
-    private void renderGuiScore2(SpriteBatch batch)
-    {
-	float x = 50;
-	float y = 50;
-	Assets.instance.defaultNormal.draw(batch, "" + PongGlobals.score, x + 75, y + 37);
-	Assets.instance.defaultNormal.setColor(1,1,1,1);
-    }
-
     private void renderGuiExtraLive(SpriteBatch batch)
     {
 	float x = cameraUI.viewportWidth - 25 - PongGlobals.LIVES_START * 50;
@@ -289,6 +265,8 @@ public class GameScreen extends AbstractGameScreen
 	cam.position.set(groundPos.x - 15, groundPos.y + 15, groundPos.z + 15);
 	cam.lookAt(groundPos);
 	cam.update();
+	scoreLbl.setText("Score: " +PongGlobals.score);
+	
     }
 
     private void rebuildStage()
@@ -301,7 +279,17 @@ public class GameScreen extends AbstractGameScreen
 	Stack stack = new Stack();
 	stage.addActor(stack);
 	stack.setSize(Assets.VIEWPORT_GUI_WIDTH, Assets.VIEWPORT_GUI_HEIGHT);
+	stack.add(buildScoreTable());
 	stage.addActor(layerOptionsWindow);
+    }
+    
+    private Table buildScoreTable()
+    {
+	Table tbl = new Table();
+	scoreLbl = new Label("Score: "+0, skinLibgdx, "default-font", Color.ORANGE);
+	tbl.addActor(scoreLbl);
+	scoreLbl.setPosition(15, Assets.VIEWPORT_GUI_HEIGHT - 25);
+	return tbl;
     }
 
     /**
