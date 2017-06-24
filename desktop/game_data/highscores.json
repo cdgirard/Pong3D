@@ -1,28 +1,36 @@
 {
 highScores: [
 	{
-		player: <None>
+		player: Gerber
+		score: 110
 	}
 	{
-		player: <None>
+		player: Gerber's Equal
+		score: 110
 	}
 	{
-		player: <None>
+		player: Evan
+		score: 50
 	}
 	{
-		player: <None>
+		player: Nathaniel
+		score: 50
 	}
 	{
-		player: <None>
+		player: ""
+		score: 20
 	}
 	{
-		player: <None>
+		player: Cubby
+		score: 10
 	}
 	{
-		player: <None>
+		player: doop
+		score: 10
 	}
 	{
-		player: <None>
+		player: unkown
+		score: 10
 	}
 	{
 		player: <None>

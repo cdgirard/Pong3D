@@ -58,6 +58,7 @@ public class PongObjects implements Disposable
 	// Put them all in an array to make adding new objects to the game 
 	// more easy.
 	objects.add(water);
+	//objects.add(new TargetGameObject(new Vector3(50,4,50),TargetGameObject.SOLID_TARGET));
 	
 	// Load in the game objects for the given level.
 	LevelLoader.loadLevel("levels/Level_"+PongGlobals.level+".png", cam);

@@ -35,7 +35,7 @@ public class PlatformGameObject extends GameObject
 	bodyInfo.setFriction(1.0f);
 	body = new btRigidBody(bodyInfo);
 	body.setMotionState(motionState);
-	body.setUserValue(15);
+	//body.setUserValue(15);
 	body.setCollisionFlags(body.getCollisionFlags() | btCollisionObject.CollisionFlags.CF_CUSTOM_MATERIAL_CALLBACK);
 	BulletWorld.world.addRigidBody(body);
 	body.setGravity(new Vector3(0, 0, 0));

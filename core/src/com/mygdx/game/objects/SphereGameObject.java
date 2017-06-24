@@ -73,6 +73,7 @@ public class SphereGameObject extends GameObject
 
 	// If want to see the particle need to add it to a particle system.
 	//Assets.instance.particleSystem.add(flameEffect);
+	body.setLinearVelocity(new Vector3(0f,0.5f,0f));
     }
     
     /**
@@ -184,15 +185,20 @@ public class SphereGameObject extends GameObject
 	        PongObjects.instance.startSplash(instance.transform);
 	        alive = false;
 	    }
-	    else if ((sphereY > 3.0f) && (timeAtRest > 0.25f) && (speed.x + speed.y + speed.z == 0))
+	    else if ((sphereY > 3.0f) && (timeAtRest > 0.2f))
 	    {
+		body.activate();
 		body.setLinearVelocity(new Vector3(1f,5f,1f));
-	    }
-	    
-	    if (speed.x + speed.y + speed.z != 0)
-		timeAtRest = 0;
-	    else
+		//body.applyCentralImpulse(new Vector3(1f,-5f,1f));
+		//Gdx.app.error("INFO"," SP: "+(speed.x+speed.y+speed.z)+" TR: "+timeAtRest);
+	    } 
+	    //Gdx.app.error("INFO"," SP: "+(speed.x+speed.y+speed.z)+" TR: "+timeAtRest);
+	    if (Math.abs(speed.x + speed.y + speed.z) <= 0.1)
 		timeAtRest += delta;
+	    else
+	        timeAtRest = 0;
+	    
+	    
 	}
     }
 
