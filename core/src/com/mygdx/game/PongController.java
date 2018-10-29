@@ -4,7 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.utils.Disposable;
+import com.mygdx.game.assets.AudioManager;
 import com.mygdx.game.objects.PongObjects;
+import com.mygdx.game.screens.GameScreen;
+import com.mygdx.game.screens.MenuScreen;
 
 /**
  * This class manages the input from the user while they still have lives.  Once all 
@@ -20,9 +23,13 @@ public class PongController extends InputAdapter implements Disposable
     boolean right = false;
     boolean up = false;
     boolean down = false;
+    
+    // TODO Quick fix, clean up later.
+    GameScreen screen;
 
-    public PongController()
+    public PongController(GameScreen gs)
     {
+	screen = gs;
 	init();
     }
 
@@ -92,6 +99,12 @@ public class PongController extends InputAdapter implements Disposable
 	{
 	    Gdx.app.error("Tag",""+PongObjects.instance.ground.bounceTimer);
 	    PongObjects.instance.ground.bounce();
+	}
+	if (keycode == Keys.ESCAPE)
+	{
+	    screen.dispose();
+	    AudioManager.instance.stopMusic();
+	    Pong3D.instance.setScreen(new MenuScreen());
 	}
 	return false;
     }

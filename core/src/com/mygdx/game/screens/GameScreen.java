@@ -78,8 +78,6 @@ public class GameScreen extends AbstractGameScreen
     private TextButton btnWinOptSave;
     private TextField tfPlayer;
     
-    
-
     public GameScreen()
     {
 	create();
@@ -137,7 +135,7 @@ public class GameScreen extends AbstractGameScreen
 	// shadowSystem.addLight(pShadow);
 	shadowSystem.addLight(new MovingPointShadowLight(new Vector3(50f, 30.0f, 50f), 0.1f));
 
-	controller = new PongController();
+	controller = new PongController(this);
 
 	// TODO: Might want in a different method
 	stage = new Stage(new StretchViewport(Assets.VIEWPORT_GUI_WIDTH, Assets.VIEWPORT_GUI_HEIGHT));

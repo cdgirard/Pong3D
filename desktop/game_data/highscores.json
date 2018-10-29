@@ -1,42 +1,44 @@
 {
 highScores: [
 	{
-		player: Gerber
-		score: 110
-	}
-	{
-		player: Gerber's Equal
-		score: 110
-	}
-	{
-		player: Evan
+		player: Vanix
 		score: 50
 	}
 	{
-		player: Nathaniel
+		player: Some Guy
 		score: 50
 	}
 	{
-		player: ""
-		score: 20
+		player: Foxtrot
+		score: 40
 	}
 	{
-		player: Cubby
-		score: 10
+		player: Ian
+		score: 30
 	}
 	{
-		player: doop
-		score: 10
+		player: WOAAAH
+		score: 30
 	}
 	{
-		player: unkown
-		score: 10
+		player: abcdefghijklmnopqrstuvwxyz
+		score: 30
 	}
 	{
-		player: <None>
+		player: Somebody at TMG
+		score: 30
 	}
 	{
-		player: <None>
+		player: So how long did are the names allowed to be on here?  Because it's still not stopping me.
+		score: 30
+	}
+	{
+		player: fox
+		score: 30
+	}
+	{
+		player: Demo
+		score: 30
 	}
 ]
 }
